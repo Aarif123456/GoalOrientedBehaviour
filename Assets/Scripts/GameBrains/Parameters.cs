@@ -4,14 +4,23 @@ using UnityEngine;
     
 public sealed class Parameters : MonoBehaviour
 {
+    /* Can we hit team mates*/
     public bool friendlyFire = true;
+    /* Unused - implement so if enemy hit they flash*/
     public float hitFlashTime = 0.2f;
+    /* How many times per second - the system process thinking*/
     public float agentGoalAppraisalUpdateFrequency = 0.5f;
+    /* How often the vision is updated - system has memory 
+    * so this can be resource intensive
+    */
     public float agentVisionUpdateFrequency = 4;
+    /* How often we check to see if we have a target */
     public float agentTargetingUpdateFrequency = 1;
+    /* Check which weapon we should be using */
     public float agentWeaponSelectionFrequency = 0.5f;
     public float agentMemorySpan = 5;
     public float agentFieldOfView = 135;
+    /* If we see enemy how long we wait until we start shooting */
     public float agentReactionTime = 0.2f;
     public float agentAimPersistenceTime = 1;
     public float agentAimAccuracy = 0;
@@ -21,8 +30,9 @@ public sealed class Parameters : MonoBehaviour
     public float agentRailgunGoalTweaker = 1.0f;
     public float agentRocketLauncherGoalTweaker = 1.0f;
     public float agentAggroGoalTweaker = 1.0f;
-    
+
     public int maximumSearchCyclesPerUpdateStep = 1000;
+    /* Health from health pack */
     public int defaultHealthGiven = 50;
     public float healthRespawnDelay = 10;
     public float weaponRespawnDelay = 15;
