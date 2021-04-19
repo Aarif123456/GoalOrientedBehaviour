@@ -1,0 +1,1 @@
+This folder contains all the logic required to implement fuzzy logic in the game

@@ -1,0 +1,1 @@
+This folder holds the scripts that control the behaviour of all the objects in our game.

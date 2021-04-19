@@ -1,0 +1,1 @@
+This folder handles the steering behaviour of the character. Steering behaviour examples are found in assignment 3.

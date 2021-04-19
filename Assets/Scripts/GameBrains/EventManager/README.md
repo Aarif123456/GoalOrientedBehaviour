@@ -1,0 +1,1 @@
+This folder all the code responsible for implementing an event manager in the game.

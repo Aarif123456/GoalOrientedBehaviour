@@ -1,0 +1,1 @@
+This folder handles how the character moves across the world. This implements search spaces for assignment 4.
