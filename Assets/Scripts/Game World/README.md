@@ -1,0 +1,1 @@
+This folder contains all scripts that control how the game world works at the highest level. So, objects that handle camera behaviour and search spaces go here. 

@@ -1,0 +1,1 @@
+The utility folder holds classes that do not game specific behaviour. These scripts can easily be used across different Unity project with little modification. 
