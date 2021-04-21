@@ -22,13 +22,12 @@ namespace GameBrains.AI
             }
 
             // these values represent cutoffs. Any distance over maxDistance results in
-            // a value of 0, and value below minDistance results in a value of 1
-            const float MAX_DISTANCE = 500.0f;
+            // a value of 1, and value below minDistance results in a value of 0
+            const float MAX_DISTANCE = 450.0f;
             const float MIN_DISTANCE = 50.0f;
-
-            distanceToItem = Mathf.Clamp(distanceToItem, MIN_DISTANCE, MAX_DISTANCE);
-
-            return distanceToItem / MAX_DISTANCE;
+            distanceToItem -= MIN_DISTANCE;
+            distanceToItem = Mathf.Clamp(distanceToItem, 0f, MAX_DISTANCE);
+            return (distanceToItem/ MAX_DISTANCE);
         }
         
         public static float IndividualWeaponStrength(Agent agent, WeaponTypes weaponType)
@@ -60,7 +59,7 @@ namespace GameBrains.AI
             // (it basically adds in an amount for a bot's persistent weapon -- the blaster)
             const float TWEAKER = 0.1f;
 
-            return TWEAKER + (1 - TWEAKER) * (numSlugs + numCartridges + numRockets) / totalRoundsCarryable;
+            return TWEAKER + (1.0f - TWEAKER) * (numSlugs + numCartridges + numRockets) / totalRoundsCarryable;
         }
         
         private static float GetMaxRoundsBotCanCarryForWeapon(WeaponTypes weaponType)

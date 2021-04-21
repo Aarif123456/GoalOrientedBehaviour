@@ -255,7 +255,7 @@ public sealed class PathPlanner : MonoBehaviour
         
         if (closestNodeToAgent == null)
         {
-            return closestSoFar;
+            return -1;
         }
         
         // TODO: should cache triggers??
