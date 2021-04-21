@@ -88,6 +88,7 @@ namespace GameBrains.Cameras
             {
                 Debug.Log("Provide a target for the camera.");
             }
+            CameraName = "Orbit Camera";
         }
 
         public void Start()

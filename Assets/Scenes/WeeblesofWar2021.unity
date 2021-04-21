@@ -10361,6 +10361,7 @@ GameObject:
   - component: {fileID: 2953}
   - component: {fileID: 2666}
   - component: {fileID: 2583}
+  - component: {fileID: 923}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -10378,7 +10379,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1444}
   - component: {fileID: 1445}
-  - component: {fileID: 2560}
   - component: {fileID: 2665}
   m_Layer: 0
   m_Name: Overhead Camera
@@ -10469,6 +10469,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1c97205f279ebd54fa46d30ea70b7215, type: 3}
   m_PrefabInstance: {fileID: 3083}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff3795efe3e15149984431476032bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowId: 0
+  positionOffset: {x: 197.58, y: 50}
+  minimumWindowWidth: 150
+  minimumColumnWidth: 120
+  curCamera: -1
 --- !u!4 &924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1c97205f279ebd54fa46d30ea70b7215, type: 3}
@@ -13335,14 +13352,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!81 &2560
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909}
-  m_Enabled: 1
 --- !u!108 &2562
 Light:
   m_ObjectHideFlags: 0
@@ -13689,9 +13698,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overheadCamera: {fileID: 1445}
-  zoomAxis: Right Stick Y
-  sideMoveAxis: Left Stick X
-  forwardMoveAxis: Left Stick Y
   homeKey: 278
   moveSpeed: 0.5
 --- !u!114 &2666
@@ -18019,6 +18025,10 @@ PrefabInstance:
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: shortName
+      value: Alice
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a011b7fa66fa405438778840713a4da4, type: 3}
@@ -53376,11 +53386,11 @@ GameObject:
   - component: {fileID: 1133779502}
   m_Layer: 0
   m_Name: Targeted Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1133779499
 Transform:
   m_ObjectHideFlags: 0
@@ -53410,7 +53420,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1133779498}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}

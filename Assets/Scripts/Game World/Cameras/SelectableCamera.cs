@@ -4,10 +4,21 @@ namespace GameBrains.Cameras
 {
     public class SelectableCamera : MonoBehaviour
     {
-        //TODO: All selectable cameras should derive from this
-        //TODO: Add code to fina all selectable cameras and set the current camera.
-        //TODO: Need to disable inactive camera scripts and camera gameObjects
+        public string CameraName { get; protected set; }
 
+        public void Deactivate(){
+            this.enabled = false;
+            GetComponent<Camera>().enabled = false; 
+        }
+
+        public void Activate(){
+            this.enabled = true;
+            GetComponent<Camera>().enabled = true; 
+        }
+
+        public bool IsActive(){
+            return this.enabled;
+        }
         public virtual void Awake()
         {
         }

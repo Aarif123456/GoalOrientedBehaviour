@@ -31,6 +31,8 @@ namespace GameBrains.Cameras
             {
                 Debug.Log("Provide a target for the camera.");
             }
+
+            CameraName = "Smooth Follow";
         }
         
         public void LateUpdate() 

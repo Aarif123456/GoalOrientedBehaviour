@@ -20,6 +20,7 @@ namespace GameBrains.Cameras
         
             maximumZoomOut = overheadCamera.orthographicSize;
             homePosition = overheadCamera.transform.position;
+            CameraName = "Overhead Zoom And Pan";
         }
     
         public void Update() 

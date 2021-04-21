@@ -88,6 +88,7 @@ namespace GameBrains.Cameras
             {
                 Debug.Log("Please assign a target to the camera.");
             }
+            CameraName = "Fade Out Line Of Sight"; 
         }
 
         // If this behaviour is enabled, LateUpdate is called once per frame

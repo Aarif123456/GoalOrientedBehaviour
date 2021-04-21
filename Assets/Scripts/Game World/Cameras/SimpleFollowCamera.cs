@@ -72,6 +72,8 @@ namespace GameBrains.Cameras
             {
                 Debug.Log("Please assign a target to the SimpleFollowCamera script.");
             }
+
+            CameraName = "Simple Follow Camera";
         }
 
         // If this behaviour is enabled, LateUpdate is called once per frame
