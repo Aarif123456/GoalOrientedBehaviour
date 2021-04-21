@@ -26,14 +26,12 @@ namespace GameBrains.AI
             // nearest instance of a health item.
             float desirability =
                 Parameters.Instance.AgentHealthGoalTweaker *
-                (1 - Feature.Health(agent)) / Feature.DistanceToItem(agent, ItemTypes.Health);
-            
+                (1 - Feature.Health(agent)) / distance;
             // bias the value according to the personality of the bot
             desirability *= characterBias;
 
             // ensure the value is in the range 0 to 1
             desirability = Mathf.Clamp(desirability, 0, 1);
-
             return desirability;
         }
         
