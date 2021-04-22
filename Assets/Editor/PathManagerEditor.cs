@@ -9,7 +9,7 @@ public class PathManagerEditor : Editor
     {
         pathManager = target as PathManager;
     
-        if (pathManager != null)
+        if (!ReferenceEquals(pathManager, null))
         {
             DrawDefaultInspector();
         }

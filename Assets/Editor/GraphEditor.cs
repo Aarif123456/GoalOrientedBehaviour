@@ -81,14 +81,14 @@ public class GraphEditor : Editor
             else if (GUILayout.Button("Show graph"))
             {
                 if (graph.nodeCollection != null)
-                    {
-                        graph.nodeCollection.IsVisible = true;
-                    }
+                {
+                    graph.nodeCollection.IsVisible = true;
+                }
                     
-                    if (graph.edgeCollection != null)
-                    {
-                        graph.edgeCollection.IsVisible = true;
-                    }
+                if (graph.edgeCollection != null)
+                {
+                    graph.edgeCollection.IsVisible = true;
+                }
             }
         }
     }

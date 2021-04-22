@@ -99,7 +99,6 @@ public class MovingEntity : Entity
         State = States.Alive;
         transform.position = spawnPoint;
         transform.eulerAngles = Vector3.zero;
-        
         Kinematic = new Kinematic { Position = transform.position, Rotation = transform.eulerAngles };
         
         if (characterController != null)

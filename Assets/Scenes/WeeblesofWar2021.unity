@@ -10485,7 +10485,6 @@ MonoBehaviour:
   positionOffset: {x: 197.58, y: 50}
   minimumWindowWidth: 150
   minimumColumnWidth: 120
-  curCamera: -1
 --- !u!4 &924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1c97205f279ebd54fa46d30ea70b7215, type: 3}
@@ -13739,7 +13738,7 @@ MonoBehaviour:
   blasterMaximumRoundsCarried: 0
   blasterIdealRange: 10
   blasterSoundRange: 30
-  useBlaster: 0
+  useBlaster: 1
   maximumActiveBolts: 2
   boltMaximumSpeed: 25
   boltMass: 1
@@ -13763,7 +13762,7 @@ MonoBehaviour:
   railgunFiringFrequency: 1
   railgunDefaultRounds: 5
   railgunMaximumRoundsCarried: 15
-  railgunIdealRange: 75
+  railgunIdealRange: 55
   railgunSoundRange: 40
   maximumActiveSlugs: 5
   slugMaximumSpeed: 60
@@ -17999,6 +17998,10 @@ PrefabInstance:
       value: Red Weeble (Alice)
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42.5
       objectReference: {fileID: 0}
@@ -18814,6 +18817,10 @@ PrefabInstance:
     - target: {fileID: 100010, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52758,7 +52765,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52816,6 +52827,10 @@ PrefabInstance:
     - target: {fileID: 100004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -53088,6 +53103,10 @@ PrefabInstance:
     - target: {fileID: 100004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_Name
       value: Blue Weeble (Bob)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: a011b7fa66fa405438778840713a4da4, type: 3}
       propertyPath: m_LocalPosition.x
