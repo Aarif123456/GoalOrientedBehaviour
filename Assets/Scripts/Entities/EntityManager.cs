@@ -84,7 +84,7 @@ namespace Entities {
             foreach (var entity in _entityIdDictionary.Values){
                 var entityT = entity as T;
 
-                if (entityT != null) resultList.Add(entityT);
+                if (!ReferenceEquals(entityT, null)) resultList.Add(entityT);
             }
 
             return resultList;

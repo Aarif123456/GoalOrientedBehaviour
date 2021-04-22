@@ -32,21 +32,19 @@ namespace Entities.GoalOrientedBehaviour {
             }
 
             // if any subgoals remain, process the one at the front of the list
-            if (Subgoals.Count > 0){
-                // grab the status of the front-most subgoal
-                var statusOfSubGoals = Subgoals.Peek().Process();
+            if (Subgoals.Count <= 0) return StatusTypes.Completed;
+            // grab the status of the front-most subgoal
+            var statusOfSubGoals = Subgoals.Peek().Process();
 
-                // we have to test for the special case where the front-most reports 
-                // 'completed' *and* the subgoal list contains additional goals. When this
-                // is the case, to ensure the parent keeps processing its subgoal list we
-                // must return the 'active' status.
-                if (statusOfSubGoals == StatusTypes.Completed && Subgoals.Count > 1) return StatusTypes.Active;
+            // we have to test for the special case where the front-most reports 
+            // 'completed' *and* the subgoal list contains additional goals. When this
+            // is the case, to ensure the parent keeps processing its subgoal list we
+            // must return the 'active' status.
+            if (statusOfSubGoals == StatusTypes.Completed && Subgoals.Count > 1) return StatusTypes.Active;
 
-                return statusOfSubGoals;
-            }
+            return statusOfSubGoals;
 
             // no more subgoals to process - return 'completed'
-            return StatusTypes.Completed;
         }
 
 //        public override void ShowOnDisplay(MessageManager messageManager, string messageDisplay, ref int indent)

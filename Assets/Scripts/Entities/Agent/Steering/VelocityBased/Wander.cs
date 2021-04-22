@@ -73,10 +73,9 @@ namespace Entities.Steering {
                 steering.Linear = Move.Steer().Linear;
             }
 
-            if (Look != null){
-                Look.OtherKinematic = targetKinematic;
-                steering.Angular = Look.Steer().Angular;
-            }
+            if (Look == null) return steering;
+            Look.OtherKinematic = targetKinematic;
+            steering.Angular = Look.Steer().Angular;
 
             return steering;
         }

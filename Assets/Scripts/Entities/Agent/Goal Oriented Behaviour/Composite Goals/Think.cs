@@ -53,13 +53,11 @@ namespace Entities.GoalOrientedBehaviour {
 
             var subgoalStatus = ProcessSubgoals();
 
-            if ((subgoalStatus == StatusTypes.Completed ||
-                 subgoalStatus == StatusTypes.Failed) &&
-                Agent.IsAiControlled){
-                Status = StatusTypes.Inactive;
+            if (subgoalStatus != StatusTypes.Completed && subgoalStatus != StatusTypes.Failed ||
+                !Agent.IsAiControlled) return Status;
+            Status = StatusTypes.Inactive;
 
-                if (!Subgoals.IsEmpty()) Subgoals.Peek().Terminate();
-            }
+            if (!Subgoals.IsEmpty()) Subgoals.Peek().Terminate();
 
             return Status;
         }
@@ -78,10 +76,9 @@ namespace Entities.GoalOrientedBehaviour {
             foreach (var evaluator in evaluators){
                 var desirabilty = evaluator.CalculateDesirability(Agent);
 
-                if (bestDesirability < desirabilty){
-                    bestDesirability = desirabilty;
-                    mostDesirable = evaluator;
-                }
+                if (!(bestDesirability < desirabilty)) continue;
+                bestDesirability = desirabilty;
+                mostDesirable = evaluator;
             }
 
             if (mostDesirable == null) throw new Exception("Think.Arbitrate: no evaluator selected.");

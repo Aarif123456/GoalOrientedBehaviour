@@ -55,19 +55,17 @@ namespace GameWorld.Navigation.Graph {
 
         public void CalculateCost(){
             if (IsLocked) return;
-            if (ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)){
+            if (ReferenceEquals(FromNode, null) || ReferenceEquals(ToNode, null))
                 Cost = float.MaxValue;
-            }
-            else{
+            else
                 Cost = Vector3.Distance(FromNode.Position, ToNode.Position);
-            }
         }
 
         public void GenerateNameFromNodes(){
             if (!IsLocked && !nameLocked){
                 name =
                     "Edge (" +
-                    (ReferenceEquals(FromNode, null)? "NONE" : FromNode.name) +
+                    (ReferenceEquals(FromNode, null) ? "NONE" : FromNode.name) +
                     " --[" + Cost.ToString("F1") + "]--> " +
                     (ReferenceEquals(ToNode, null) ? "NONE" : ToNode.name) +
                     ")";
@@ -75,19 +73,18 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void UpdatePosition(){
-            if (!IsLocked && !ReferenceEquals(FromNode, null) && !ReferenceEquals(ToNode, null)){
+            if (!IsLocked && !ReferenceEquals(FromNode, null) && !ReferenceEquals(ToNode, null))
                 transform.position = (FromNode.Position + ToNode.Position) / 2;
-            }
         }
 
         public void UpdateRotation(){
-            if (IsLocked || ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)) return;
+            if (IsLocked || ReferenceEquals(FromNode, null) || ReferenceEquals(ToNode, null)) return;
             transform.LookAt(ToNode.Position);
             transform.Rotate(Vector3.right, 90);
         }
 
         public void UpdateScale(){
-            if (IsLocked || ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)) return;
+            if (IsLocked || ReferenceEquals(FromNode, null) || ReferenceEquals(ToNode, null)) return;
             var scale = transform.localScale;
             scale.y = Vector3.Distance(FromNode.Position, ToNode.Position) / 2;
             transform.localScale = scale;

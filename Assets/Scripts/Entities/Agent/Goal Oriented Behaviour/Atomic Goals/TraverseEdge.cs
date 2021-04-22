@@ -45,7 +45,7 @@ namespace Entities.GoalOrientedBehaviour {
 //            edgeToTraverse.ToNode.renderer.enabled = edgeToTraverse.ToNode.NodeCollection.IsVisible;
         }
 
-        private bool IsStuck(){
+        private static bool IsStuck(){
             return false; //!Agent.PathPlanner.CanMoveBetween(Agent.Kinematic.Position, destination);
         }
     }

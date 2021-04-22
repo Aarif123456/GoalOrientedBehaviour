@@ -26,13 +26,12 @@ namespace GameWorld.Navigation.Graph {
                 var nextNodeAndCost = nextNodeAndCostTable[new NodePair(fromNode, destination)];
                 var toNode = nextNodeAndCost.node;
 
-                if (toNode != null){
-                    if (path == null) path = new List<Edge>();
+                if (toNode == null) continue;
+                path ??= new List<Edge>();
 
-                    // TODO: make outEdges a hashList??
-                    path.Add(fromNode.outEdges.Find(element => element.ToNode == toNode));
-                    fromNode = toNode;
-                }
+                // TODO: make outEdges a hashList??
+                path.Add(fromNode.outEdges.Find(element => element.ToNode == toNode));
+                fromNode = toNode;
             }
 
             return path;
@@ -74,23 +73,21 @@ namespace GameWorld.Navigation.Graph {
 
                 var currentNode = nodeAndCost.node;
 
-                if (!table[currentNode].known){
-                    var currentNodeEntry = table[currentNode];
-                    currentNodeEntry.known = true;
-                    table[currentNode] = currentNodeEntry;
+                if (table[currentNode].known) continue;
+                var currentNodeEntry = table[currentNode];
+                currentNodeEntry.known = true;
+                table[currentNode] = currentNodeEntry;
 
-                    foreach (var edge in currentNode.outEdges){
-                        var toNode = edge.ToNode;
-                        var toNodeCost = table[currentNode].cost + edge.Cost;
+                foreach (var edge in currentNode.outEdges){
+                    var toNode = edge.ToNode;
+                    var toNodeCost = table[currentNode].cost + edge.Cost;
 
-                        if (table[toNode].cost > toNodeCost){
-                            var toNodeEntry = table[toNode];
-                            toNodeEntry.cost = toNodeCost;
-                            toNodeEntry.predecessor = currentNode;
-                            table[toNode] = toNodeEntry;
-                            priorityQueue.Add(new NodeAndCost(toNode, toNodeCost));
-                        }
-                    }
+                    if (!(table[toNode].cost > toNodeCost)) continue;
+                    var toNodeEntry = table[toNode];
+                    toNodeEntry.cost = toNodeCost;
+                    toNodeEntry.predecessor = currentNode;
+                    table[toNode] = toNodeEntry;
+                    priorityQueue.Add(new NodeAndCost(toNode, toNodeCost));
                 }
             }
 

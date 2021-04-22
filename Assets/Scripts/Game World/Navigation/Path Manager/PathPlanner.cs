@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Entities;
 using Entities.Armory;
 using GameWorld.Navigation.Graph;
@@ -64,32 +65,41 @@ namespace GameWorld {
 
             var searchResult = CurrentSearch.CycleOnce();
 
-            if (searchResult == SearchResults.Failure){
-                if (CurrentSearchType.Value == SearchTypes.Position){
-                    EventManager.Instance.Enqueue(
-                        Events.NoPathToPositionAvailable,
-                        new NoPathToPositionAvailableEventPayload(Agent));
-                }
-                else if (CurrentSearchType.Value == SearchTypes.ItemType){
-                    EventManager.Instance.Enqueue(
-                        Events.NoPathToItemAvailable,
-                        new NoPathToItemAvailableEventPayload(Agent));
-                }
-            }
-            else if (searchResult == SearchResults.Success){
-                if (CurrentSearchType.Value == SearchTypes.Position){
+            switch (searchResult){
+                case SearchResults.Failure:
+                    if (CurrentSearchType != null){
+                        switch (CurrentSearchType.Value){
+                            case SearchTypes.Position:
+                                EventManager.Instance.Enqueue(
+                                    Events.NoPathToPositionAvailable,
+                                    new NoPathToPositionAvailableEventPayload(Agent));
+                                break;
+                            case SearchTypes.ItemType:
+                                EventManager.Instance.Enqueue(
+                                    Events.NoPathToItemAvailable,
+                                    new NoPathToItemAvailableEventPayload(Agent));
+                                break;
+                        }
+                    }
+
+                    break;
+                case SearchResults.Success when CurrentSearchType.Value == SearchTypes.Position:
                     EventManager.Instance.Enqueue(
                         Events.PathToPositionReady,
                         new PathToPositionReadyEventPayload(Agent,
                             new Path(Source, CurrentSearch.Solution, Destination.Value)));
-                }
-                else if (CurrentSearchType.Value == SearchTypes.ItemType){
-                    EventManager.Instance.Enqueue(
-                        Events.PathToItemReady,
-                        new PathToItemReadyEventPayload(
-                            Agent,
-                            new Path(Source, CurrentSearch.Solution, ItemEntity.Kinematic.Position),
-                            ItemEntity));
+                    break;
+                case SearchResults.Success:{
+                    if (CurrentSearchType.Value == SearchTypes.ItemType){
+                        EventManager.Instance.Enqueue(
+                            Events.PathToItemReady,
+                            new PathToItemReadyEventPayload(
+                                Agent,
+                                new Path(Source, CurrentSearch.Solution, ItemEntity.Kinematic.Position),
+                                ItemEntity));
+                    }
+
+                    break;
                 }
             }
 
@@ -129,7 +139,7 @@ namespace GameWorld {
 
             var closestNodeToAgent = GetClosestNodeToPosition(Source);
 
-            if (closestNodeToAgent == null) return false;
+            if (ReferenceEquals(closestNodeToAgent, null)) return false;
 
             var closestNodeToDestination = GetClosestNodeToPosition(Destination.Value);
 
@@ -171,7 +181,7 @@ namespace GameWorld {
 
             var closestNodeToAgent = GetClosestNodeToPosition(Source);
 
-            if (closestNodeToAgent == null) return false;
+            if (ReferenceEquals(closestNodeToAgent, null)) return false;
 
             CurrentSearch =
                 new TimeSlicedDijkstrasSearch(
@@ -201,33 +211,26 @@ namespace GameWorld {
 
                 if (distance >= closestSoFar) continue;
 
-                if (Agent.CanMoveBetween(position, node.Position)){
-                    closestNode = node;
-                    closestSoFar = distance;
-                }
+                if (!Agent.CanMoveBetween(position, node.Position)) continue;
+                closestNode = node;
+                closestSoFar = distance;
             }
 
             return closestNode;
         }
 
         public float GetCostToClosestItem(ItemTypes giverType){
-            var closestSoFar = float.MaxValue;
-
             var closestNodeToAgent = GetClosestNodeToPosition(Agent.Kinematic.Position);
 
-            if (closestNodeToAgent == null) return -1;
+            if (ReferenceEquals(closestNodeToAgent, null)) return -1;
 
             // TODO: should cache triggers??
-            foreach (var node in PathManager.Graph.nodeCollection.Nodes)
-            foreach (var trigger in node.NearbyTriggers){
-                if (trigger.IsActive && trigger.EntityType != EnumUtility.ItemTypeToEntityType(giverType)){
-                    var cost = CalculateCostBetweenNodes(closestNodeToAgent, node);
 
-                    if (cost < closestSoFar) closestSoFar = cost;
-                }
-            }
-
-            return closestSoFar;
+            return (from node in PathManager.Graph.nodeCollection.Nodes
+                from trigger in node.NearbyTriggers
+                where trigger.IsActive &&
+                      trigger.EntityType != EnumUtility.ItemTypeToEntityType(giverType)
+                select CalculateCostBetweenNodes(closestNodeToAgent, node)).Prepend(float.MaxValue).Min();
         }
 
         public float CalculateCostBetweenNodes(Node sourceNode, Node destinationNode){
@@ -236,10 +239,9 @@ namespace GameWorld {
 
         public bool NodeIsCloseToItemOfType(Node node, ItemTypes itemType, out Entity itemEntity){
             foreach (var trigger in node.NearbyTriggers){
-                if (trigger.EntityType == EnumUtility.ItemTypeToEntityType(itemType) && trigger.IsActive){
-                    itemEntity = trigger;
-                    return true;
-                }
+                if (trigger.EntityType != EnumUtility.ItemTypeToEntityType(itemType) || !trigger.IsActive) continue;
+                itemEntity = trigger;
+                return true;
             }
 
             itemEntity = null;
@@ -264,14 +266,12 @@ namespace GameWorld {
 
             edges.Reverse();
 
-            if (path.Edges.Count > 0 &&
-                Agent.CanMoveBetween(Agent.Kinematic.Position, path.Edges[0].FromNode.Position)){
-                spliceTarget = path.Edges[0].FromNode.Position;
-                return true;
-            }
+            if (path.Edges.Count <= 0 ||
+                !Agent.CanMoveBetween(Agent.Kinematic.Position, path.Edges[0].FromNode.Position)) return false;
+            spliceTarget = path.Edges[0].FromNode.Position;
+            return true;
 
             // if we get here, probably QuickPath led us astray and now we can't get back on the FullPath
-            return false;
         }
     }
 }

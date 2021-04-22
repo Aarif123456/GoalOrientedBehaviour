@@ -109,7 +109,7 @@ namespace GameWorld.Cameras {
 
                     // Make sure we have a renderer
                     var hitRenderer = hit.collider.GetComponent<Renderer>();
-                    if (ReferenceEquals(hitRenderer, null) || !hitRenderer.enabled) continue;
+                    if (!(hitRenderer is{enabled: true})) continue;
 
                     var info = FindLosInfo(hitRenderer);
 

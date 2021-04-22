@@ -102,18 +102,16 @@ namespace Utility.Fuzzy {
 
             // find DOM if left of center
             if (givenValue <= PeakPoint && givenValue >= PeakPoint - LeftOffset){
-                var grad = 1.0f / LeftOffset;
-                return grad * (givenValue - (PeakPoint - LeftOffset));
+                var leftGrad = 1.0f / LeftOffset;
+                return leftGrad * (givenValue - (PeakPoint - LeftOffset));
             }
 
             // find DOM if right of center
-            if (givenValue > PeakPoint && givenValue < PeakPoint + RightOffset){
-                var grad = 1.0f / -RightOffset;
-                return grad * (givenValue - PeakPoint) + 1.0f;
-            }
+            if (!(givenValue > PeakPoint) || !(givenValue < PeakPoint + RightOffset)) return 0.0f;
+            var rightGrad = 1.0f / -RightOffset;
+            return rightGrad * (givenValue - PeakPoint) + 1.0f;
 
             // out of range of this FLV, return zero
-            return 0.0f;
         }
     }
 }

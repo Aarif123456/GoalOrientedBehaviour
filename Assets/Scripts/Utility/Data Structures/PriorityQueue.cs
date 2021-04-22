@@ -433,11 +433,10 @@ namespace Utility.Data_Structures {
             var matchedAtLeastOne = false;
 
             for (var index = 0; index < Count; ++index){
-                if (match(_items[index].Value)){
-                    RemoveAt(index);
-                    index--;
-                    matchedAtLeastOne = true;
-                }
+                if (!match(_items[index].Value)) continue;
+                RemoveAt(index);
+                index--;
+                matchedAtLeastOne = true;
             }
 
             return matchedAtLeastOne;
@@ -490,36 +489,35 @@ namespace Utility.Data_Structures {
 
             // If you forget to clear this, you have a potential memory leak.
             _items[Count] = default;
-            if (Count > 0 && index != Count){
-                // If the new item is greater than its parent, bubble up.
-                var i = index;
-                var parent = (i - 1) / 2;
-                while (_prioritySign * _compareFunc(tmp.Priority, _items[parent].Priority) > 0){
-                    _items[i] = _items[parent];
-                    i = parent;
-                    parent = (i - 1) / 2;
-                }
-
-                // if i == index, then we didn't move the item up
-                if (i == index)
-                    // bubble down ...
-                {
-                    while (i < Count / 2){
-                        var j = 2 * i + 1;
-                        if (j < Count - 1 &&
-                            _prioritySign * _compareFunc(_items[j].Priority, _items[j + 1].Priority) < 0)
-                            ++j;
-
-                        if (_prioritySign * _compareFunc(_items[j].Priority, tmp.Priority) <= 0) break;
-
-                        _items[i] = _items[j];
-                        i = j;
-                    }
-                }
-
-                // Be sure to store the item in its place.
-                _items[i] = tmp;
+            if (Count <= 0 || index == Count) return o;
+            // If the new item is greater than its parent, bubble up.
+            var i = index;
+            var parent = (i - 1) / 2;
+            while (_prioritySign * _compareFunc(tmp.Priority, _items[parent].Priority) > 0){
+                _items[i] = _items[parent];
+                i = parent;
+                parent = (i - 1) / 2;
             }
+
+            // if i == index, then we didn't move the item up
+            if (i == index)
+                // bubble down ...
+            {
+                while (i < Count / 2){
+                    var j = 2 * i + 1;
+                    if (j < Count - 1 &&
+                        _prioritySign * _compareFunc(_items[j].Priority, _items[j + 1].Priority) < 0)
+                        ++j;
+
+                    if (_prioritySign * _compareFunc(_items[j].Priority, tmp.Priority) <= 0) break;
+
+                    _items[i] = _items[j];
+                    i = j;
+                }
+            }
+
+            // Be sure to store the item in its place.
+            _items[i] = tmp;
 
             // if (!VerifyQueue())
             // {

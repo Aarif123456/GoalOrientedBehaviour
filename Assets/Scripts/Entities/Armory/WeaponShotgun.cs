@@ -114,14 +114,13 @@ namespace Entities.Armory {
         }
 
         private void AddPellet(Agent shooter, Vector3 target){
-            if (activeProjectileCount < Parameters.Instance.MaximumActivePellets){
-                OnProjectileAdded();
+            if (activeProjectileCount >= Parameters.Instance.MaximumActivePellets) return;
+            OnProjectileAdded();
 
-                var pelletObject = Object.Instantiate(GameManager.Instance.pelletPrefab);
-                pelletObject.GetComponent<Rigidbody>().mass = Parameters.Instance.PelletMass;
-                var pellet = pelletObject.AddComponent<ProjectilePellet>();
-                pellet.Spawn(this, shooter, target);
-            }
+            var pelletObject = Object.Instantiate(GameManager.Instance.pelletPrefab);
+            pelletObject.GetComponent<Rigidbody>().mass = Parameters.Instance.PelletMass;
+            var pellet = pelletObject.AddComponent<ProjectilePellet>();
+            pellet.Spawn(this, shooter, target);
         }
     }
 }

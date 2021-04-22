@@ -36,9 +36,8 @@ namespace GameWorld.Navigation.Graph {
 
         public GameObject AddEdge(Node fromNode, Node toNode){
             if (IsLocked || ReferenceEquals(fromNode, null) || fromNode.Graph != toNode.Graph ||
-                ReferenceEquals(fromNode.Graph.edgePrefab, null)){
+                ReferenceEquals(fromNode.Graph.edgePrefab, null))
                 return null;
-            }
 
 #if UNITY_EDITOR
             var edgeObject = PrefabUtility.InstantiatePrefab(fromNode.Graph.edgePrefab) as GameObject;
@@ -46,7 +45,7 @@ namespace GameWorld.Navigation.Graph {
         GameObject edgeObject = Instantiate(fromNode.Graph.edgePrefab) as GameObject;
 #endif
 
-            if (ReferenceEquals(edgeObject , null)) return edgeObject;
+            if (ReferenceEquals(edgeObject, null)) return edgeObject;
             var edge = edgeObject.GetComponent<Edge>();
 
             if (!ReferenceEquals(edge, null)){

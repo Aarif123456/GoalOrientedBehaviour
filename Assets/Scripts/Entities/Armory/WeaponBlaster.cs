@@ -57,14 +57,13 @@ namespace Entities.Armory {
 
 
         private void AddBolt(Agent shooter, Vector3 target){
-            if (activeProjectileCount < Parameters.Instance.MaximumActiveBolts){
-                OnProjectileAdded();
+            if (activeProjectileCount >= Parameters.Instance.MaximumActiveBolts) return;
+            OnProjectileAdded();
 
-                var boltObject = Object.Instantiate(GameManager.Instance.boltPrefab);
-                boltObject.GetComponent<Rigidbody>().mass = Parameters.Instance.BoltMass;
-                var bolt = boltObject.AddComponent<ProjectileBolt>();
-                bolt.Spawn(this, shooter, target);
-            }
+            var boltObject = Object.Instantiate(GameManager.Instance.boltPrefab);
+            boltObject.GetComponent<Rigidbody>().mass = Parameters.Instance.BoltMass;
+            var bolt = boltObject.AddComponent<ProjectileBolt>();
+            bolt.Spawn(this, shooter, target);
         }
     }
 }

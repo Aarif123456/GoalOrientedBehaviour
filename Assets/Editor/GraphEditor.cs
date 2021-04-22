@@ -10,15 +10,14 @@ public class GraphEditor : Editor {
 
     public override void OnInspectorGUI(){
         graph = target as Graph;
-        if(ReferenceEquals(graph, null)) return;
+        if (ReferenceEquals(graph, null)) return;
 
         if (graph.IsLocked){
             GUILayout.Label("The graph is locked. Unlock to edit.");
             graph.locked = EditorGUILayout.Toggle("\tLocked", graph.locked);
         }
-        else{
+        else
             DrawDefaultInspector();
-        }
 
         if (!graph.IsLocked &&
             ReferenceEquals(graph.nodeCollectionObject, null) &&
@@ -31,48 +30,35 @@ public class GraphEditor : Editor {
         if (!graph.IsLocked &&
             ReferenceEquals(graph.nodeCollectionObject, null) &&
             !ReferenceEquals(graph.edgeCollectionObject, null) &&
-            GUILayout.Button("Create a new node collection")){
+            GUILayout.Button("Create a new node collection"))
             CreateNewNodeCollection();
-        }
 
         if (!graph.IsLocked &&
             !ReferenceEquals(graph.nodeCollectionObject, null) &&
-            GUILayout.Button("Edit node collection")){
+            GUILayout.Button("Edit node collection"))
             Selection.activeGameObject = graph.nodeCollectionObject;
-        }
 
         if (!graph.IsLocked &&
             ReferenceEquals(graph.edgeCollection, null) &&
             !ReferenceEquals(graph.nodeCollectionObject, null) &&
-            GUILayout.Button("Create a new edge collection")){
+            GUILayout.Button("Create a new edge collection"))
             CreateNewEdgeCollection();
-        }
 
         if (!graph.IsLocked &&
             !ReferenceEquals(graph.edgeCollectionObject, null) &&
-            GUILayout.Button("Edit edge collection")){
+            GUILayout.Button("Edit edge collection"))
             Selection.activeGameObject = graph.edgeCollectionObject;
-        }
 
         if (graph.IsVisible){
-            if (GUILayout.Button("Hide graph")){
-                if (!ReferenceEquals(graph.nodeCollection, null)){
-                    graph.nodeCollection.IsVisible = false;
-                }
+            if (!GUILayout.Button("Hide graph")) return;
+            if (!ReferenceEquals(graph.nodeCollection, null)) graph.nodeCollection.IsVisible = false;
 
-                if (!ReferenceEquals(graph.edgeCollection, null)){
-                    graph.edgeCollection.IsVisible = false;
-                }
-            }
+            if (!ReferenceEquals(graph.edgeCollection, null)) graph.edgeCollection.IsVisible = false;
         }
         else if (GUILayout.Button("Show graph")){
-            if (!ReferenceEquals(graph.nodeCollection, null)){
-                graph.nodeCollection.IsVisible = true;
-            }
+            if (!ReferenceEquals(graph.nodeCollection, null)) graph.nodeCollection.IsVisible = true;
 
-            if (!ReferenceEquals(graph.edgeCollection, null)){
-                graph.edgeCollection.IsVisible = true;
-            }
+            if (!ReferenceEquals(graph.edgeCollection, null)) graph.edgeCollection.IsVisible = true;
         }
     }
 

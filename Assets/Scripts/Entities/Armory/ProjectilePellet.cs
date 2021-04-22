@@ -6,21 +6,23 @@ namespace Entities.Armory {
         public void OnTriggerEnter(Collider hitCollider){
             var hitEntity = hitCollider.GetComponent<Entity>();
 
-            if (hitEntity != null){
-                var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
+            if (hitEntity == null) return;
+            var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
 
-                if (hitEntity.EntityType == EntityTypes.Wall)
+            switch (hitEntity.EntityType){
+                case EntityTypes.Wall:
                     ProcessImpact(hitEntity, hitPoint);
-                else if (hitEntity.EntityType == EntityTypes.Agent){
+                    break;
+                case EntityTypes.Agent:{
                     var hitAgent = hitEntity as Agent;
 
-                    if (hitAgent != null && hitAgent != Shooter &&
-                        (Parameters.Instance.FriendlyFire || Shooter.color != hitAgent.color)){
-                        ProcessImpact(hitEntity, hitPoint);
-                        EventManager.Instance.Enqueue(
-                            Events.DamageInflicted,
-                            new DamageInflictedEventPayload(Shooter, hitAgent, hitPoint, DamageInflicted));
-                    }
+                    if (hitAgent == null || hitAgent == Shooter ||
+                        !Parameters.Instance.FriendlyFire && Shooter.color == hitAgent.color) return;
+                    ProcessImpact(hitEntity, hitPoint);
+                    EventManager.Instance.Enqueue(
+                        Events.DamageInflicted,
+                        new DamageInflictedEventPayload(Shooter, hitAgent, hitPoint, DamageInflicted));
+                    break;
                 }
             }
         }

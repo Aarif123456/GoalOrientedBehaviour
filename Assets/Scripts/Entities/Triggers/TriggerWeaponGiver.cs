@@ -15,25 +15,23 @@ namespace Entities.Triggers {
             base.Awake();
 
             EntityType =
-                weaponGiverType == WeaponGiverTypes.Railgun
-                    ? EntityTypes.Railgun
-                    : weaponGiverType == WeaponGiverTypes.RocketLauncher
-                        ? EntityTypes.RocketLauncher
-                        : EntityTypes.Shotgun;
+                weaponGiverType switch{
+                    WeaponGiverTypes.Railgun => EntityTypes.Railgun,
+                    WeaponGiverTypes.RocketLauncher => EntityTypes.RocketLauncher,
+                    _ => EntityTypes.Shotgun
+                };
 
             TimeBetweenRespawns = Parameters.Instance.WeaponRespawnDelay;
         }
 
         public void OnTriggerEnter(Collider triggeringCollider){
-            if (IsActive){
-                TriggeringAgent = triggeringCollider.GetComponent<Agent>();
+            if (!IsActive) return;
+            TriggeringAgent = triggeringCollider.GetComponent<Agent>();
 
-                if (TriggeringAgent != null){
-                    TriggeringAgent.WeaponSystem.AddWeapon(EnumUtility.EntityTypeToWeaponType(EntityType));
+            if (TriggeringAgent == null) return;
+            TriggeringAgent.WeaponSystem.AddWeapon(EnumUtility.EntityTypeToWeaponType(EntityType));
 
-                    Deactivate();
-                }
-            }
+            Deactivate();
         }
     }
 }

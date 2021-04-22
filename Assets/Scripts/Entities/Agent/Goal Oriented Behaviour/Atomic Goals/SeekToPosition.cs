@@ -38,7 +38,7 @@ namespace Entities.GoalOrientedBehaviour {
             Agent.SteeringBehaviours.Remove(look);
         }
 
-        private bool IsStuck(){
+        private static bool IsStuck(){
             return false;
         }
     }

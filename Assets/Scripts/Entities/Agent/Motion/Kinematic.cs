@@ -147,24 +147,30 @@ namespace Entities.Steering {
         public Vector3 Center => Position + CenterOffset;
 
         public void SetSteering(Steering steering){
-            if (steering.Type == Steering.Types.Velocities)
-                SetVelocities(steering.Linear, steering.Angular);
-            else if (steering.Type == Steering.Types.Accelerations)
-                SetAccelerations(steering.Linear, steering.Angular);
-            else{
-                throw new NotImplementedException(
-                    string.Format("Steering type {0} is not implemented", steering.Type));
+            switch (steering.Type){
+                case Steering.Types.Velocities:
+                    SetVelocities(steering.Linear, steering.Angular);
+                    break;
+                case Steering.Types.Accelerations:
+                    SetAccelerations(steering.Linear, steering.Angular);
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        string.Format("Steering type {0} is not implemented", steering.Type));
             }
         }
 
         public void AccumulateSteering(Steering steering){
-            if (steering.Type == Steering.Types.Velocities)
-                AccumulateVelocities(steering.Linear, steering.Angular);
-            else if (steering.Type == Steering.Types.Accelerations)
-                AccumulateAccelerations(steering.Linear, steering.Angular);
-            else{
-                throw new NotImplementedException(
-                    string.Format("Steering type {0} is not implemented", steering.Type));
+            switch (steering.Type){
+                case Steering.Types.Velocities:
+                    AccumulateVelocities(steering.Linear, steering.Angular);
+                    break;
+                case Steering.Types.Accelerations:
+                    AccumulateAccelerations(steering.Linear, steering.Angular);
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        string.Format("Steering type {0} is not implemented", steering.Type));
             }
         }
 

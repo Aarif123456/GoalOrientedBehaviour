@@ -13,8 +13,8 @@ namespace GameWorld.Navigation.Graph {
                 new IntervalHeap<ScoredNode>(
                     new DelegateComparer<ScoredNode>(
                         delegate(ScoredNode s1, ScoredNode s2) { return s1.f.CompareTo(s2.f); }));
-            float g = 0;
-            float h = 0;
+            const float g = 0;
+            const float h = 0;
             priorityQueue.Add(new ScoredNode(source, g + h, g, null, null));
         }
 
@@ -31,7 +31,7 @@ namespace GameWorld.Navigation.Graph {
             }
 
             foreach (var edgeFromCurrent in current.node.outEdges){
-                float h = 0;
+                const float h = 0;
                 var g = current.g + edgeFromCurrent.Cost;
 
                 priorityQueue.Add(new ScoredNode(edgeFromCurrent.ToNode, g + h, g, edgeFromCurrent, current));

@@ -10,19 +10,18 @@ namespace Entities.GoalOrientedBehaviour {
             var desirability = 0.0f;
 
             // only do the calculation if there is a target present
-            if (agent.TargetingSystem.IsTargetPresent){
-                var tweaker = Parameters.Instance.AgentAggroGoalTweaker;
+            if (!agent.TargetingSystem.IsTargetPresent) return desirability;
+            var tweaker = Parameters.Instance.AgentAggroGoalTweaker;
 
-                desirability = tweaker *
-                               Feature.Health(agent) *
-                               Feature.TotalWeaponStrength(agent);
+            desirability = tweaker *
+                           Feature.Health(agent) *
+                           Feature.TotalWeaponStrength(agent);
 
-                // bias the value according to the personality of the bot
-                desirability *= characterBias;
+            // bias the value according to the personality of the bot
+            desirability *= characterBias;
 
-                // ensure the value is in the range 0 to 1
-                desirability = Mathf.Clamp(desirability, 0.0f, 1.0f);
-            }
+            // ensure the value is in the range 0 to 1
+            desirability = Mathf.Clamp(desirability, 0.0f, 1.0f);
 
             return desirability;
         }

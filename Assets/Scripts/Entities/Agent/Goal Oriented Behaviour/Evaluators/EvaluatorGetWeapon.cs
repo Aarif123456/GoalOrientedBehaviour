@@ -21,24 +21,12 @@ namespace Entities.GoalOrientedBehaviour {
             if (distance == 1) return 0;
 
             // value used to tweak the desirability
-            float tweaker;
-            switch (weaponType){
-                case WeaponTypes.Railgun:
-                    tweaker =
-                        Parameters.Instance.AgentRailgunGoalTweaker;
-                    break;
-                case WeaponTypes.RocketLauncher:
-                    tweaker =
-                        Parameters.Instance.AgentRocketLauncherGoalTweaker;
-                    break;
-                case WeaponTypes.Shotgun:
-                    tweaker =
-                        Parameters.Instance.AgentShotgunGoalTweaker;
-                    break;
-                default:
-                    tweaker = 1.0f;
-                    break;
-            }
+            var tweaker = weaponType switch{
+                WeaponTypes.Railgun => Parameters.Instance.AgentRailgunGoalTweaker,
+                WeaponTypes.RocketLauncher => Parameters.Instance.AgentRocketLauncherGoalTweaker,
+                WeaponTypes.Shotgun => Parameters.Instance.AgentShotgunGoalTweaker,
+                _ => 1.0f
+            };
 
             var health = Feature.Health(agent);
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Entities.Steering {
     public abstract class SteeringBehaviour {
-        protected SteeringBehaviour(Agent agent, Vector3 otherPosition)
+        protected SteeringBehaviour(Entity agent, Vector3 otherPosition)
             : this(agent.Kinematic, otherPosition){
         }
 

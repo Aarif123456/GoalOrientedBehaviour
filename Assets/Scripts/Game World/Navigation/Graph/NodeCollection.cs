@@ -69,10 +69,8 @@ namespace GameWorld.Navigation.Graph {
 //            node.transform.position = position;
         }
 
-        public GameObject AddNode(Camera camera){
-            if (IsLocked || ReferenceEquals(graph, null) || ReferenceEquals(graph.nodePrefab, null)){
-                return null;
-            }
+        public GameObject AddNode(Camera curCamera){
+            if (IsLocked || ReferenceEquals(graph, null) || ReferenceEquals(graph.nodePrefab, null)) return null;
 
 #if UNITY_EDITOR
             var nodeObject = PrefabUtility.InstantiatePrefab(graph.nodePrefab) as GameObject;
@@ -84,8 +82,8 @@ namespace GameWorld.Navigation.Graph {
             var node = nodeObject.GetComponent<Node>();
 
             if (!ReferenceEquals(node, null)){
-                if (!ReferenceEquals(camera, null)){
-                    var transform1 = camera.transform;
+                if (!ReferenceEquals(curCamera, null)){
+                    var transform1 = curCamera.transform;
                     node.CastToCollider(transform1.position, transform1.forward, 5f, 20f);
                 }
 
@@ -102,9 +100,7 @@ namespace GameWorld.Navigation.Graph {
             if (IsLocked) return;
 
             foreach (var node in Nodes){
-                if (!node.locked){
-                    node.DropToSurface();
-                }
+                if (!node.locked) node.DropToSurface();
             }
         }
 
@@ -112,19 +108,16 @@ namespace GameWorld.Navigation.Graph {
             if (IsLocked) return;
 
             foreach (var node in Nodes){
-                if (!node.locked){
-                    node.GenerateNameFromPosition();
-                }
+                if (!node.locked) node.GenerateNameFromPosition();
             }
         }
 
         public void RaycastNodes(){
             if (IsLocked) return;
             foreach (var fromNode in Nodes){
-                if (!fromNode.locked){
-                    fromNode.RemoveAllConnections();
-                    fromNode.RaycastNeighbours(Nodes, false, true);
-                }
+                if (fromNode.locked) continue;
+                fromNode.RemoveAllConnections();
+                fromNode.RaycastNeighbours(Nodes, false, true);
             }
         }
     }

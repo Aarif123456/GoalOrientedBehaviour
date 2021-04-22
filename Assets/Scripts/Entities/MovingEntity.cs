@@ -25,17 +25,16 @@ namespace Entities {
             characterController = GetComponent<CharacterController>();
             SteeringBehaviours = new List<SteeringBehaviour>();
 
-            if (characterController != null){
-                Kinematic.CenterOffset = characterController.center;
-                Kinematic.Radius = characterController.radius;
-                Kinematic.Height = characterController.height;
-            }
+            if (characterController == null) return;
+            Kinematic.CenterOffset = characterController.center;
+            Kinematic.Radius = characterController.radius;
+            Kinematic.Height = characterController.height;
         }
 
         public override void Update(){
             base.Update();
 
-            if (motor != null && motor.enabled) motor.UpdateFromGameObject(this, Time.deltaTime);
+            if (motor is{enabled: true}) motor.UpdateFromGameObject(this, Time.deltaTime);
         }
 
         public void LateUpdate(){
@@ -43,10 +42,9 @@ namespace Entities {
 
             Act(Time.deltaTime);
 
-            if (motor != null && motor.enabled){
-                motor.CalculatePhysics(this, Time.deltaTime);
-                motor.ApplyPhysicsToGameObject(this, Time.deltaTime);
-            }
+            if (!(motor is{enabled: true})) return;
+            motor.CalculatePhysics(this, Time.deltaTime);
+            motor.ApplyPhysicsToGameObject(this, Time.deltaTime);
         }
 
         protected virtual void Think(float deltaTime){
@@ -78,11 +76,10 @@ namespace Entities {
             transform.eulerAngles = Vector3.zero;
             Kinematic = new Kinematic{Position = transform.position, Rotation = transform.eulerAngles};
 
-            if (characterController != null){
-                Kinematic.CenterOffset = characterController.center;
-                Kinematic.Radius = characterController.radius;
-                Kinematic.Height = characterController.height;
-            }
+            if (characterController == null) return;
+            Kinematic.CenterOffset = characterController.center;
+            Kinematic.Radius = characterController.radius;
+            Kinematic.Height = characterController.height;
         }
     }
 }

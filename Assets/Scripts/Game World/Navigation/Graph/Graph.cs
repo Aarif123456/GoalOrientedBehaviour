@@ -26,13 +26,13 @@ namespace GameWorld.Navigation.Graph {
 
         public bool IsVisible {
             get =>
-                (nodeCollection == null || nodeCollection.IsVisible) &&
-                (edgeCollection == null || edgeCollection.IsVisible);
+                (ReferenceEquals(nodeCollection, null) || nodeCollection.IsVisible) &&
+                (ReferenceEquals(edgeCollection, null) || edgeCollection.IsVisible);
 
             set {
-                if (nodeCollection != null) nodeCollection.IsVisible = value;
+                if (!ReferenceEquals(nodeCollection, null)) nodeCollection.IsVisible = value;
 
-                if (edgeCollection != null) edgeCollection.IsVisible = value;
+                if (!ReferenceEquals(edgeCollection, null)) edgeCollection.IsVisible = value;
             }
         }
     }

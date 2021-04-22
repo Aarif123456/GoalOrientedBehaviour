@@ -141,9 +141,8 @@ namespace GameWorld {
                 List<Subscription> eventSubscriptionList;
                 if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
                     eventSubscriptionList != null){
-                    if (!eventSubscriptionList.Contains(subscriptionToAdd)){
+                    if (!eventSubscriptionList.Contains(subscriptionToAdd))
                         eventSubscriptionList.Add(subscriptionToAdd);
-                    }
 
                     return;
                 }
@@ -167,9 +166,8 @@ namespace GameWorld {
             lock (_eventSubscribers){
                 List<Subscription> eventSubscriptionList;
                 if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
-                    eventSubscriptionList != null){
+                    eventSubscriptionList != null)
                     eventSubscriptionList.Remove(subscriptionToRemove);
-                }
             }
         }
 
@@ -444,20 +442,15 @@ namespace GameWorld {
         /// </returns>
         private bool ProcessEvents(){
             // if already processing event, leave.
-            if (_isProcessingEvents){
-                return false;
-            }
+            if (_isProcessingEvents) return false;
 
             // if no events to process, leave.
-            if (_eventGatherQueue.Count == 0 || _eventGatherQueue.Peek().Priority > Time.time){
-                return false;
-            }
+            if (_eventGatherQueue.Count == 0 || _eventGatherQueue.Peek().Priority > Time.time) return false;
 
             _isProcessingEvents = true;
 
-            if (_eventProcessQueue.Count != 0){
+            if (_eventProcessQueue.Count != 0)
                 Debug.WriteLine("EventManager: event process list should be empty at this point.");
-            }
 
             lock (_eventGatherQueue){
                 // We use a double buffer scheme (gather, process) to minimize lock time.
@@ -476,9 +469,8 @@ namespace GameWorld {
                     if (unprocessedEvent.EventLifespan == Event.Lifespans.Cycle){
                         //unprocessedEvent.Recycle(); // shouldn't happen. If it does, event is skipped.
                     }
-                    else{
+                    else
                         _eventGatherQueue.Enqueue(queueItem);
-                    }
                 }
             }
 
@@ -510,13 +502,9 @@ namespace GameWorld {
 
             // notify specified receiver
             if (eventToFire.ReceiverId != RECEIVER_ID_IRRELEVANT){
-                if (EntityManager.Find<Entity>(eventToFire.ReceiverId)){
-                    eventToFire.Send();
-                }
+                if (EntityManager.Find<Entity>(eventToFire.ReceiverId)) eventToFire.Send();
             }
-            else if (eventToFire.EventDelegate != null){
-                eventToFire.Fire(eventToFire.EventDelegate);
-            }
+            else if (eventToFire.EventDelegate != null) eventToFire.Fire(eventToFire.EventDelegate);
 
             //eventToFire.Recycle();
         }

@@ -16,15 +16,13 @@ namespace Entities.Triggers {
         }
 
         public void OnTriggerEnter(Collider triggeringCollider){
-            if (IsActive){
-                TriggeringAgent = triggeringCollider.GetComponent<Agent>();
+            if (!IsActive) return;
+            TriggeringAgent = triggeringCollider.GetComponent<Agent>();
 
-                if (TriggeringAgent != null){
-                    TriggeringAgent.IncreaseHealth(HealthGiven);
+            if (TriggeringAgent == null) return;
+            TriggeringAgent.IncreaseHealth(HealthGiven);
 
-                    Deactivate();
-                }
-            }
+            Deactivate();
         }
     }
 }

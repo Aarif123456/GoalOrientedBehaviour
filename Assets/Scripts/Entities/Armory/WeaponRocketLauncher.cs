@@ -74,14 +74,13 @@ namespace Entities.Armory {
         }
 
         private void AddRocket(Agent shooter, Vector3 target){
-            if (activeProjectileCount < Parameters.Instance.MaximumActiveRockets){
-                OnProjectileAdded();
+            if (activeProjectileCount >= Parameters.Instance.MaximumActiveRockets) return;
+            OnProjectileAdded();
 
-                var rocketObject = Object.Instantiate(GameManager.Instance.rocketPrefab);
-                rocketObject.GetComponent<Rigidbody>().mass = Parameters.Instance.RocketMass;
-                var rocket = rocketObject.AddComponent<ProjectileRocket>();
-                rocket.Spawn(this, shooter, target);
-            }
+            var rocketObject = Object.Instantiate(GameManager.Instance.rocketPrefab);
+            rocketObject.GetComponent<Rigidbody>().mass = Parameters.Instance.RocketMass;
+            var rocket = rocketObject.AddComponent<ProjectileRocket>();
+            rocket.Spawn(this, shooter, target);
         }
     }
 }

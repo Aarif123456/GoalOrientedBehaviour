@@ -36,9 +36,9 @@ namespace Entities.GoalOrientedBehaviour {
             // if there are no subgoals present check to see if the path still
             // has edges remaining. If it does then call activate to grab the
             // next edge.
-            if (Status == StatusTypes.Completed){
-                if (edgesToTraverse.Count > 0) Activate();
-            }
+            if (Status != StatusTypes.Completed) return Status;
+            if (edgesToTraverse.Count > 0)
+                Activate();
 
             return Status;
         }

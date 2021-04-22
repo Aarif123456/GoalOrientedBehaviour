@@ -74,14 +74,13 @@ namespace Entities.Armory {
         }
 
         private void AddSlug(Agent shooter, Vector3 target){
-            if (activeProjectileCount < Parameters.Instance.MaximumActiveSlugs){
-                OnProjectileAdded();
+            if (activeProjectileCount >= Parameters.Instance.MaximumActiveSlugs) return;
+            OnProjectileAdded();
 
-                var slugObject = Object.Instantiate(GameManager.Instance.slugPrefab);
-                slugObject.GetComponent<Rigidbody>().mass = Parameters.Instance.SlugMass;
-                var slug = slugObject.AddComponent<ProjectileSlug>();
-                slug.Spawn(this, shooter, target);
-            }
+            var slugObject = Object.Instantiate(GameManager.Instance.slugPrefab);
+            slugObject.GetComponent<Rigidbody>().mass = Parameters.Instance.SlugMass;
+            var slug = slugObject.AddComponent<ProjectileSlug>();
+            slug.Spawn(this, shooter, target);
         }
     }
 }

@@ -9,12 +9,11 @@ namespace Entities.GoalOrientedBehaviour {
         private bool clockwise;
         private Vector3 strafeTarget;
 
-        public Strafe(Agent agent, Agent targetAgent)
+        public Strafe(Agent agent, Entity targetAgent)
             : base(agent, GoalTypes.Strafe){
             clockwise = Random.Range(0, 2) == 0;
             satisfactionRadius = 0.1f;
-            seek = new Seek(agent.Kinematic);
-            seek.SatisfactionRadius = satisfactionRadius;
+            seek = new Seek(agent.Kinematic){SatisfactionRadius = satisfactionRadius};
             //look = new Face(Agent.Kinematic, targetAgent.Kinematic);
             look = new Face(Agent.Kinematic, targetAgent.Kinematic.Position);
         }

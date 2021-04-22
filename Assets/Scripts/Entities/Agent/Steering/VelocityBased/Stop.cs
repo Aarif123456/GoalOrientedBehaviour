@@ -4,7 +4,7 @@ namespace Entities.Steering {
             : base(agentKinematic){
         }
 
-        public Stop(Agent agent)
+        public Stop(Entity agent)
             : this(agent.Kinematic){
         }
 

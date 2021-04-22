@@ -52,15 +52,12 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         private static float GetMaxRoundsBotCanCarryForWeapon(WeaponTypes weaponType){
-            switch (weaponType){
-                case WeaponTypes.Railgun: return Parameters.Instance.RailgunMaximumRoundsCarried;
-
-                case WeaponTypes.RocketLauncher: return Parameters.Instance.RocketLauncherMaximumRoundsCarried;
-
-                case WeaponTypes.Shotgun: return Parameters.Instance.ShotgunMaximumRoundsCarried;
-
-                default: throw new Exception("Trying to calculate  of unknown weapon.");
-            }
+            return weaponType switch{
+                WeaponTypes.Railgun => Parameters.Instance.RailgunMaximumRoundsCarried,
+                WeaponTypes.RocketLauncher => Parameters.Instance.RocketLauncherMaximumRoundsCarried,
+                WeaponTypes.Shotgun => Parameters.Instance.ShotgunMaximumRoundsCarried,
+                _ => throw new Exception("Trying to calculate  of unknown weapon.")
+            };
         }
     }
 }

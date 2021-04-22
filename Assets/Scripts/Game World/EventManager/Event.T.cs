@@ -168,14 +168,10 @@ namespace GameWorld {
         }
 
         internal override void Send(){
-            if (ReceiverId == EventManager.RECEIVER_ID_IRRELEVANT){
-                return;
-            }
+            if (ReceiverId == EventManager.RECEIVER_ID_IRRELEVANT) return;
 
             var entity = EntityManager.Find<Entity>(ReceiverId);
-            if (!ReferenceEquals(entity, null)){
-                entity.HandleEvent(this);
-            }
+            if (!ReferenceEquals(entity, null)) entity.HandleEvent(this);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace GameWorld.Navigation.Graph {
         public List<Edge> outEdges;
         public List<Trigger> nearbyTriggers;
 
-        public Graph Graph => NodeCollection == null ? null : NodeCollection.Graph;
+        public Graph Graph => ReferenceEquals(NodeCollection, null) ? null : NodeCollection.Graph;
 
         public NodeCollection NodeCollection =>
             transform.parent == null ? null : transform.parent.GetComponent<NodeCollection>();
@@ -44,15 +44,12 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void Update(){
-            if (!IsLocked){
-                GenerateNameFromPosition();
-            }
+            if (!IsLocked) GenerateNameFromPosition();
         }
 
         public GameObject AddConnectedNode(bool oneWay, Camera camera){
-            if (IsLocked || NodeCollection == null || Graph == null || Graph.nodePrefab == null){
-                return null;
-            }
+            if (IsLocked || ReferenceEquals(NodeCollection, null) || ReferenceEquals(Graph, null) ||
+                Graph.nodePrefab == null) return null;
 #if UNITY_EDITOR
             var connectedNodeObject = PrefabUtility.InstantiatePrefab(Graph.nodePrefab) as GameObject;
 #else
@@ -62,17 +59,14 @@ namespace GameWorld.Navigation.Graph {
             if (ReferenceEquals(connectedNodeObject, null)) return null;
             var connectedNode = connectedNodeObject.GetComponent<Node>();
 
-            if (!ReferenceEquals(camera, null)){
+            if (!ReferenceEquals(camera, null))
                 connectedNode.CastToCollider(camera.transform.position, camera.transform.forward, 5f, 20f);
-            }
 
             connectedNode.GenerateNameFromPosition();
             NodeCollection.ApplyParametersToNode(connectedNode);
             connectedNodeObject.transform.parent = transform.parent;
 
-            if (!oneWay){
-                connectedNode.AddConnection(this);
-            }
+            if (!oneWay) connectedNode.AddConnection(this);
 
             AddConnection(connectedNode);
 
@@ -93,9 +87,7 @@ namespace GameWorld.Navigation.Graph {
 
             var edge = edgeObject.GetComponent<Edge>();
 
-            if (!outEdges.Contains(edge)){
-                outEdges.Add(edge);
-            }
+            if (!outEdges.Contains(edge)) outEdges.Add(edge);
         }
 
         public void CastToCollider(Vector3 fromPosition, Vector3 forward, float minDistance, float maxDistance){
@@ -104,27 +96,21 @@ namespace GameWorld.Navigation.Graph {
             var ray = new Ray(fromPosition, forward);
             var flag = false;
 
-            if (maxDistance > 0f){
+            if (maxDistance > 0f)
                 flag = Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask);
-            }
-            else{
+            else
                 flag = Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
-            }
 
-            if (flag){
+            if (flag)
                 transform.position = hit.point + Vector3.up * surfaceOffset;
-            }
-            else if (minDistance > 0f){
+            else if (minDistance > 0f)
                 transform.position = fromPosition + forward.normalized * minDistance + Vector3.up * surfaceOffset;
-            }
         }
 
         public static void ConnectNodes(Node[] nodes){
             foreach (var nodeFrom in nodes)
             foreach (var nodeTo in nodes){
-                if (!nodeFrom.IsLocked && nodeFrom != nodeTo){
-                    nodeFrom.AddConnection(nodeTo);
-                }
+                if (!nodeFrom.IsLocked && nodeFrom != nodeTo) nodeFrom.AddConnection(nodeTo);
             }
         }
 
@@ -142,9 +128,8 @@ namespace GameWorld.Navigation.Graph {
                     fromNode.RemoveConnection(toNode);
                     break;
                 default:{
-                    if (twoConnectedToOne){
+                    if (twoConnectedToOne)
                         toNode.RemoveConnection(fromNode);
-                    }
                     else{
                         fromNode.AddConnection(toNode);
                         toNode.AddConnection(fromNode);
@@ -158,9 +143,7 @@ namespace GameWorld.Navigation.Graph {
         public static void DisconnectNodes(Node[] nodes){
             foreach (var nodeFrom in nodes)
             foreach (var nodeTo in nodes){
-                if (!nodeFrom.IsLocked && nodeFrom != nodeTo){
-                    nodeFrom.RemoveConnection(nodeTo);
-                }
+                if (!nodeFrom.IsLocked && nodeFrom != nodeTo) nodeFrom.RemoveConnection(nodeTo);
             }
         }
 
@@ -188,38 +171,37 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void RaycastNeighbours(Node[] potentialNeighbours, bool clearConnections, bool requireSymmetry){
-            if (!IsLocked){
-                if (clearConnections){
-                    RemoveAllConnections();
-                }
+            if (IsLocked) return;
+            if (clearConnections) RemoveAllConnections();
 
-                if (potentialNeighbours == null) return;
-                foreach (var neighbour in potentialNeighbours){
-                    if (ReferenceEquals(neighbour, null) || neighbour == this) continue;
-                    var direction = neighbour.transform.position - transform.position;
+            if (potentialNeighbours == null) return;
+            foreach (var neighbour in potentialNeighbours){
+                if (ReferenceEquals(neighbour, null) || neighbour == this) continue;
+                var direction = neighbour.transform.position - transform.position;
 
-                    if (!(direction.magnitude <= raycastMaximumDistance) || ((!useCapsuleCast ||
-                                                                              Physics.CapsuleCast(
-                                                                                  transform.position - (1 - raycastPathRadius) * Vector3.up,
-                                                                                  transform.position + (1 - raycastPathRadius) * Vector3.up,
-                                                                                  raycastPathRadius,
-                                                                                  direction,
-                                                                                  out _,
-                                                                                  direction.magnitude,
-                                                                                  raycastObstaclesLayerMask)) && (useCapsuleCast || Physics.SphereCast(
+                if (!(direction.magnitude <= raycastMaximumDistance) || (!useCapsuleCast ||
+                                                                         Physics.CapsuleCast(
+                                                                             transform.position -
+                                                                             (1 - raycastPathRadius) * Vector3.up,
+                                                                             transform.position +
+                                                                             (1 - raycastPathRadius) * Vector3.up,
+                                                                             raycastPathRadius,
+                                                                             direction,
+                                                                             out _,
+                                                                             direction.magnitude,
+                                                                             raycastObstaclesLayerMask)) &&
+                    (useCapsuleCast || Physics.SphereCast(
                         transform.position,
                         raycastPathRadius,
                         direction,
                         out _,
                         direction.magnitude,
-                        raycastObstaclesLayerMask)))) continue;
-                    if (!requireSymmetry){
-                        AddConnection(neighbour);
-                    }
-                    else{
-                        AddConnection(neighbour);
-                        neighbour.AddConnection(this);
-                    }
+                        raycastObstaclesLayerMask))) continue;
+                if (!requireSymmetry)
+                    AddConnection(neighbour);
+                else{
+                    AddConnection(neighbour);
+                    neighbour.AddConnection(this);
                 }
             }
         }
@@ -229,9 +211,7 @@ namespace GameWorld.Navigation.Graph {
             neighbours.Clear();
 
             foreach (var edge in outEdges){
-                if (!ReferenceEquals(edge, null)){
-                    DestroyImmediate(edge.gameObject);
-                }
+                if (!ReferenceEquals(edge, null)) DestroyImmediate(edge.gameObject);
             }
 
             outEdges.Clear();
@@ -242,7 +222,7 @@ namespace GameWorld.Navigation.Graph {
             neighbours.Remove(toNode);
 
             for (var i = 0; i < outEdges.Count; i++){
-                if (outEdges[i] == null || outEdges[i].ToNode != toNode) continue;
+                if (ReferenceEquals(outEdges[i], null) || outEdges[i].ToNode != toNode) continue;
                 DestroyImmediate(outEdges[i].gameObject);
                 outEdges.RemoveAt(i);
                 break;

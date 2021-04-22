@@ -6,12 +6,14 @@ namespace Entities.Armory {
         public void OnTriggerEnter(Collider hitCollider){
             var hitEntity = hitCollider.GetComponent<Entity>();
 
-            if (hitEntity != null){
-                var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
+            if (hitEntity == null) return;
+            var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
 
-                if (hitEntity.EntityType == EntityTypes.Wall)
+            switch (hitEntity.EntityType){
+                case EntityTypes.Wall:
                     ProcessImpact(hitEntity, hitPoint);
-                else if (hitEntity.EntityType == EntityTypes.Agent){
+                    break;
+                case EntityTypes.Agent:{
                     var hitAgent = hitEntity as Agent;
 
                     if (hitAgent != null && hitAgent != Shooter &&
@@ -21,6 +23,8 @@ namespace Entities.Armory {
                             Events.DamageInflicted,
                             new DamageInflictedEventPayload(Shooter, hitAgent, hitPoint, DamageInflicted));
                     }
+
+                    break;
                 }
             }
         }

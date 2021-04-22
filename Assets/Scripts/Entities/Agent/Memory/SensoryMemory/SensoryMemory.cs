@@ -155,10 +155,9 @@ namespace Entities.Memory.SensoryMemory {
                         info.LastSensedPosition = agent.Kinematic.Position;
                         info.TimeLastVisible = Time.time;
 
-                        if (info.IsWithinFieldOfView == false){
-                            info.IsWithinFieldOfView = true;
-                            info.TimeBecameVisible = info.TimeLastSensed;
-                        }
+                        if (info.IsWithinFieldOfView) continue;
+                        info.IsWithinFieldOfView = true;
+                        info.TimeBecameVisible = info.TimeLastSensed;
                     }
                     else
                         info.IsWithinFieldOfView = false;
@@ -174,7 +173,7 @@ namespace Entities.Memory.SensoryMemory {
         ///     Gets the list of recently sensed opponents.
         /// </summary>
         /// <returns>A list of the agents that have been sensed recently.</returns>
-        public List<Agent> GetListOfRecentlySensedOpponents(){
+        public IEnumerable<Agent> GetListOfRecentlySensedOpponents(){
             // this will store all the opponents the agent can remember
             var opponents = new List<Agent>();
 

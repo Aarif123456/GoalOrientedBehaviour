@@ -76,11 +76,10 @@ namespace Entities.GoalOrientedBehaviour {
                 // add in reverse order
                 AddSubgoal(new SeekToPosition(Agent, payload.path.Destination));
 
-                if (!Agent.CanMoveTo(payload.path.Destination)){
-                    if (splicePath.Count > 0) AddSubgoal(new FollowPath(Agent, splicePath));
+                if (Agent.CanMoveTo(payload.path.Destination)) return;
+                if (splicePath.Count > 0) AddSubgoal(new FollowPath(Agent, splicePath));
 
-                    if (spliceTarget.HasValue) AddSubgoal(new SeekToPosition(Agent, spliceTarget.Value));
-                }
+                if (spliceTarget.HasValue) AddSubgoal(new SeekToPosition(Agent, spliceTarget.Value));
             }
         }
 

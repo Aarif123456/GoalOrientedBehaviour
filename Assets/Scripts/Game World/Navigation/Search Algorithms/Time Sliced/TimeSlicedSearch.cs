@@ -15,10 +15,10 @@ namespace GameWorld.Navigation.Graph {
 
         public abstract SearchResults CycleOnce();
 
-        public List<Edge> ExtractPath(ScoredNode current){
+        protected static List<Edge> ExtractPath(ScoredNode current){
             var path = new List<Edge>();
 
-            while (current.edgeFromParent != null){
+            while (!ReferenceEquals(current.edgeFromParent, null)){
                 path.Add(current.edgeFromParent);
                 current = current.parentScoredNode;
             }

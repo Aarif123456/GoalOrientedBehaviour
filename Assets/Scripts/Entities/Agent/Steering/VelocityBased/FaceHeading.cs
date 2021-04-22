@@ -14,13 +14,10 @@ namespace Entities.Steering {
         public override Steering Steer(){
             var speed = AgentKinematic.Velocity.magnitude;
 
-            if (speed > minimumSpeed){
-                OtherKinematic.Position = AgentKinematic.Position + AgentKinematic.Velocity / speed;
+            if (!(speed > minimumSpeed)) return new Steering{Type = Steering.Types.Velocities};
+            OtherKinematic.Position = AgentKinematic.Position + AgentKinematic.Velocity / speed;
 
-                return base.Steer();
-            }
-
-            return new Steering{Type = Steering.Types.Velocities};
+            return base.Steer();
         }
     }
 }

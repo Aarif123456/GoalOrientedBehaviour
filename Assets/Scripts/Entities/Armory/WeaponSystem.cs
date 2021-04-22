@@ -130,38 +130,33 @@ namespace Entities.Armory {
             // has only very recently gone out of view (this latter condition is
             // to ensure the weapon is aimed at the target even if it temporarily
             // dodges behind a wall or other cover)
-            if (Agent.TargetingSystem.IsTargetShootable ||
-                Agent.TargetingSystem.TimeTargetOutOfView < AimPersistenceTime){
-                // the position the weapon will be aimed at
-                AimingPosition = Agent.TargetingSystem.Target.Kinematic.Position;
+            if (!Agent.TargetingSystem.IsTargetShootable &&
+                !(Agent.TargetingSystem.TimeTargetOutOfView < AimPersistenceTime)) return;
+            // the position the weapon will be aimed at
+            AimingPosition = Agent.TargetingSystem.Target.Kinematic.Position;
 
-                // if the current weapon is not an instant hit type gun the
-                // target position must be adjusted to take into account the
-                // predicted movement of the target
-                if (CurrentWeapon.WeaponType == WeaponTypes.RocketLauncher ||
-                    CurrentWeapon.WeaponType == WeaponTypes.Blaster){
-                    AimingPosition = PredictFuturePositionOfTarget(deltaTime);
+            // if the current weapon is not an instant hit type gun the
+            // target position must be adjusted to take into account the
+            // predicted movement of the target
+            if (CurrentWeapon.WeaponType == WeaponTypes.RocketLauncher ||
+                CurrentWeapon.WeaponType == WeaponTypes.Blaster){
+                AimingPosition = PredictFuturePositionOfTarget(deltaTime);
 
-                    // if the weapon is aimed correctly, there is line of sight between 
-                    // the agent and the aiming position and it has been in view for a
-                    // period longer than the agent's reaction time, shoot the weapon
-                    if ( //Agent.RotateAimTowardPosition(AimingPosition) &&
-                        Agent.TargetingSystem.TimeTargetVisible > ReactionTime &&
-                        Agent.HasLineOfSight(AimingPosition)){
-                        AddNoiseToAim();
-                        ShootAt(AimingPosition);
-                    }
-                }
-                // no need to predict movement, aim directly at target
-                else{
-                    // if the weapon is aimed correctly and it has been in view for
-                    // a period longer than the agent's reaction time, shoot the weapon
-                    if ( //Agent.RotateAimTowardPosition(AimingPosition) &&
-                        Agent.TargetingSystem.TimeTargetVisible > ReactionTime){
-                        AddNoiseToAim();
-                        ShootAt(AimingPosition);
-                    }
-                }
+                // if the weapon is aimed correctly, there is line of sight between 
+                // the agent and the aiming position and it has been in view for a
+                // period longer than the agent's reaction time, shoot the weapon
+                if (!(Agent.TargetingSystem.TimeTargetVisible > ReactionTime) ||
+                    !Agent.HasLineOfSight(AimingPosition)) return;
+                AddNoiseToAim();
+                ShootAt(AimingPosition);
+            }
+            // no need to predict movement, aim directly at target
+            else{
+                // if the weapon is aimed correctly and it has been in view for
+                // a period longer than the agent's reaction time, shoot the weapon
+                if (!(Agent.TargetingSystem.TimeTargetVisible > ReactionTime)) return;
+                AddNoiseToAim();
+                ShootAt(AimingPosition);
             }
             // no target to shoot at so rotate aim to be parallel with the
             // agent's heading direction
