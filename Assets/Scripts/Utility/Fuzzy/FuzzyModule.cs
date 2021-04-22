@@ -51,7 +51,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     This class describes a fuzzy module: a collection of fuzzy variables and the rules that
     ///     operate on them.

@@ -59,7 +59,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace GameBrains.AI {
+namespace Utility.Data_Structures {
     /// <summary>
     ///     A priority queue item whose value is of type
     ///     <typeparamref name="TValue" /> and whose priority is of type

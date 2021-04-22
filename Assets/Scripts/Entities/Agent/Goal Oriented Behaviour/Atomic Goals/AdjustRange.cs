@@ -1,6 +1,7 @@
+using Entities.Steering;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public sealed class AdjustRange : Goal {
         private readonly Face look;
         private readonly Seek seek;

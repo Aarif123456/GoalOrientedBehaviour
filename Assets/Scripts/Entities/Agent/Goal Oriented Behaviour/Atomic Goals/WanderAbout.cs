@@ -1,4 +1,6 @@
-namespace GameBrains.AI {
+using Entities.Steering;
+
+namespace Entities.GoalOrientedBehaviour {
     public class WanderAbout : Goal {
         private readonly Wander wander;
 

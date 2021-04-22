@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class TargetingSystem {
         public TargetingSystem(Agent agent){
             Agent = agent;

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using GameWorld.Navigation.Graph;
 using UnityEngine;
+using Utility.Data_Structures;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class FollowPath : CompositeGoal {
         private readonly List<Edge> edgesToTraverse;
         private Vector3? destination;

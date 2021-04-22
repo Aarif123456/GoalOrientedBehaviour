@@ -51,7 +51,7 @@
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class SimpleFollowCamera : TargetedCamera {
         // The distance in the x-z plane to the target.
         public float distance = 7.0f;

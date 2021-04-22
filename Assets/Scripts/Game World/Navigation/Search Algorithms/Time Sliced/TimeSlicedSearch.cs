@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace GameWorld.Navigation.Graph {
     public abstract class TimeSlicedSearch {
         protected TimeSlicedSearch(TimeSlicedSearchTypes searchType, Node source){
             SearchType = searchType;

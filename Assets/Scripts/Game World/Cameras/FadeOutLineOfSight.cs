@@ -52,7 +52,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
 /* Fades out any objects between the player and this transform.
    The renderers shader is first changed to be an Alpha/Diffuse, then alpha is faded out to fadedOutAlpha.
    Only objects

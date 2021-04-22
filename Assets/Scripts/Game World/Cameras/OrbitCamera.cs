@@ -51,7 +51,7 @@
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class OrbitCamera : TargetedCamera {
         // Whether the camera is controllable by the player.
         public bool isControllable = true;

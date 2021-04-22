@@ -1,4 +1,4 @@
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class AttackTarget : CompositeGoal {
         public AttackTarget(Agent agent)
             : base(agent, GoalTypes.AttackTarget){

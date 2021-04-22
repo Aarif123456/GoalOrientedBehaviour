@@ -1,4 +1,6 @@
-namespace GameBrains.AI {
+using Utility.Math;
+
+namespace Entities.GoalOrientedBehaviour {
     public class HuntTarget : CompositeGoal {
         public HuntTarget(Agent agent)
             : base(agent, GoalTypes.HuntTarget){

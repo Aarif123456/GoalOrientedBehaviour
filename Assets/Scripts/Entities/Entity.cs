@@ -1,164 +1,167 @@
-using GameBrains.AI;
+using Entities.Steering;
+using GameWorld;
 using UnityEngine;
 
-public class Entity : MonoBehaviour {
-    public enum States {
-        Alive,
-        Dead,
-        Spawning
-    }
+namespace Entities {
+    public class Entity : MonoBehaviour {
+        public enum States {
+            Alive,
+            Dead,
+            Spawning
+        }
 
-    private static int _nextId;
+        private static int _nextId;
 
-    public int id;
-    public bool isObstacle;
-    public bool isLockedPositionX;
-    public bool isLockedPositionY;
-    public bool isLockedPositionZ;
-    public bool isLockedRotationX;
-    public bool isLockedRotationY;
-    public bool isLockedRotationZ;
-    public bool isAiControlled;
+        public int id;
+        public bool isObstacle;
+        public bool isLockedPositionX;
+        public bool isLockedPositionY;
+        public bool isLockedPositionZ;
+        public bool isLockedRotationX;
+        public bool isLockedRotationY;
+        public bool isLockedRotationZ;
+        public bool isAiControlled;
 
-    public EntityTypes entityType = EntityTypes.DefaultEntityType;
+        public EntityTypes entityType = EntityTypes.DefaultEntityType;
 
-    protected Kinematic kinematic;
+        protected Kinematic kinematic;
 
-    public States State { get; set; }
+        public States State { get; set; }
 
-    public bool IsDead => State == States.Dead;
+        public bool IsDead => State == States.Dead;
 
-    public bool IsAlive => State == States.Alive;
+        public bool IsAlive => State == States.Alive;
 
-    public bool IsSpawning => State == States.Spawning;
+        public bool IsSpawning => State == States.Spawning;
 
-    public bool IsAiControlled {
-        get => isAiControlled;
+        public bool IsAiControlled {
+            get => isAiControlled;
 
-        set => isAiControlled = value;
-    }
+            set => isAiControlled = value;
+        }
 
-    public Collider Collider => GetComponent<Collider>();
+        public Collider Collider => GetComponent<Collider>();
 
-    public Kinematic Kinematic {
-        get => kinematic;
+        public Kinematic Kinematic {
+            get => kinematic;
 
-        set => kinematic = value;
-    }
+            set => kinematic = value;
+        }
 
-    public bool IsLockedPositionX {
-        get => isLockedPositionX;
+        public bool IsLockedPositionX {
+            get => isLockedPositionX;
 
-        set {
-            isLockedPositionX = value;
+            set {
+                isLockedPositionX = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedPositionX = isLockedPositionX;
+                if (kinematic != null){
+                    kinematic.IsLockedPositionX = isLockedPositionX;
+                }
             }
         }
-    }
 
-    public bool IsLockedPositionY {
-        get => isLockedPositionY;
+        public bool IsLockedPositionY {
+            get => isLockedPositionY;
 
-        set {
-            isLockedPositionY = value;
+            set {
+                isLockedPositionY = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedPositionY = isLockedPositionY;
+                if (kinematic != null){
+                    kinematic.IsLockedPositionY = isLockedPositionY;
+                }
             }
         }
-    }
 
-    public bool IsLockedPositionZ {
-        get => isLockedPositionZ;
+        public bool IsLockedPositionZ {
+            get => isLockedPositionZ;
 
-        set {
-            isLockedPositionZ = value;
+            set {
+                isLockedPositionZ = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedPositionZ = isLockedPositionZ;
+                if (kinematic != null){
+                    kinematic.IsLockedPositionZ = isLockedPositionZ;
+                }
             }
         }
-    }
 
-    public bool IsLockedRotationX {
-        get => isLockedRotationX;
+        public bool IsLockedRotationX {
+            get => isLockedRotationX;
 
-        set {
-            isLockedRotationX = value;
+            set {
+                isLockedRotationX = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedRotationX = isLockedRotationX;
+                if (kinematic != null){
+                    kinematic.IsLockedRotationX = isLockedRotationX;
+                }
             }
         }
-    }
 
-    public bool IsLockedRotationY {
-        get => isLockedRotationY;
+        public bool IsLockedRotationY {
+            get => isLockedRotationY;
 
-        set {
-            isLockedRotationY = value;
+            set {
+                isLockedRotationY = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedRotationY = isLockedRotationY;
+                if (kinematic != null){
+                    kinematic.IsLockedRotationY = isLockedRotationY;
+                }
             }
         }
-    }
 
-    public bool IsLockedRotationZ {
-        get => isLockedRotationZ;
+        public bool IsLockedRotationZ {
+            get => isLockedRotationZ;
 
-        set {
-            isLockedRotationZ = value;
+            set {
+                isLockedRotationZ = value;
 
-            if (kinematic != null){
-                kinematic.IsLockedRotationZ = isLockedRotationZ;
+                if (kinematic != null){
+                    kinematic.IsLockedRotationZ = isLockedRotationZ;
+                }
             }
         }
-    }
 
-    public EntityTypes EntityType {
-        get => entityType;
-        set => entityType = value;
-    }
+        public EntityTypes EntityType {
+            get => entityType;
+            set => entityType = value;
+        }
 
-    public virtual void Awake(){
-        id = _nextId++;
-        EntityManager.Add(this);
+        public virtual void Awake(){
+            id = _nextId++;
+            EntityManager.Add(this);
 
-        State = States.Alive;
+            State = States.Alive;
 
-        kinematic =
-            new Kinematic{
-                IsLockedPositionX = isLockedPositionX,
-                IsLockedRotationX = isLockedRotationX,
-                IsLockedPositionY = isLockedPositionY,
-                IsLockedRotationY = isLockedRotationY,
-                IsLockedPositionZ = isLockedPositionZ,
-                IsLockedRotationZ = isLockedRotationZ
-            };
+            kinematic =
+                new Kinematic{
+                    IsLockedPositionX = isLockedPositionX,
+                    IsLockedRotationX = isLockedRotationX,
+                    IsLockedPositionY = isLockedPositionY,
+                    IsLockedRotationY = isLockedRotationY,
+                    IsLockedPositionZ = isLockedPositionZ,
+                    IsLockedRotationZ = isLockedRotationZ
+                };
 
-        Kinematic.Position = transform.position;
-        Kinematic.Rotation = transform.rotation.eulerAngles;
-    }
+            Kinematic.Position = transform.position;
+            Kinematic.Rotation = transform.rotation.eulerAngles;
+        }
 
-    public virtual void Update(){
-    }
+        public virtual void Update(){
+        }
 
-    public virtual bool HandleEvent<T>(Event<T> eventArguments){
-        return false;
-    }
+        public virtual bool HandleEvent<T>(Event<T> eventArguments){
+            return false;
+        }
 
-    public void SetSpawning(){
-        State = States.Spawning;
-    }
+        public void SetSpawning(){
+            State = States.Spawning;
+        }
 
-    public void SetDead(){
-        State = States.Dead;
-    }
+        public void SetDead(){
+            State = States.Dead;
+        }
 
-    public void SetAlive(){
-        State = States.Alive;
+        public void SetAlive(){
+            State = States.Alive;
+        }
     }
 }

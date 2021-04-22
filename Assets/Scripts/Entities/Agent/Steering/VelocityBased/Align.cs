@@ -1,6 +1,7 @@
 using UnityEngine;
+using Utility.Math;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Align : SteeringBehaviour {
         private readonly float satisfactionRadius;
         private readonly float timeToTarget;

@@ -1,6 +1,7 @@
+using Entities.Steering;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class SeekToPosition : Goal {
         private readonly Vector3 destination;
         private readonly FaceHeading look;

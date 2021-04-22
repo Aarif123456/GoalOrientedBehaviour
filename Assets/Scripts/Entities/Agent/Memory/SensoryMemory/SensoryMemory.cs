@@ -52,7 +52,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Memory.SensoryMemory {
     /// <summary>
     ///     Sensory memory keeps track of opponents detected by sound or sight.
     /// </summary>

@@ -1,6 +1,8 @@
+using GameWorld.Managers;
 using UnityEngine;
+using Utility.Fuzzy;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class WeaponBlaster : Weapon {
         public WeaponBlaster(Agent agent)
             : base(

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using GameWorld.Navigation.Graph;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public class Path {
         public Path(Vector3 source, List<Edge> edges, Vector3 destination){
             Source = source;

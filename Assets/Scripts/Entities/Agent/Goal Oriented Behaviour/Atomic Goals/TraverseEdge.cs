@@ -1,6 +1,8 @@
+using Entities.Steering;
+using GameWorld.Navigation.Graph;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class TraverseEdge : Goal {
         private readonly Vector3 destination;
         private readonly FaceHeading look;

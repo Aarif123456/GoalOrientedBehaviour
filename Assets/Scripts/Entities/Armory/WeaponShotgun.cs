@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using GameWorld.Managers;
 using UnityEngine;
+using Utility.Data_Structures;
+using Utility.Fuzzy;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class WeaponShotgun : Weapon {
         public WeaponShotgun(Agent agent)
             : base(

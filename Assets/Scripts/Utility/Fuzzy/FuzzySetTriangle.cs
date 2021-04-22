@@ -48,7 +48,9 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI {
+using Utility.Math;
+
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Class for triangular shaped fuzzy set.
     /// </summary>

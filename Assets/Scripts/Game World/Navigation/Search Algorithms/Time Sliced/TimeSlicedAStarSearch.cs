@@ -1,6 +1,7 @@
 using C5;
+using GameWorld.Navigation.Heuristics;
 
-namespace GameBrains.AI {
+namespace GameWorld.Navigation.Graph {
     public sealed class TimeSlicedAStarSearch : TimeSlicedSearch {
         private readonly IntervalHeap<ScoredNode> priorityQueue;
 

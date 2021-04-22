@@ -1,7 +1,7 @@
 using System;
 using C5;
 
-namespace GameBrains.AI {
+namespace GameWorld.Navigation.Graph {
     public sealed class TimeSlicedDijkstrasSearch : TimeSlicedSearch {
         private readonly IntervalHeap<ScoredNode> priorityQueue;
 

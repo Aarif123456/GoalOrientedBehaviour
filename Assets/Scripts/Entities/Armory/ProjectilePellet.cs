@@ -1,6 +1,7 @@
+using GameWorld;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class ProjectilePellet : Projectile {
         public void OnTriggerEnter(Collider hitCollider){
             var hitEntity = hitCollider.GetComponent<Entity>();

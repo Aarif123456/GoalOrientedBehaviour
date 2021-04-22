@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using Math = Utility.Math.Math;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Kinematic {
         public const float DEFAULT_MAXIMUM_SPEED = 5;
         public const float DEFAULT_MAXIMUM_ANGULAR_SPEED = 360;

@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using C5;
 
-namespace GameBrains.AI {
+namespace GameWorld.Navigation.Graph {
     public class ScoredNode : IEquatable<ScoredNode>, IShowable, IFormattable {
         public readonly Edge edgeFromParent;
         public readonly float f;

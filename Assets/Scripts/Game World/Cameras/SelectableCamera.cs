@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class SelectableCamera : MonoBehaviour {
         public string CameraName { get; protected set; }
 

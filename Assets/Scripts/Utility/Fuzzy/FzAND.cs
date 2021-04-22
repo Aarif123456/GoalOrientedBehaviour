@@ -50,7 +50,7 @@
 
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     A fuzzy AND operator class.
     /// </summary>

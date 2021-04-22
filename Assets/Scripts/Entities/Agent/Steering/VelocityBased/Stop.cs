@@ -1,4 +1,4 @@
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Stop : SteeringBehaviour {
         public Stop(Kinematic agentKinematic)
             : base(agentKinematic){

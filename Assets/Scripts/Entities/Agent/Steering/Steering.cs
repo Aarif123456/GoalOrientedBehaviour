@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Steering {
         public enum Types {
             Velocities,

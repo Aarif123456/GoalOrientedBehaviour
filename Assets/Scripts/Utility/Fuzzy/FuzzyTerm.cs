@@ -48,7 +48,7 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Abstract class to provide an interface for classes able to be used as terms in a fuzzy
     ///     if-then rule base.

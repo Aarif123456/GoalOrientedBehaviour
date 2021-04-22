@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Utility.Math {
     public static partial class Math {
         public static float WrapAngle(float angle){
             while (angle <= -180f){

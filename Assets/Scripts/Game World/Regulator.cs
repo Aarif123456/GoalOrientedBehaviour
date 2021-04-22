@@ -50,7 +50,7 @@
 
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     /// <summary>
     ///     A regulator that is ready periodically.
     /// </summary>

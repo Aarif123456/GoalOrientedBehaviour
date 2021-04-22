@@ -49,9 +49,11 @@
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
 using System.ComponentModel;
+using Entities;
+using Entities.Armory;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public static partial class Events {
         [Description("PathToPositionRequest")]
         public static readonly EventType PathToPositionRequest = (EventType) Count++;

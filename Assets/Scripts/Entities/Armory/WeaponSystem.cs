@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class WeaponSystem {
         private readonly Dictionary<WeaponTypes, Weapon> weaponMap =
             new Dictionary<WeaponTypes, Weapon>();

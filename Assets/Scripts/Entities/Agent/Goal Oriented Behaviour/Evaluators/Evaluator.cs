@@ -1,4 +1,4 @@
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public abstract class Evaluator {
         protected float characterBias;
 

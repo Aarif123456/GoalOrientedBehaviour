@@ -1,6 +1,7 @@
+using Entities.Armory;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetHealth : Evaluator {
         public EvaluatorGetHealth(float characterBias)
             : base(characterBias){

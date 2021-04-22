@@ -50,7 +50,7 @@
 
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Utility.Math {
     /// <summary>
     ///     Class for handling small things.
     /// </summary>

@@ -1,7 +1,8 @@
 using System;
+using Entities.Armory;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public sealed class Feature {
         public static float Health(Agent agent){
             return agent.Health / (float) agent.MaximumHealth;

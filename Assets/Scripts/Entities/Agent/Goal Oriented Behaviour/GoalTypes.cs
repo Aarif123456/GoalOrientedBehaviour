@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public enum GoalTypes {
         Think,
         Explore,

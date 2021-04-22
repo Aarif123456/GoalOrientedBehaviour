@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace Utility.Data_Structures {
     /// <summary>
     ///     Extensions to the generic list class to give it an interface like a Deque (combination Stack/Queue).
     /// </summary>

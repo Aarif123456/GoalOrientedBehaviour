@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace Entities {
     public enum EntityTypes {
         [Description("Default entity type")] DefaultEntityType = -1,
 

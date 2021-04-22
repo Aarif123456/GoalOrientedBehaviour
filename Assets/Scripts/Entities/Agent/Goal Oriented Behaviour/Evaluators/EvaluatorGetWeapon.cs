@@ -1,6 +1,8 @@
+using Entities.Armory;
 using UnityEngine;
+using Utility;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetWeapon : Evaluator {
         private readonly WeaponTypes weaponType;
 

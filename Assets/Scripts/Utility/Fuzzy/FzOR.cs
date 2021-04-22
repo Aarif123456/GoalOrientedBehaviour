@@ -51,7 +51,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Class for fuzzy OR.
     /// </summary>

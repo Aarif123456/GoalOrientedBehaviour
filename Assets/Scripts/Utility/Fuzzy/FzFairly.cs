@@ -50,7 +50,7 @@
 
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Class for implementing Fairly fuzzy term.
     /// </summary>

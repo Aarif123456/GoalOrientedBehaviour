@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using C5;
 
-namespace GameBrains.AI {
+namespace GameWorld.Navigation.Graph {
     public static class LeastCostPathTable {
         private static readonly HashDictionary<NodePair, NodeAndCost> nextNodeAndCostTable =
             new HashDictionary<NodePair, NodeAndCost>();

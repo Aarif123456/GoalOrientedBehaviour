@@ -50,7 +50,7 @@
 
 using System;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Class to define an interface for a fuzzy set.
     /// </summary>

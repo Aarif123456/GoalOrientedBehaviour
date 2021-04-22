@@ -1,6 +1,9 @@
+using Entities.Triggers;
+using GameWorld.Managers;
 using UnityEngine;
+using Utility.Fuzzy;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public abstract class Weapon {
         protected int activeProjectileCount;
 

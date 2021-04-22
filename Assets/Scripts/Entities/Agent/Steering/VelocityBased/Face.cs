@@ -1,6 +1,7 @@
 using UnityEngine;
+using Utility.Math;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Face : Align {
         public Face(Kinematic agentKinematic, Vector3 targetPosition)
             : this(agentKinematic, targetPosition, 0.25f, 5){

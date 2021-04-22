@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using GameWorld;
+using GameWorld.Navigation.Graph;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class MoveToPosition : CompositeGoal {
         private readonly Vector3 destination;
 

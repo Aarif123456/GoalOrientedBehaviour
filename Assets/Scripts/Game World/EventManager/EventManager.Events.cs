@@ -50,7 +50,7 @@
 
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public static partial class Events {
         [Description("Invalid")] public static readonly EventType Invalid = (EventType) Count++;
 

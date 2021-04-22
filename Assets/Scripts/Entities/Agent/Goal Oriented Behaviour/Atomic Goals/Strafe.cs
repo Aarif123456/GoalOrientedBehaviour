@@ -1,6 +1,7 @@
+using Entities.Steering;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class Strafe : Goal {
         private readonly Face look;
         private readonly float satisfactionRadius;

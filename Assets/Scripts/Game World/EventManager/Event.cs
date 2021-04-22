@@ -50,7 +50,7 @@
 
 using System;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public abstract partial class Event {
         /// <summary>
         ///     Initializes a new instance of the Event class.

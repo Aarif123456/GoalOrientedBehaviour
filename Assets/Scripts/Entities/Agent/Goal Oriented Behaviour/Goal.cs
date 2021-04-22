@@ -1,6 +1,6 @@
 using System;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public abstract class Goal {
         public enum StatusTypes {
             Active,

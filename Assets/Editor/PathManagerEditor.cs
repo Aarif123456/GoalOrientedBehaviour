@@ -1,3 +1,4 @@
+using GameWorld;
 using UnityEditor;
 
 [CustomEditor(typeof(PathManager))]

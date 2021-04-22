@@ -50,7 +50,7 @@
 
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Memory.SensoryMemory {
     /// <summary>
     ///     Class to implement short term memory of sensory info.
     /// </summary>

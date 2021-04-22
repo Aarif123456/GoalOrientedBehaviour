@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Arrive : Seek {
         private readonly float brakingRadius;
         private readonly float timeToTarget;

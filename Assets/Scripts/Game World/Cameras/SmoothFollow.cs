@@ -11,7 +11,7 @@ Then we apply the smoothed values to the transform's position.
 
 using UnityEngine;
 
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class SmoothFollow : TargetedCamera {
         // The distance in the x-z plane to the target
         public float distance = 10.0f;

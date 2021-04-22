@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     /// <summary>
     ///     Abstract base class for projectiles.
     /// </summary>

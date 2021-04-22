@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using Utility.Data_Structures;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public abstract class CompositeGoal : Goal {
         protected CompositeGoal(Agent agent, GoalTypes goalType)
             : base(agent, goalType){
             Subgoals = new List<Goal>();
         }
 
-        public List<Goal> Subgoals { get; private set;}
+        public List<Goal> Subgoals { get; }
 
         public override void AddSubgoal(Goal subgoal){
             Subgoals.Push(subgoal);

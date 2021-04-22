@@ -1,4 +1,4 @@
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class FaceHeading : Face {
         private readonly float minimumSpeed;
 

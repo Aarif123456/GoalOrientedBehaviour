@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public enum ItemTypes {
         Blaster,
 

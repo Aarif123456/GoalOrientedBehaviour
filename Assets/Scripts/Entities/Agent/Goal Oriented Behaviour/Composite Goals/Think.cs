@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Entities.Armory;
 using UnityEngine;
+using Utility;
+using Utility.Data_Structures;
 using Random = UnityEngine.Random;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
         private readonly List<Evaluator> evaluators = new List<Evaluator>();
 

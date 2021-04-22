@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class TargetedCamera : SelectableCamera {
         // The camera's target.
         public Transform target;

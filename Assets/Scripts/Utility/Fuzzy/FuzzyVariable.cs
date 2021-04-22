@@ -50,9 +50,10 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using Utility.Math;
 using Debug = System.Diagnostics.Debug;
 
-namespace GameBrains.AI {
+namespace Utility.Fuzzy {
     /// <summary>
     ///     Class to implement a fuzzy variable.
     /// </summary>

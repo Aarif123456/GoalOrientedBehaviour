@@ -1,36 +1,38 @@
-using GameBrains.AI;
 using UnityEngine;
+using Utility;
 
-public enum WeaponGiverTypes {
-    Railgun,
-    RocketLauncher,
-    Shotgun
-}
-
-public sealed class TriggerWeaponGiver : TriggerRespawning {
-    public WeaponGiverTypes weaponGiverType;
-
-    public override void Awake(){
-        base.Awake();
-
-        EntityType =
-            weaponGiverType == WeaponGiverTypes.Railgun
-                ? EntityTypes.Railgun
-                : weaponGiverType == WeaponGiverTypes.RocketLauncher
-                    ? EntityTypes.RocketLauncher
-                    : EntityTypes.Shotgun;
-
-        TimeBetweenRespawns = Parameters.Instance.WeaponRespawnDelay;
+namespace Entities.Triggers {
+    public enum WeaponGiverTypes {
+        Railgun,
+        RocketLauncher,
+        Shotgun
     }
 
-    public void OnTriggerEnter(Collider triggeringCollider){
-        if (IsActive){
-            TriggeringAgent = triggeringCollider.GetComponent<Agent>();
+    public sealed class TriggerWeaponGiver : TriggerRespawning {
+        public WeaponGiverTypes weaponGiverType;
 
-            if (TriggeringAgent != null){
-                TriggeringAgent.WeaponSystem.AddWeapon(EnumUtility.EntityTypeToWeaponType(EntityType));
+        public override void Awake(){
+            base.Awake();
 
-                Deactivate();
+            EntityType =
+                weaponGiverType == WeaponGiverTypes.Railgun
+                    ? EntityTypes.Railgun
+                    : weaponGiverType == WeaponGiverTypes.RocketLauncher
+                        ? EntityTypes.RocketLauncher
+                        : EntityTypes.Shotgun;
+
+            TimeBetweenRespawns = Parameters.Instance.WeaponRespawnDelay;
+        }
+
+        public void OnTriggerEnter(Collider triggeringCollider){
+            if (IsActive){
+                TriggeringAgent = triggeringCollider.GetComponent<Agent>();
+
+                if (TriggeringAgent != null){
+                    TriggeringAgent.WeaponSystem.AddWeapon(EnumUtility.EntityTypeToWeaponType(EntityType));
+
+                    Deactivate();
+                }
             }
         }
     }

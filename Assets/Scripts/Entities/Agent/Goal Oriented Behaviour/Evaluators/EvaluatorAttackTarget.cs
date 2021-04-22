@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorAttackTarget : Evaluator {
         public EvaluatorAttackTarget(float characterBias)
             : base(characterBias){

@@ -50,7 +50,7 @@
 
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public abstract partial class Event {
         public static class Lifespans {
             [Description("Cycle")] public static readonly Lifespan Cycle = (Lifespan) Count++;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.Cameras {
+namespace GameWorld.Cameras {
     public class OverheadZoomAndPan : SelectableCamera {
         public Camera overheadCamera;
         public KeyCode homeKey = KeyCode.Home;

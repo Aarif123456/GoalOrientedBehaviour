@@ -1,6 +1,7 @@
 using UnityEngine;
+using Utility.Math;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public sealed class Wander : SteeringBehaviour {
         private float headingAngle;
 

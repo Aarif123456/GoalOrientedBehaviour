@@ -1,11 +1,14 @@
 using System;
 using System.ComponentModel;
+using Entities;
+using Entities.Armory;
+using Entities.GoalOrientedBehaviour;
 
-namespace GameBrains.AI {
+namespace Utility {
     /// <summary>
     ///     A helper class for dealing with Enums.
     /// </summary>
-    public class EnumUtility {
+    public static class EnumUtility {
         /// <summary>
         ///     Get the string representation of the enum value.
         /// </summary>

@@ -49,9 +49,10 @@
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
 using System.ComponentModel;
+using Entities;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public static partial class Events {
         [Description("DamageInflicted")] public static readonly EventType DamageInflicted = (EventType) Count++;
 

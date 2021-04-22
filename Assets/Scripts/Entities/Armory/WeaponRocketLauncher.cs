@@ -1,6 +1,8 @@
+using GameWorld.Managers;
 using UnityEngine;
+using Utility.Fuzzy;
 
-namespace GameBrains.AI {
+namespace Entities.Armory {
     public sealed class WeaponRocketLauncher : Weapon {
         public WeaponRocketLauncher(Agent agent)
             : base(

@@ -48,7 +48,7 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public sealed class EventType {
         private readonly int _eventType;
 

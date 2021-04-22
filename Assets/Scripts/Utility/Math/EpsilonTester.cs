@@ -51,7 +51,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Utility.Math {
     /// <summary>
     ///     Use this to test for values close to zero. If you use the default epsilon value then use the
     ///     static version of this (Epsilon) instead.

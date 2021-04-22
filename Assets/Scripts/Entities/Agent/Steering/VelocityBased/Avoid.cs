@@ -1,4 +1,4 @@
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Avoid : SteeringBehaviour {
         public Avoid(Kinematic agentKinematic)
             : base(agentKinematic, new Kinematic()){

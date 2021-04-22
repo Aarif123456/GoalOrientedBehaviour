@@ -50,7 +50,7 @@
 
 using System.Collections.Generic;
 
-namespace GameBrains.AI {
+namespace Entities {
     public static class EntityManager {
         private static readonly Dictionary<int, Entity> _entityIdDictionary = new Dictionary<int, Entity>();
         private static readonly Dictionary<string, Entity> _entityNameDictionary = new Dictionary<string, Entity>();

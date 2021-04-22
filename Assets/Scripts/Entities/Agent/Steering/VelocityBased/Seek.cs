@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public class Seek : SteeringBehaviour {
         protected float satisfactionRadius = 1;
 

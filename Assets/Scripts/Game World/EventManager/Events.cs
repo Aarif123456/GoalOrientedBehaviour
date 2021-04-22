@@ -50,9 +50,9 @@
 
 using System.ComponentModel;
 
-namespace GameBrains.AI {
+namespace GameWorld {
     public static partial class Events {
-        public static int Count { get; }
+        public static int Count { get; set; }
 
         public static string GetDescription(EventType eventType){
             foreach (var fieldInfo in typeof(Events).GetFields()){

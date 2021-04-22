@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Entities.Steering {
     public abstract class SteeringBehaviour {
         protected SteeringBehaviour(Agent agent, Vector3 otherPosition)
             : this(agent.Kinematic, otherPosition){

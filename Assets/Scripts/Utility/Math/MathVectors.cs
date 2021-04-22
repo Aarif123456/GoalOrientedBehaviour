@@ -1,6 +1,7 @@
+using Entities.Steering;
 using UnityEngine;
 
-namespace GameBrains.AI {
+namespace Utility.Math {
     public static partial class Math {
         public static Vector3 LimitMagnitude(Vector3 vector, float maximumMagnitude){
             var magnitude = vector.magnitude;
