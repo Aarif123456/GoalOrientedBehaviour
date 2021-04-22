@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Common;
 using Entities.Armory;
 using UnityEngine;
-using Utility;
 using Utility.Data_Structures;
 using Random = UnityEngine.Random;
 

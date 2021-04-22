@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Entities;
 using Entities.Armory;
 using GameWorld.Navigation.Graph;
 using UnityEngine;
-using Utility;
 
 namespace GameWorld {
     public sealed class PathPlanner : MonoBehaviour {

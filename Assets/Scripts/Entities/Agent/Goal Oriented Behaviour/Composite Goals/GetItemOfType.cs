@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using Common;
 using Entities.Armory;
 using Entities.Triggers;
 using GameWorld;
 using GameWorld.Navigation.Graph;
 using UnityEngine;
-using Utility;
 
 namespace Entities.GoalOrientedBehaviour {
     public class GetItemOfType : CompositeGoal {

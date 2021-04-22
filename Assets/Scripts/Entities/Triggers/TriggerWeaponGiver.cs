@@ -1,5 +1,5 @@
+using Common;
 using UnityEngine;
-using Utility;
 
 namespace Entities.Triggers {
     public enum WeaponGiverTypes {

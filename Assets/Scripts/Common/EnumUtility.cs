@@ -4,7 +4,7 @@ using Entities;
 using Entities.Armory;
 using Entities.GoalOrientedBehaviour;
 
-namespace Utility {
+namespace Common {
     /// <summary>
     ///     A helper class for dealing with Enums.
     /// </summary>

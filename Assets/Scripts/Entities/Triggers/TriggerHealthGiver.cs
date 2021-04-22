@@ -1,3 +1,4 @@
+using Common;
 using UnityEngine;
 
 namespace Entities.Triggers {
