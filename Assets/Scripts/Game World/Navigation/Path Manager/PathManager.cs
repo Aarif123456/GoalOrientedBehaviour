@@ -52,16 +52,12 @@ namespace GameWorld {
             while (cyclesRemaining > 0 && SearchRequests.Count > 0){
                 var searchResult = SearchRequests[currentSearchRequestIndex].CycleOnce();
 
-                if (searchResult != SearchResults.Running){
+                if (searchResult != SearchResults.Running)
                     SearchRequests.RemoveAt(currentSearchRequestIndex);
-                }
-                else{
+                else
                     currentSearchRequestIndex++;
-                }
 
-                if (currentSearchRequestIndex >= SearchRequests.Count){
-                    currentSearchRequestIndex = 0;
-                }
+                if (currentSearchRequestIndex >= SearchRequests.Count) currentSearchRequestIndex = 0;
 
                 cyclesRemaining--;
             }
@@ -71,15 +67,11 @@ namespace GameWorld {
             // make sure the bot does not already have a current search
             if (pathPlanner != null && !SearchRequests.Contains(pathPlanner))
                 // add to the list
-            {
                 SearchRequests.Add(pathPlanner);
-            }
         }
 
         public void RemovePathPlanner(PathPlanner pathPlanner){
-            if (pathPlanner != null && SearchRequests != null){
-                SearchRequests.Remove(pathPlanner);
-            }
+            if (pathPlanner != null && SearchRequests != null) SearchRequests.Remove(pathPlanner);
         }
     }
 }

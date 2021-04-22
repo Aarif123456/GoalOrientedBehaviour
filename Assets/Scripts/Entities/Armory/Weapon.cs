@@ -62,15 +62,11 @@ namespace Entities.Armory {
         public virtual void OnProjectileRemoved(){
             activeProjectileCount--;
 
-            if (activeProjectileCount < 0){
-                activeProjectileCount = 0;
-            }
+            if (activeProjectileCount < 0) activeProjectileCount = 0;
         }
 
         public void DecrementRounds(){
-            if (RoundsRemaining > 0){
-                RoundsRemaining -= 1;
-            }
+            if (RoundsRemaining > 0) RoundsRemaining -= 1;
         }
 
         public void IncrementRounds(int amount){

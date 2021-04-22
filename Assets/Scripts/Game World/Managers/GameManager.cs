@@ -4,7 +4,6 @@ using UnityEngine;
 namespace GameWorld.Managers {
     public sealed class GameManager : MonoBehaviour {
         private static GameManager _instance;
-        public GameObject spawnPointPrefab;
         public GameObject boltPrefab;
         public GameObject rocketPrefab;
         public GameObject slugPrefab;
@@ -12,13 +11,7 @@ namespace GameWorld.Managers {
         public GameObject soundNotifyTriggerPrefab;
 
         public static GameManager Instance {
-            get {
-                if (_instance == null){
-                    _instance = GameObject.Find("Game").GetComponent<GameManager>();
-                }
-
-                return _instance;
-            }
+            get { return _instance ??= GameObject.Find("Game").GetComponent<GameManager>(); }
         }
 
         public void Update(){
@@ -28,9 +21,8 @@ namespace GameWorld.Managers {
                 // if this agent's status is 'spawning' attempt to resurrect it
                 // from an unoccupied spawn point
             {
-                if (agent.IsSpawning && isSpawnPossible){
+                if (agent.IsSpawning && isSpawnPossible)
                     isSpawnPossible = AttemptToAddAgent(agent);
-                }
                 // if this agent's status is 'dead' add a grave at its current
                 // location then change its status to 'spawning'
                 else if (agent.IsDead){
@@ -47,15 +39,15 @@ namespace GameWorld.Managers {
             }
         }
 
-        public bool AttemptToAddAgent(Agent agent){
+        private static bool AttemptToAddAgent(Agent agent){
             var spawnPoints = EntityManager.FindAll<SpawnPoint>();
 
             foreach (var spawnPoint in spawnPoints){
-                if (spawnPoint.color == agent.color && spawnPoint.IsAvailable){
-                    var position = spawnPoint.transform.position;
-                    position.y = 1.1f; // could place higher and let drop in with gravity
-                    agent.Spawn(position);
-                }
+                if (spawnPoint.color != agent.color || !spawnPoint.IsAvailable) continue;
+
+                var position = spawnPoint.transform.position;
+                position.y = 1.1f; // could place higher and let drop in with gravity
+                agent.Spawn(position);
             }
 
             return false;

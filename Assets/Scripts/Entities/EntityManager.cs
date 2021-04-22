@@ -56,14 +56,10 @@ namespace Entities {
         private static readonly Dictionary<string, Entity> _entityNameDictionary = new Dictionary<string, Entity>();
 
         public static void Add(Entity entity){
-            if (!_entityIdDictionary.ContainsKey(entity.id)){
-                _entityIdDictionary.Add(entity.id, entity);
-            }
+            if (!_entityIdDictionary.ContainsKey(entity.id)) _entityIdDictionary.Add(entity.id, entity);
 
             // TODO: catch duplicate name errors
-            if (!_entityNameDictionary.ContainsKey(entity.name)){
-                _entityNameDictionary.Add(entity.name, entity);
-            }
+            if (!_entityNameDictionary.ContainsKey(entity.name)) _entityNameDictionary.Add(entity.name, entity);
         }
 
         public static void Remove(Entity entity){
@@ -72,17 +68,13 @@ namespace Entities {
         }
 
         public static T Find<T>(int entityId) where T : Entity{
-            if (!_entityIdDictionary.ContainsKey(entityId)){
-                return null;
-            }
+            if (!_entityIdDictionary.ContainsKey(entityId)) return null;
 
             return _entityIdDictionary[entityId] as T;
         }
 
         public static T Find<T>(string entityName) where T : Entity{
-            if (!_entityNameDictionary.ContainsKey(entityName)){
-                return null;
-            }
+            if (!_entityNameDictionary.ContainsKey(entityName)) return null;
 
             return _entityNameDictionary[entityName] as T;
         }
@@ -92,9 +84,7 @@ namespace Entities {
             foreach (var entity in _entityIdDictionary.Values){
                 var entityT = entity as T;
 
-                if (entityT != null){
-                    resultList.Add(entityT);
-                }
+                if (entityT != null) resultList.Add(entityT);
             }
 
             return resultList;

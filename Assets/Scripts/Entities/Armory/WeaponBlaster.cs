@@ -18,9 +18,7 @@ namespace Entities.Armory {
         }
 
         public override void ShootAt(Vector3 targetPosition){
-            if (!Parameters.Instance.UseBlaster || !IsReadyForNextShot()){
-                return;
-            }
+            if (!Parameters.Instance.UseBlaster || !IsReadyForNextShot()) return;
 
             AddBolt(Agent, targetPosition);
 

@@ -107,13 +107,7 @@ namespace GameWorld {
         private int _nextEventId;
 
         public static EventManager Instance {
-            get {
-                if (_instance == null){
-                    _instance = GameObject.Find("Game").GetComponent<EventManager>();
-                }
-
-                return _instance;
-            }
+            get { return _instance ??= GameObject.Find("Game").GetComponent<EventManager>(); }
         }
 
         /// <summary>
@@ -533,7 +527,7 @@ namespace GameWorld {
         /// <typeparam name="T">Type of objects to swap.</typeparam>
         /// <param name="a">First object to swap.</param>
         /// <param name="b">Second object to swap.</param>
-        private void Swap<T>(ref T a, ref T b){
+        private static void Swap<T>(ref T a, ref T b){
             var tmp = a;
             a = b;
             b = tmp;

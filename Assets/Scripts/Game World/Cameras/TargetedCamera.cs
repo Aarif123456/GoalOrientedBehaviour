@@ -6,6 +6,7 @@ namespace GameWorld.Cameras {
         public Transform target;
 
         public override void Awake(){
+            base.Awake();
         }
     }
 }

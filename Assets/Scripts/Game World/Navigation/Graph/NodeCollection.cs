@@ -24,8 +24,9 @@ namespace GameWorld.Navigation.Graph {
 
         public Node[] Nodes => GetComponentsInChildren<Node>();
 
-        public bool IsLocked => locked || Graph != null && Graph.IsLocked;
+        public bool IsLocked => locked || !ReferenceEquals(Graph, null) && Graph.IsLocked;
 
+        /* TODO: Make cache the node component renderer */
         public bool IsVisible {
             get => isVisible;
 
@@ -43,34 +44,33 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void ApplyParametersToNodes(){
-            if (!IsLocked){
-                foreach (var node in Nodes){
-                    ApplyParametersToNode(node);
-                }
+            if (IsLocked) return;
+
+            foreach (var node in Nodes){
+                ApplyParametersToNode(node);
             }
         }
 
         public void ApplyParametersToNode(Node node){
-            if (!IsLocked && !node.IsLocked){
-                color.a = alpha;
-                node.color = color;
-                //node.renderer.sharedMaterial.shader = Shader.Find("Transparent/Diffuse");
-                node.GetComponent<Renderer>().sharedMaterial.color = color;
-                node.lookAheadDistance = lookAheadDistance;
-                node.radius = radius;
-                node.useCapsuleCast = useCapsuleCast;
-                node.raycastMaximumDistance = raycastMaximumDistance;
-                node.raycastPathRadius = raycastPathRadius;
-                node.surfaceOffset = surfaceOffset;
-                node.raycastObstaclesLayerMask = raycastObstaclesLayerMask;
+            if (IsLocked || node.IsLocked) return;
+            color.a = alpha;
+            node.color = color;
+            //node.renderer.sharedMaterial.shader = Shader.Find("Transparent/Diffuse");
+            node.GetComponent<Renderer>().sharedMaterial.color = color;
+            node.lookAheadDistance = lookAheadDistance;
+            node.radius = radius;
+            node.useCapsuleCast = useCapsuleCast;
+            node.raycastMaximumDistance = raycastMaximumDistance;
+            node.raycastPathRadius = raycastPathRadius;
+            node.surfaceOffset = surfaceOffset;
+            node.raycastObstaclesLayerMask = raycastObstaclesLayerMask;
 //            Vector3 position = node.transform.position;
 //            position.y += 6;
 //            node.transform.position = position;
-            }
         }
 
         public GameObject AddNode(Camera camera){
-            if (IsLocked || graph == null || graph.nodePrefab == null){
+            if (IsLocked || ReferenceEquals(graph, null) || ReferenceEquals(graph.nodePrefab, null)){
                 return null;
             }
 
@@ -80,51 +80,50 @@ namespace GameWorld.Navigation.Graph {
         GameObject nodeObject = Instantiate(graph.nodePrefab) as GameObject;
 #endif
 
-            if (nodeObject != null){
-                var node = nodeObject.GetComponent<Node>();
+            if (ReferenceEquals(nodeObject, null)) return null;
+            var node = nodeObject.GetComponent<Node>();
 
-                if (node != null){
-                    if (camera != null){
-                        node.CastToCollider(camera.transform.position, camera.transform.forward, 5f, 20f);
-                    }
-
-                    node.GenerateNameFromPosition();
-                    ApplyParametersToNode(node);
+            if (!ReferenceEquals(node, null)){
+                if (!ReferenceEquals(camera, null)){
+                    var transform1 = camera.transform;
+                    node.CastToCollider(transform1.position, transform1.forward, 5f, 20f);
                 }
 
-                nodeObject.transform.parent = transform;
+                node.GenerateNameFromPosition();
+                ApplyParametersToNode(node);
             }
+
+            nodeObject.transform.parent = transform;
 
             return nodeObject;
         }
 
         public void DropToSurface(){
-            if (!IsLocked){
-                foreach (var node in Nodes){
-                    if (!node.locked){
-                        node.DropToSurface();
-                    }
+            if (IsLocked) return;
+
+            foreach (var node in Nodes){
+                if (!node.locked){
+                    node.DropToSurface();
                 }
             }
         }
 
         public void GenerateNamesFromPosition(){
-            if (!IsLocked){
-                foreach (var node in Nodes){
-                    if (!node.locked){
-                        node.GenerateNameFromPosition();
-                    }
+            if (IsLocked) return;
+
+            foreach (var node in Nodes){
+                if (!node.locked){
+                    node.GenerateNameFromPosition();
                 }
             }
         }
 
         public void RaycastNodes(){
-            if (!IsLocked){
-                foreach (var fromNode in Nodes){
-                    if (!fromNode.locked){
-                        fromNode.RemoveAllConnections();
-                        fromNode.RaycastNeighbours(Nodes, false, true);
-                    }
+            if (IsLocked) return;
+            foreach (var fromNode in Nodes){
+                if (!fromNode.locked){
+                    fromNode.RemoveAllConnections();
+                    fromNode.RaycastNeighbours(Nodes, false, true);
                 }
             }
         }

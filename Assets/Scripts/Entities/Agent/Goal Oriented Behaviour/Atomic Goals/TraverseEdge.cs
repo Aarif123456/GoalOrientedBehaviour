@@ -30,12 +30,10 @@ namespace Entities.GoalOrientedBehaviour {
             ActivateIfInactive();
 
             // test to see if the bot has become stuck
-            if (IsStuck()){
+            if (IsStuck())
                 Status = StatusTypes.Failed;
-            }
-            else if (Vector3.Distance(Agent.Kinematic.Position, destination) <= seek.SatisfactionRadius){
+            else if (Vector3.Distance(Agent.Kinematic.Position, destination) <= seek.SatisfactionRadius)
                 Status = StatusTypes.Completed;
-            }
 
             return Status;
         }

@@ -37,9 +37,7 @@ namespace Entities.GoalOrientedBehaviour {
             // has edges remaining. If it does then call activate to grab the
             // next edge.
             if (Status == StatusTypes.Completed){
-                if (edgesToTraverse.Count > 0){
-                    Activate();
-                }
+                if (edgesToTraverse.Count > 0) Activate();
             }
 
             return Status;

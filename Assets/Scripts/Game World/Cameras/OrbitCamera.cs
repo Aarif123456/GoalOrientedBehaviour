@@ -81,9 +81,7 @@ namespace GameWorld.Cameras {
         public override void Awake(){
             base.Awake();
 
-            if (target == null){
-                Debug.Log("Provide a target for the camera.");
-            }
+            if (target == null) Debug.Log("Provide a target for the camera.");
 
             CameraName = "Orbit Camera";
         }
@@ -95,55 +93,48 @@ namespace GameWorld.Cameras {
             currentDistance = distance;
 
             // Make the rigid body not change rotation.
-            if (GetComponent<Rigidbody>()){
-                GetComponent<Rigidbody>().freezeRotation = true;
-            }
+            if (GetComponent<Rigidbody>()) GetComponent<Rigidbody>().freezeRotation = true;
         }
 
         public void LateUpdate(){
-            if (target){
-                if (isControllable){
-                    x += Input.GetAxis(sideLookAxis) * xSpeed * 0.02f;
-                    y -= Input.GetAxis(verticalAxis) * ySpeed * 0.02f;
-                }
-                else{
-                    // TODO: Add ability for AI control?
-                    x = 0;
-                    y = 0;
-                }
+            if (!target) return;
 
-                y = ClampAngle(y, yMinLimit, yMaxLimit);
-
-                var rotation = Quaternion.Euler(y, x, 0);
-                var targetPos = target.position + targetOffset;
-                var direction = rotation * -Vector3.forward;
-
-                var targetDistance = AdjustLineOfSight(targetPos, direction);
-                currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref distanceVelocity,
-                    closerSnapLag * 0.3f);
-
-                transform.rotation = rotation;
-                transform.position = targetPos + direction * currentDistance;
+            if (isControllable){
+                x += Input.GetAxis(sideLookAxis) * xSpeed * 0.02f;
+                y -= Input.GetAxis(verticalAxis) * ySpeed * 0.02f;
             }
+            else{
+                // TODO: Add ability for AI control?
+                x = 0;
+                y = 0;
+            }
+
+            y = ClampAngle(y, yMinLimit, yMaxLimit);
+
+            var rotation = Quaternion.Euler(y, x, 0);
+            var targetPos = target.position + targetOffset;
+            var direction = rotation * -Vector3.forward;
+
+            var targetDistance = AdjustLineOfSight(targetPos, direction);
+            currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref distanceVelocity,
+                closerSnapLag * 0.3f);
+
+            transform.rotation = rotation;
+            transform.position = targetPos + direction * currentDistance;
         }
 
         private float AdjustLineOfSight(Vector3 target, Vector3 direction){
             RaycastHit hit;
-            if (Physics.Raycast(target, direction, out hit, distance, lineOfSightMask.value)){
+            if (Physics.Raycast(target, direction, out hit, distance, lineOfSightMask.value))
                 return hit.distance - closerRadius;
-            }
 
             return distance;
         }
 
         private static float ClampAngle(float angle, float min, float max){
-            if (angle < -360){
-                angle += 360;
-            }
+            if (angle < -360) angle += 360;
 
-            if (angle > 360){
-                angle -= 360;
-            }
+            if (angle > 360) angle -= 360;
 
             return Mathf.Clamp(angle, min, max);
         }

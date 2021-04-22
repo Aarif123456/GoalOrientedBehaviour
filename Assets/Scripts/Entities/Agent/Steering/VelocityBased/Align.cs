@@ -17,15 +17,12 @@ namespace Entities.Steering {
 
             Vector3 angularVelocity;
 
-            if (angularDirection.magnitude <= satisfactionRadius){
+            if (angularDirection.magnitude <= satisfactionRadius)
                 angularVelocity = Vector3.zero;
-            }
-            else if (timeToTarget <= 0f){
+            else if (timeToTarget <= 0f)
                 angularVelocity = angularDirection;
-            }
-            else{
+            else
                 angularVelocity = angularDirection / timeToTarget;
-            }
 
             return new Steering{Type = Steering.Types.Velocities, Angular = angularVelocity};
         }

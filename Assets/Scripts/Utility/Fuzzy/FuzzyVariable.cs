@@ -115,9 +115,7 @@ namespace Utility.Fuzzy {
             }
 
             // make sure bottom is not equal to zero
-            if (Epsilon.IsEqual(0, bottom)){
-                return 0.0f;
-            }
+            if (Epsilon.IsEqual(0, bottom)) return 0.0f;
 
             return top / bottom;
         }
@@ -163,9 +161,7 @@ namespace Utility.Fuzzy {
             }
 
             // make sure total area is not equal to zero
-            if (Epsilon.IsEqual(0, totalArea)){
-                return 0.0f;
-            }
+            if (Epsilon.IsEqual(0, totalArea)) return 0.0f;
 
             return sumOfMoments / totalArea;
         }
@@ -270,13 +266,9 @@ namespace Utility.Fuzzy {
         /// <param name="minimumBound">The minimum bound.</param>
         /// <param name="maximumBound">The maximum bound.</param>
         private void AdjustRangeToFit(float minimumBound, float maximumBound){
-            if (minimumBound < MinRange){
-                MinRange = minimumBound;
-            }
+            if (minimumBound < MinRange) MinRange = minimumBound;
 
-            if (maximumBound > MaxRange){
-                MaxRange = maximumBound;
-            }
+            if (maximumBound > MaxRange) MaxRange = maximumBound;
         }
     }
 }

@@ -22,9 +22,7 @@ namespace Entities.Steering {
         public override Steering Steer(){
             var direction = OtherKinematic.Position - AgentKinematic.Position;
 
-            if (Mathf.Approximately(direction.magnitude, 0f)){
-                return new Steering{Type = Steering.Types.Velocities};
-            }
+            if (Mathf.Approximately(direction.magnitude, 0f)) return new Steering{Type = Steering.Types.Velocities};
 
             // TODO: dangerous side-effect
             OtherKinematic.Rotation = Math.GetLookAtVector(AgentKinematic, OtherKinematic);

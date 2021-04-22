@@ -81,9 +81,7 @@ namespace Utility.Fuzzy {
             get => _dom;
 
             set {
-                if (value < 0 || value > 1){
-                    throw new Exception("FuzzySet.SetDOM: invalid value.");
-                }
+                if (value < 0 || value > 1) throw new Exception("FuzzySet.SetDOM: invalid value.");
 
                 _dom = value;
             }
@@ -108,9 +106,7 @@ namespace Utility.Fuzzy {
         /// </summary>
         /// <param name="givenValue">The given value.</param>
         public void OrWithDom(float givenValue){
-            if (givenValue > _dom){
-                _dom = givenValue;
-            }
+            if (givenValue > _dom) _dom = givenValue;
         }
 
         /// <summary>

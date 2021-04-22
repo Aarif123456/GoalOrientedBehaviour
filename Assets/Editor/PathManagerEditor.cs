@@ -8,8 +8,6 @@ public class PathManagerEditor : Editor {
     public override void OnInspectorGUI(){
         pathManager = target as PathManager;
 
-        if (!ReferenceEquals(pathManager, null)){
-            DrawDefaultInspector();
-        }
+        if (!ReferenceEquals(pathManager, null)) DrawDefaultInspector();
     }
 }

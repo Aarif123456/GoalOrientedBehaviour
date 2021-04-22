@@ -20,17 +20,13 @@ public class NodeEditor : Editor {
 
         node = target as Node;
 
-        if (ReferenceEquals(node, null)){
-            return;
-        }
+        if (ReferenceEquals(node, null)) return;
 
-        if (!ReferenceEquals(node.Graph, null) &&
-            node.Graph.IsLocked){
+        if (node.Graph is{IsLocked: true}){
             GUILayout.Label("The node is locked because its graph is");
             GUILayout.Label("locked. Unlock the graph to edit.");
         }
-        else if (!ReferenceEquals(node.NodeCollection, null) &&
-                 node.NodeCollection.IsLocked){
+        else if (node.NodeCollection is{IsLocked: true}){
             GUILayout.Label("The node is locked because its collection");
             GUILayout.Label("is locked. Unlock the collection to edit.");
         }
@@ -38,51 +34,38 @@ public class NodeEditor : Editor {
             GUILayout.Label("The node is locked. Unlock to edit.");
             node.locked = EditorGUILayout.Toggle("\tLocked", node.locked);
         }
-        else{
+        else
             DrawDefaultInspector();
-        }
 
         if (!node.IsLocked &&
-            node.GetComponent<Renderer>().sharedMaterial.color != node.color){
+            node.GetComponent<Renderer>().sharedMaterial.color != node.color)
             node.GetComponent<Renderer>().sharedMaterial.color = node.color;
-        }
 
         if (!ReferenceEquals(node.Graph, null)){
-            if (GUILayout.Button("Edit graph")){
-                Selection.activeGameObject = node.Graph.gameObject;
-            }
+            if (GUILayout.Button("Edit graph")) Selection.activeGameObject = node.Graph.gameObject;
 
             if (!ReferenceEquals(node.Graph.nodeCollectionObject, null) &&
-                GUILayout.Button("Edit node collection")){
+                GUILayout.Button("Edit node collection"))
                 Selection.activeGameObject = node.Graph.nodeCollectionObject;
-            }
         }
 
 
-        if (node.IsLocked){
-            return;
-        }
+        if (node.IsLocked) return;
 
-        if (GUILayout.Button("Drop selected node to surface")){
-            node.DropToSurface();
-        }
+        if (GUILayout.Button("Drop selected node to surface")) node.DropToSurface();
 
-        if (GUILayout.Button("Connect a new node with selected node")){
+        if (GUILayout.Button("Connect a new node with selected node"))
             Selection.activeGameObject = node.AddConnectedNode(false, SceneView.lastActiveSceneView.camera);
-        }
 
-        if (GUILayout.Button("Connect from selected node to a new node")){
+        if (GUILayout.Button("Connect from selected node to a new node"))
             Selection.activeGameObject = node.AddConnectedNode(true, SceneView.lastActiveSceneView.camera);
-        }
 
         if (GUILayout.Button("Connect selected nodes")){
             Node.ConnectNodes(Array.ConvertAll(Selection.GetFiltered(typeof(Node), SelectionMode.TopLevel),
                 element => (Node) element));
         }
 
-        if (GUILayout.Button("Remove all connections of selected node")){
-            node.RemoveAllConnections();
-        }
+        if (GUILayout.Button("Remove all connections of selected node")) node.RemoveAllConnections();
 
         if (GUILayout.Button("Disconnect selected nodes from each other")){
             Node.DisconnectNodes(Array.ConvertAll(Selection.GetFiltered(typeof(Node), SelectionMode.TopLevel),
@@ -99,9 +82,7 @@ public class NodeEditor : Editor {
             }
         }
 
-        if (!GUILayout.Button("Raycast connections for each selected node")){
-            return;
-        }
+        if (!GUILayout.Button("Raycast connections for each selected node")) return;
 
         node.RemoveAllConnections();
         node.RaycastNeighbours(node.NodeCollection.Nodes, false, true);

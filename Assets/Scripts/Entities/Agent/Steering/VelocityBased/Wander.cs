@@ -42,18 +42,15 @@ namespace Entities.Steering {
         public override Steering Steer(){
             var steering = new Steering{Type = Steering.Types.Velocities};
 
-            if (WanderCircleRadius <= 0){
-                return steering;
-            }
+            if (WanderCircleRadius <= 0) return steering;
 
             headingAngle += MaximumSlideDegrees - 2 * Random.value * MaximumSlideDegrees;
             headingAngle = Math.WrapAngle(headingAngle);
 
             var forwardDirection = new Vector3(AgentKinematic.Velocity.x, 0, AgentKinematic.Velocity.z);
 
-            if (forwardDirection.magnitude > 0){
+            if (forwardDirection.magnitude > 0)
                 forwardDirection.Normalize();
-            }
             else{
                 forwardDirection = new Vector3(-Mathf.Sin(AgentKinematic.AngularVelocity.y), 0,
                     -Mathf.Cos(AgentKinematic.AngularVelocity.y));

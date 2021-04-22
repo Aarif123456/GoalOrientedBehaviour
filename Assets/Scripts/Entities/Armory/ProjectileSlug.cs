@@ -9,9 +9,8 @@ namespace Entities.Armory {
             if (hitEntity != null){
                 var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
 
-                if (hitEntity.EntityType == EntityTypes.Wall){
+                if (hitEntity.EntityType == EntityTypes.Wall)
                     ProcessImpact(hitEntity, hitPoint);
-                }
                 else if (hitEntity.EntityType == EntityTypes.Agent){
                     var hitAgent = hitEntity as Agent;
 

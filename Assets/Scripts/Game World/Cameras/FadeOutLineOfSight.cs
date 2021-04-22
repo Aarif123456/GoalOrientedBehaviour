@@ -49,6 +49,7 @@
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // Add to the component menu.
@@ -73,9 +74,7 @@ namespace GameWorld.Cameras {
         public override void Awake(){
             base.Awake();
 
-            if (!target){
-                Debug.Log("Please assign a target to the camera.");
-            }
+            if (!target) Debug.Log("Please assign a target to the camera.");
 
             CameraName = "Fade Out Line Of Sight";
         }
@@ -83,9 +82,7 @@ namespace GameWorld.Cameras {
         // If this behaviour is enabled, LateUpdate is called once per frame
         // after all Update functions have been called.
         public void LateUpdate(){
-            if (!target){
-                return;
-            }
+            if (!target) return;
 
             var from = transform.position;
             var to = target.position;
@@ -108,15 +105,11 @@ namespace GameWorld.Cameras {
                 // Find all blocking objects which we want to hide
                 var hits = Physics.RaycastAll(from + relativeOffset, to - from, castDistance, layerMask.value);
                 foreach (var hit in hits){
-                    if (hit.transform.gameObject == target.gameObject){
-                        continue;
-                    }
+                    if (hit.transform.gameObject == target.gameObject) continue;
 
                     // Make sure we have a renderer
                     var hitRenderer = hit.collider.GetComponent<Renderer>();
-                    if (hitRenderer == null || !hitRenderer.enabled){
-                        continue;
-                    }
+                    if (ReferenceEquals(hitRenderer, null) || !hitRenderer.enabled) continue;
 
                     var info = FindLosInfo(hitRenderer);
 
@@ -139,9 +132,8 @@ namespace GameWorld.Cameras {
                         fadedOutObjects.Add(info);
                     }
                     // Just mark the renderer as needing fade out
-                    else{
+                    else
                         info.needFadeOut = true;
-                    }
                 }
             }
 
@@ -170,37 +162,27 @@ namespace GameWorld.Cameras {
                         var color = alphaMaterial.color;
                         color.a = alpha;
                         alphaMaterial.color = color;
-                        if (alpha >= 0.99){
-                            totallyFadedIn++;
-                        }
+                        if (alpha >= 0.99) totallyFadedIn++;
                     }
 
                     // All alpha materials are faded back to 100%
                     // Thus we can switch back to the original materials
-                    if (totallyFadedIn == fade.alphaMaterials.Length){
-                        if (fade.renderer){
-                            fade.renderer.sharedMaterials = fade.originalMaterials;
-                        }
+                    if (totallyFadedIn != fade.alphaMaterials.Length) continue;
 
-                        foreach (var newMaterial in fade.alphaMaterials){
-                            Destroy(newMaterial);
-                        }
+                    if (fade.renderer) fade.renderer.sharedMaterials = fade.originalMaterials;
 
-                        fadedOutObjects.RemoveAt(i);
-                        i--;
+                    foreach (var newMaterial in fade.alphaMaterials){
+                        Destroy(newMaterial);
                     }
+
+                    fadedOutObjects.RemoveAt(i);
+                    i--;
                 }
             }
         }
 
-        private FadeOutLOSInfo FindLosInfo(Renderer r){
-            foreach (var fade in fadedOutObjects){
-                if (r == fade.renderer){
-                    return fade;
-                }
-            }
-
-            return null;
+        private FadeOutLOSInfo FindLosInfo(Object r){
+            return fadedOutObjects.FirstOrDefault(fade => r == fade.renderer);
         }
 
         public class FadeOutLOSInfo {

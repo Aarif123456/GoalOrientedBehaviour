@@ -35,9 +35,7 @@ namespace Entities {
         public override void Update(){
             base.Update();
 
-            if (motor != null && motor.enabled){
-                motor.UpdateFromGameObject(this, Time.deltaTime);
-            }
+            if (motor != null && motor.enabled) motor.UpdateFromGameObject(this, Time.deltaTime);
         }
 
         public void LateUpdate(){

@@ -63,18 +63,14 @@ namespace GameWorld {
 
             public static string GetDescription(Lifespan lifespan){
                 foreach (var fieldInfo in typeof(Lifespans).GetFields()){
-                    if ((Lifespan) fieldInfo.GetValue(null) != lifespan){
-                        continue;
-                    }
+                    if ((Lifespan) fieldInfo.GetValue(null) != lifespan) continue;
 
                     var attributes =
                         (DescriptionAttribute[]) fieldInfo.GetCustomAttributes(
                             typeof(DescriptionAttribute),
                             false);
 
-                    if (attributes.Length > 0){
-                        return attributes[0].Description;
-                    }
+                    if (attributes.Length > 0) return attributes[0].Description;
                 }
 
                 return lifespan.ToString();

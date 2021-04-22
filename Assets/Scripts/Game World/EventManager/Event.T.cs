@@ -164,17 +164,17 @@ namespace GameWorld {
         /// </param>
         internal override void Fire(Delegate delegateToFire){
             var eventDelegate = delegateToFire as EventDelegate<T>;
-            if (eventDelegate != null){
-                eventDelegate(this);
-            }
+            eventDelegate?.Invoke(this);
         }
 
         internal override void Send(){
-            if (ReceiverId != EventManager.RECEIVER_ID_IRRELEVANT){
-                var entity = EntityManager.Find<Entity>(ReceiverId);
-                if (entity != null){
-                    entity.HandleEvent(this);
-                }
+            if (ReceiverId == EventManager.RECEIVER_ID_IRRELEVANT){
+                return;
+            }
+
+            var entity = EntityManager.Find<Entity>(ReceiverId);
+            if (!ReferenceEquals(entity, null)){
+                entity.HandleEvent(this);
             }
         }
     }

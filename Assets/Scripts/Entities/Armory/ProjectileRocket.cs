@@ -10,9 +10,8 @@ namespace Entities.Armory {
             if (hitEntity != null){
                 var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
 
-                if (hitEntity.EntityType == EntityTypes.Wall){
+                if (hitEntity.EntityType == EntityTypes.Wall)
                     ProcessImpact(hitEntity, hitPoint);
-                }
                 else if (hitEntity.EntityType == EntityTypes.Agent){
                     var hitAgent = hitEntity as Agent;
 
@@ -43,12 +42,10 @@ namespace Entities.Armory {
             transform.LookAt(targetPosition);
             transform.Rotate(Vector3.right, 90);
 
-            if (Parameters.Instance.RocketIsHeatSeeking){
+            if (Parameters.Instance.RocketIsHeatSeeking)
                 SteeringBehaviours.Add(new Seek(Kinematic, shooter.TargetingSystem.Target.Kinematic));
-            }
-            else{
+            else
                 Kinematic.SetVelocity(directionToTarget * Parameters.Instance.RocketMaximumSpeed);
-            }
         }
 
         protected override void Act(float deltaTime){

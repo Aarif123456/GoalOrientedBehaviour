@@ -8,9 +8,7 @@ namespace Utility.Math {
 
             if (magnitude > maximumMagnitude)
                 // vector.normalized * maximumMagnitude
-            {
                 vector *= maximumMagnitude / magnitude;
-            }
 
             return vector;
         }
@@ -36,13 +34,9 @@ namespace Utility.Math {
             lookAtVector.x = angles.x;
             lookAtVector.z = agentKinematic.Rotation.z;
 
-            if (lookAtVector.x > 90f){
-                lookAtVector.x = 180f - lookAtVector.x;
-            }
+            if (lookAtVector.x > 90f) lookAtVector.x = 180f - lookAtVector.x;
 
-            if (lookAtVector.x < -90f){
-                lookAtVector.x = -180f - lookAtVector.x;
-            }
+            if (lookAtVector.x < -90f) lookAtVector.x = -180f - lookAtVector.x;
 
             return lookAtVector;
         }

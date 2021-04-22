@@ -97,9 +97,7 @@ namespace Utility.Fuzzy {
         /// <param name="val">The value of the fuzzy linguistic variable.</param>
         public void Fuzzify(string nameOfFlv, float val){
             // first make sure the key exists
-            if (!Variables.ContainsKey(nameOfFlv)){
-                throw new Exception("FuzzyModule.Fuzzify>: key not found.");
-            }
+            if (!Variables.ContainsKey(nameOfFlv)) throw new Exception("FuzzyModule.Fuzzify>: key not found.");
 
             Variables[nameOfFlv].Fuzzify(val);
         }
@@ -112,9 +110,7 @@ namespace Utility.Fuzzy {
         /// <returns>A crisp value.</returns>
         public float DeFuzzify(string nameOfFlv, DefuzzifyMethod method){
             // first make sure the key exists
-            if (!Variables.ContainsKey(nameOfFlv)){
-                throw new Exception("FuzzyModule.DeFuzzify: key not found.");
-            }
+            if (!Variables.ContainsKey(nameOfFlv)) throw new Exception("FuzzyModule.DeFuzzify: key not found.");
 
             // clear the DOMs of all the consequents of all the rules
             SetConfidencesOfConsequentsToZero();

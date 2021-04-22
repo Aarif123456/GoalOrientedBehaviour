@@ -32,15 +32,13 @@ namespace Entities.GoalOrientedBehaviour {
         public override StatusTypes Process(){
             ActivateIfInactive();
 
-            if (IsStuck()){
+            if (IsStuck())
                 Status = StatusTypes.Failed;
-            }
             else{
                 var distanceFromTarget = Vector3.Distance(Agent.Kinematic.Position, targetAgent.Kinematic.Position);
 
-                if (Mathf.Abs(distanceFromTarget - IdealRange) <= SatisfactionRadius){
+                if (Mathf.Abs(distanceFromTarget - IdealRange) <= SatisfactionRadius)
                     Status = StatusTypes.Completed;
-                }
                 else{
                     var idealPosition = targetAgent.Kinematic.Position;
 

@@ -14,9 +14,7 @@ namespace Entities.GoalOrientedBehaviour {
 
             // if the previous method returns a negative value then there is no item of
             // the specified type present in the game world at this time.
-            if (distanceToItem < 0){
-                return 1;
-            }
+            if (distanceToItem < 0) return 1;
 
             // these values represent cutoffs. Any distance over maxDistance results in
             // a value of 1, and value below minDistance results in a value of 0
@@ -30,9 +28,7 @@ namespace Entities.GoalOrientedBehaviour {
             // grab a pointer to the gun (if the bot owns an instance)
             var weapon = agent.WeaponSystem.GetWeaponFromInventory(weaponType);
 
-            if (weapon != null){
-                return weapon.RoundsRemaining / GetMaxRoundsBotCanCarryForWeapon(weaponType);
-            }
+            if (weapon != null) return weapon.RoundsRemaining / GetMaxRoundsBotCanCarryForWeapon(weaponType);
 
             return 0.0f;
         }

@@ -17,7 +17,7 @@ namespace GameWorld.Navigation.Graph {
 
         public Edge[] Edges => GetComponentsInChildren<Edge>();
 
-        public bool IsLocked => locked || Graph != null && Graph.IsLocked;
+        public bool IsLocked => locked || !ReferenceEquals(Graph, null) && Graph.IsLocked;
 
         public bool IsVisible {
             get => isVisible;
@@ -35,8 +35,8 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public GameObject AddEdge(Node fromNode, Node toNode){
-            if (IsLocked || fromNode.Graph == null || fromNode.Graph != toNode.Graph ||
-                fromNode.Graph.edgePrefab == null){
+            if (IsLocked || ReferenceEquals(fromNode, null) || fromNode.Graph != toNode.Graph ||
+                ReferenceEquals(fromNode.Graph.edgePrefab, null)){
                 return null;
             }
 
@@ -46,40 +46,37 @@ namespace GameWorld.Navigation.Graph {
         GameObject edgeObject = Instantiate(fromNode.Graph.edgePrefab) as GameObject;
 #endif
 
-            if (edgeObject != null){
-                var edge = edgeObject.GetComponent<Edge>();
+            if (ReferenceEquals(edgeObject , null)) return edgeObject;
+            var edge = edgeObject.GetComponent<Edge>();
 
-                if (edge != null){
-                    edge.FromNode = fromNode;
-                    edge.ToNode = toNode;
-                    edge.CalculateCost();
-                    edge.GenerateNameFromNodes();
-                    ApplyParametersToEdge(edge);
-                    edgeObject.transform.parent = transform;
-                }
-                else{
-                    Destroy(edgeObject);
-                    edgeObject = null;
-                }
+            if (!ReferenceEquals(edge, null)){
+                edge.FromNode = fromNode;
+                edge.ToNode = toNode;
+                edge.CalculateCost();
+                edge.GenerateNameFromNodes();
+                ApplyParametersToEdge(edge);
+                edgeObject.transform.parent = transform;
+            }
+            else{
+                Destroy(edgeObject);
+                edgeObject = null;
             }
 
             return edgeObject;
         }
 
         public void ApplyParametersToEdges(){
-            if (!IsLocked){
-                foreach (var edge in Edges){
-                    ApplyParametersToEdge(edge);
-                }
+            if (IsLocked) return;
+            foreach (var edge in Edges){
+                ApplyParametersToEdge(edge);
             }
         }
 
         private void ApplyParametersToEdge(Edge edge){
-            if (!IsLocked && !edge.locked){
-                color.a = alpha;
-                edge.color = color;
-                edge.GetComponent<Renderer>().sharedMaterial.color = color;
-            }
+            if (IsLocked || edge.locked) return;
+            color.a = alpha;
+            edge.color = color;
+            edge.GetComponent<Renderer>().sharedMaterial.color = color;
         }
     }
 }

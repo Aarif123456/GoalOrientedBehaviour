@@ -46,15 +46,11 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         protected void ReactivateIfFailed(){
-            if (HasFailed){
-                Status = StatusTypes.Inactive;
-            }
+            if (HasFailed) Status = StatusTypes.Inactive;
         }
 
         protected void ActivateIfInactive(){
-            if (IsInactive){
-                Activate();
-            }
+            if (IsInactive) Activate();
         }
 
 //        public void ShowOnDisplay(MessageManager messageManager, string messageDisplay)

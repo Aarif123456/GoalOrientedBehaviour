@@ -27,18 +27,16 @@ namespace Entities.GoalOrientedBehaviour {
             Agent.IsStrafing = true;
 
             if (clockwise){
-                if (Agent.CanStepRight(0, out strafeTarget)){
+                if (Agent.CanStepRight(0, out strafeTarget))
                     seek.OtherKinematic.Position = strafeTarget;
-                }
                 else{
                     Status = StatusTypes.Inactive;
                     clockwise = !clockwise;
                 }
             }
             else{
-                if (Agent.CanStepLeft(0, out strafeTarget)){
+                if (Agent.CanStepLeft(0, out strafeTarget))
                     seek.OtherKinematic.Position = strafeTarget;
-                }
                 else{
                     Status = StatusTypes.Inactive;
                     clockwise = !clockwise;
@@ -51,15 +49,12 @@ namespace Entities.GoalOrientedBehaviour {
             ActivateIfInactive();
 
             // if target goes out of view terminate
-            if (!Agent.TargetingSystem.IsTargetWithinFieldOfView){
+            if (!Agent.TargetingSystem.IsTargetWithinFieldOfView)
                 Status = StatusTypes.Completed;
-            }
 
             // else if agent reaches the target position set status to inactive so
             // the goal is reactivated on the next update-step
-            else if (Agent.IsAtPosition(strafeTarget, satisfactionRadius)){
-                Status = StatusTypes.Inactive;
-            }
+            else if (Agent.IsAtPosition(strafeTarget, satisfactionRadius)) Status = StatusTypes.Inactive;
 
             return Status;
         }

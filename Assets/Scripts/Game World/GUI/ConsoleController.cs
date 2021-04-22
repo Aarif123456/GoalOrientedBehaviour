@@ -11,11 +11,10 @@ using UnityEngine;
 namespace GameWorld.GUI {
     [AddComponentMenu("Scripts/GUI/Console Controller")]
     public class ConsoleController : WindowManager {
+        private const string WindowTitle = "Console Controller";
         public Vector2 positionOffset = new Vector2(0, 50);
         public int minimumWindowWidth = 150;
         public int minimumColumnWidth = 120;
-
-        private readonly string windowTitle = "Console Controller";
 
         private List<Agent> agents;
         private Dictionary<string, SelectableCamera> cameras;
@@ -32,19 +31,12 @@ namespace GameWorld.GUI {
         /********************************************************************************************************************/
         // If this behaviour is enabled, Start is called once
         // after all Awake calls and before all any Update calls.
-        public void Awake(){
-        }
-
         public new void Start(){
             base.Start(); // initializes the window id
             /* Get list of all Agents*/
             agents = EntityManager.FindAll<Agent>();
             GetViews();
         }
-
-        public void Update(){
-        }
-
 
         /********************************************************************************************************************/
         // If this behaviour is enabled, OnGUI is called for rendering and handling GUI events.
@@ -63,7 +55,7 @@ namespace GameWorld.GUI {
                     windowId,
                     windowRectangle,
                     WindowFunction,
-                    windowTitle,
+                    WindowTitle,
                     GUILayout.MinWidth(minimumWindowWidth));
         }
 
@@ -76,14 +68,13 @@ namespace GameWorld.GUI {
             var curCameraName = "";
             foreach (var cameraObject in cameraObjects){
                 var attachedCameras = cameraObject.GetComponents<SelectableCamera>();
-                foreach (var camera in attachedCameras){
-                    cameras.Add(camera.CameraName, camera);
+                foreach (var selectableCamera in attachedCameras){
+                    cameras.Add(selectableCamera.CameraName, selectableCamera);
                     /* Make sure we only have one active camera */
-                    if (string.IsNullOrEmpty(curCameraName) && camera.IsActive()){
-                        curCameraName = camera.CameraName;
-                    }
+                    if (string.IsNullOrEmpty(curCameraName) && selectableCamera.IsActive())
+                        curCameraName = selectableCamera.CameraName;
 
-                    camera.Deactivate();
+                    selectableCamera.Deactivate();
                 }
             }
 
@@ -92,10 +83,10 @@ namespace GameWorld.GUI {
             cameras.Keys.CopyTo(camerasNames, 0);
 
             /* Activate current camera and set the correct index*/
-            if (!string.IsNullOrEmpty(curCameraName)){
-                cameras[curCameraName].Activate();
-                curCamera = Array.IndexOf(camerasNames, curCameraName);
-            }
+            if (string.IsNullOrEmpty(curCameraName)) return;
+
+            cameras[curCameraName].Activate();
+            curCamera = Array.IndexOf(camerasNames, curCameraName);
         }
 
         /********************************************************************************************************************/
@@ -103,9 +94,7 @@ namespace GameWorld.GUI {
 
         // It requires the id of the window it's currently making GUI for. 
         private void WindowFunction(int windowID){
-            if (agents.Count == 0){
-                return;
-            }
+            if (agents.Count == 0) return;
 
             // Layout dummy label to keep the title showing
             // even when no items are selected.
@@ -131,9 +120,7 @@ namespace GameWorld.GUI {
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", GUILayout.ExpandWidth(true))){
                 curAgent--;
-                if (curAgent < 0){
-                    curAgent = (curAgent + agents.Count) % agents.Count;
-                }
+                if (curAgent < 0) curAgent = (curAgent + agents.Count) % agents.Count;
             }
 
             if (GUILayout.Button("Next", GUILayout.ExpandWidth(true))){
@@ -147,8 +134,7 @@ namespace GameWorld.GUI {
         /* Show info about the agent */
         private void ShowAgentStats(Agent agent){
             GUILayout.BeginVertical(GUILayout.MinWidth(minimumColumnWidth));
-            var style = new GUIStyle();
-            style.normal.textColor = agent.color;
+            var style = new GUIStyle{normal ={textColor = agent.color}};
             GUILayout.Label("Name: " + agent.shortName, style);
             GUILayout.Label("Score: " + agent.Score);
             GUILayout.Label("Health: " + agent.Health);
@@ -162,19 +148,15 @@ namespace GameWorld.GUI {
             return cameras[camerasNames[index]];
         }
 
-        private void SetCurrentView(SelectableCamera oldCamera, SelectableCamera newCamera, Transform target){
+        private static void SetCurrentView(SelectableCamera oldCamera, SelectableCamera newCamera, Transform target){
             oldCamera.Deactivate();
             newCamera.Activate();
             /* If the camera needs a target then we pass it in */
-            if (newCamera is TargetedCamera targetedCamera){
-                targetedCamera.target = target;
-            }
+            if (newCamera is TargetedCamera targetedCamera) targetedCamera.target = target;
         }
 
-        private void ViewSelection(Agent agent){
-            if (curCamera < 0){
-                return;
-            }
+        private void ViewSelection(Component agent){
+            if (curCamera < 0) return;
 
             /* Set current camera*/
             GUILayout.BeginVertical();

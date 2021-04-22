@@ -28,9 +28,7 @@ namespace Entities.Armory {
         }
 
         public void Update(){
-            if (Agent == null){
-                return;
-            }
+            if (Agent == null) return;
 
             ClearTarget();
 
@@ -39,15 +37,11 @@ namespace Entities.Armory {
 
             foreach (var sensedAgent in sensedAgents){
                 // make sure the bot is alive and that it is not the owner
-                if (!sensedAgent.IsAlive || sensedAgent == Agent){
-                    continue;
-                }
+                if (!sensedAgent.IsAlive || sensedAgent == Agent) continue;
 
                 var distance = (sensedAgent.Kinematic.Position - Agent.Kinematic.Position).magnitude;
 
-                if (distance >= closestDistanceSoFar){
-                    continue;
-                }
+                if (distance >= closestDistanceSoFar) continue;
 
                 closestDistanceSoFar = distance;
                 Target = sensedAgent;

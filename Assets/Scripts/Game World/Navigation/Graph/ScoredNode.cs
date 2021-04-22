@@ -38,37 +38,27 @@ namespace GameWorld.Navigation.Graph {
             rest -= 2;
 
             try{
-                if (flag = !Showing.Show(node, stringbuilder, ref rest, formatProvider)){
-                    return false;
-                }
+                if (flag = !Showing.Show(node, stringbuilder, ref rest, formatProvider)) return false;
 
                 stringbuilder.Append(", ");
                 rest -= 2;
 
-                if (flag = !Showing.Show(f, stringbuilder, ref rest, formatProvider)){
-                    return false;
-                }
+                if (flag = !Showing.Show(f, stringbuilder, ref rest, formatProvider)) return false;
 
                 stringbuilder.Append(", ");
                 rest -= 2;
 
-                if (flag = !Showing.Show(g, stringbuilder, ref rest, formatProvider)){
-                    return false;
-                }
+                if (flag = !Showing.Show(g, stringbuilder, ref rest, formatProvider)) return false;
 
                 stringbuilder.Append(", ");
                 rest -= 2;
 
-                if (flag = !Showing.Show(edgeFromParent, stringbuilder, ref rest, formatProvider)){
-                    return false;
-                }
+                if (flag = !Showing.Show(edgeFromParent, stringbuilder, ref rest, formatProvider)) return false;
 
                 stringbuilder.Append(", ");
                 rest -= 2;
 
-                if (flag = !Showing.Show(parentScoredNode, stringbuilder, ref rest, formatProvider)){
-                    return false;
-                }
+                if (flag = !Showing.Show(parentScoredNode, stringbuilder, ref rest, formatProvider)) return false;
             }
             finally{
                 if (flag){

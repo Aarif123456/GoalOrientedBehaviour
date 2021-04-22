@@ -111,9 +111,7 @@ public sealed class Parameters : MonoBehaviour {
 
     public static Parameters Instance {
         get {
-            if (_instance == null){
-                _instance = GameObject.Find("Game").GetComponent<Parameters>();
-            }
+            if (_instance == null) _instance = GameObject.Find("Game").GetComponent<Parameters>();
 
             return _instance;
         }

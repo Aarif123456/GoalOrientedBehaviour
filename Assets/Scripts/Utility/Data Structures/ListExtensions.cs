@@ -11,9 +11,7 @@ namespace Utility.Data_Structures {
         }
 
         public static void Pop<T>(this List<T> list){
-            if (list.Count > 0){
-                list.RemoveAt(list.Count - 1);
-            }
+            if (list.Count > 0) list.RemoveAt(list.Count - 1);
         }
 
         public static T Peek<T>(this List<T> list){
@@ -29,9 +27,7 @@ namespace Utility.Data_Structures {
         }
 
         public static T Dequeue<T>(this List<T> list){
-            if (list.IsEmpty()){
-                throw new Exception("Trying to remove first element of empty list.");
-            }
+            if (list.IsEmpty()) throw new Exception("Trying to remove first element of empty list.");
 
             var first = list[0];
             list.RemoveAt(0);

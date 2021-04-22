@@ -22,20 +22,17 @@ namespace Entities.GoalOrientedBehaviour {
             // and target), then select a tactic to follow while shooting
             if (Agent.TargetingSystem.IsTargetShootable){
                 // if the agent has space to strafe then do so
-                if (Agent.CanStepLeft(0) || Agent.CanStepRight(0)){
+                if (Agent.CanStepLeft(0) || Agent.CanStepRight(0))
                     AddSubgoal(new Strafe(Agent, Agent.TargetingSystem.Target));
-                }
 
                 // if not able to strafe, head directly at the target's position 
-                else{
+                else
                     AddSubgoal(new AdjustRange(Agent, Agent.TargetingSystem.Target));
-                }
             }
 
             // if the target is not visible, go hunt it.
-            else{
+            else
                 AddSubgoal(new HuntTarget(Agent));
-            }
         }
 
         public override StatusTypes Process(){

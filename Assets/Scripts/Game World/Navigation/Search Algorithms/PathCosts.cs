@@ -27,9 +27,7 @@ namespace GameWorld.Navigation.Graph {
                 var toNode = nextNodeAndCost.node;
 
                 if (toNode != null){
-                    if (path == null){
-                        path = new List<Edge>();
-                    }
+                    if (path == null) path = new List<Edge>();
 
                     // TODO: make outEdges a hashList??
                     path.Add(fromNode.outEdges.Find(element => element.ToNode == toNode));

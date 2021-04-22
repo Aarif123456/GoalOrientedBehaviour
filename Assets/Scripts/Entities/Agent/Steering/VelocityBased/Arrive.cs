@@ -17,18 +17,14 @@ namespace Entities.Steering {
             var direction = OtherKinematic.Position - AgentKinematic.Position;
             var distance = direction.magnitude;
 
-            if (timeToTarget <= 0f || distance > brakingRadius){
-                return base.Steer();
-            }
+            if (timeToTarget <= 0f || distance > brakingRadius) return base.Steer();
 
             Vector3 velocity;
 
-            if (distance <= SatisfactionRadius){
+            if (distance <= SatisfactionRadius)
                 velocity = Vector3.zero;
-            }
-            else{
+            else
                 velocity = direction / timeToTarget;
-            }
 
             return new Steering{Type = Steering.Types.Velocities, Linear = velocity};
         }

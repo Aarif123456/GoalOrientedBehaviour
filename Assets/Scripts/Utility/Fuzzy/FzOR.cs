@@ -118,9 +118,7 @@ namespace Utility.Fuzzy {
             var largest = float.MinValue;
 
             foreach (var term in Terms){
-                if (term.GetDom() > largest){
-                    largest = term.GetDom();
-                }
+                if (term.GetDom() > largest) largest = term.GetDom();
             }
 
             return largest;

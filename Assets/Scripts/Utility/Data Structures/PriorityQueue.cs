@@ -299,9 +299,7 @@ namespace Utility.Data_Structures {
         /// </returns>
         public bool Contains(TValue value){
             foreach (var x in _items){
-                if (x.Value.Equals(value)){
-                    return true;
-                }
+                if (x.Value.Equals(value)) return true;
             }
 
             return false;
@@ -311,25 +309,16 @@ namespace Utility.Data_Structures {
         ///     Copy to array starting at given array index.
         /// </summary>
         public void CopyTo(PriorityQueueItem<TValue, TPriority>[] array, int arrayIndex){
-            if (array == null){
-                throw new ArgumentNullException("array");
-            }
+            if (array == null) throw new ArgumentNullException("array");
 
-            if (arrayIndex < 0){
-                throw new ArgumentOutOfRangeException("arrayIndex", "arrayIndex is less than 0.");
-            }
+            if (arrayIndex < 0) throw new ArgumentOutOfRangeException("arrayIndex", "arrayIndex is less than 0.");
 
-            if (array.Rank > 1){
-                throw new ArgumentException("array is multidimensional.");
-            }
+            if (array.Rank > 1) throw new ArgumentException("array is multidimensional.");
 
-            if (Count == 0){
-                return;
-            }
+            if (Count == 0) return;
 
-            if (arrayIndex >= array.Length){
+            if (arrayIndex >= array.Length)
                 throw new ArgumentException("arrayIndex is equal to or greater than the length" + " of the array.");
-            }
 
             if (Count > array.Length - arrayIndex){
                 throw new ArgumentException(
@@ -352,9 +341,7 @@ namespace Utility.Data_Structures {
         ///     empty queue
         /// </exception>
         public PriorityQueueItem<TValue, TPriority> Dequeue(){
-            if (Count == 0){
-                throw new InvalidOperationException("The queue is empty");
-            }
+            if (Count == 0) throw new InvalidOperationException("The queue is empty");
 
             return RemoveAt(0);
         }
@@ -366,9 +353,7 @@ namespace Utility.Data_Structures {
             if (Count == _capacity)
                 // need to increase capacity
                 // grow by 50 percent
-            {
                 SetCapacity(3 * Capacity / 2);
-            }
 
             var i = Count;
             ++Count;
@@ -402,9 +387,7 @@ namespace Utility.Data_Structures {
         ///     empty queue
         /// </exception>
         public PriorityQueueItem<TValue, TPriority> Peek(){
-            if (Count == 0){
-                throw new InvalidOperationException("The queue is empty.");
-            }
+            if (Count == 0) throw new InvalidOperationException("The queue is empty.");
 
             return _items[0];
         }
@@ -424,9 +407,7 @@ namespace Utility.Data_Structures {
         public void Remove(TValue item, IEqualityComparer comparer){
             // need to find the PriorityQueueItem that has the Data value of item
             for (var index = 0; index < Count; ++index){
-                if (!comparer.Equals(item, _items[index].Value)){
-                    continue;
-                }
+                if (!comparer.Equals(item, _items[index].Value)) continue;
 
                 RemoveAt(index);
                 return;
@@ -447,9 +428,7 @@ namespace Utility.Data_Structures {
         }
 
         public bool Remove(Predicate<TValue> match){
-            if (match == null){
-                throw new ArgumentNullException("match");
-            }
+            if (match == null) throw new ArgumentNullException("match");
 
             var matchedAtLeastOne = false;
 
@@ -469,9 +448,7 @@ namespace Utility.Data_Structures {
         ///     number of items is less than 90 percent of the current capacity.
         /// </summary>
         public void TrimExcess(){
-            if (Count < (float) 0.9 * _capacity){
-                SetCapacity(Count);
-            }
+            if (Count < (float) 0.9 * _capacity) SetCapacity(Count);
         }
 
         /// <summary>
@@ -482,14 +459,11 @@ namespace Utility.Data_Structures {
             while (i < Count / 2){
                 var leftChild = 2 * i + 1;
                 var rightChild = leftChild + 1;
-                if (_prioritySign * _compareFunc(_items[i].Priority, _items[leftChild].Priority) < 0){
-                    return false;
-                }
+                if (_prioritySign * _compareFunc(_items[i].Priority, _items[leftChild].Priority) < 0) return false;
 
                 if (rightChild < Count &&
-                    _prioritySign * _compareFunc(_items[i].Priority, _items[rightChild].Priority) < 0){
+                    _prioritySign * _compareFunc(_items[i].Priority, _items[rightChild].Priority) < 0)
                     return false;
-                }
 
                 ++i;
             }
@@ -533,13 +507,10 @@ namespace Utility.Data_Structures {
                     while (i < Count / 2){
                         var j = 2 * i + 1;
                         if (j < Count - 1 &&
-                            _prioritySign * _compareFunc(_items[j].Priority, _items[j + 1].Priority) < 0){
+                            _prioritySign * _compareFunc(_items[j].Priority, _items[j + 1].Priority) < 0)
                             ++j;
-                        }
 
-                        if (_prioritySign * _compareFunc(_items[j].Priority, tmp.Priority) <= 0){
-                            break;
-                        }
+                        if (_prioritySign * _compareFunc(_items[j].Priority, tmp.Priority) <= 0) break;
 
                         _items[i] = _items[j];
                         i = j;
@@ -559,14 +530,10 @@ namespace Utility.Data_Structures {
 
         private void SetCapacity(int newCapacity){
             var newCap = newCapacity;
-            if (newCap < DEFAULT_CAPACITY){
-                newCap = DEFAULT_CAPACITY;
-            }
+            if (newCap < DEFAULT_CAPACITY) newCap = DEFAULT_CAPACITY;
 
             // throw exception if newCapacity < NumItems
-            if (newCap < Count){
-                throw new ArgumentOutOfRangeException("newCapacity", "New capacity is less than Count");
-            }
+            if (newCap < Count) throw new ArgumentOutOfRangeException("newCapacity", "New capacity is less than Count");
 
             _capacity = newCap;
             if (_items == null){

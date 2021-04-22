@@ -72,9 +72,8 @@ namespace Entities.Steering {
             set {
                 velocity = value;
 
-                if (MaximumMagnitudeIncludesVertical){
+                if (MaximumMagnitudeIncludesVertical)
                     velocity = Math.LimitMagnitude(velocity, MaximumSpeed);
-                }
                 else{
                     velocity.y = 0;
                     velocity = Math.LimitMagnitude(velocity, MaximumSpeed);
@@ -95,9 +94,8 @@ namespace Entities.Steering {
             set {
                 acceleration = value;
 
-                if (MaximumMagnitudeIncludesVertical){
+                if (MaximumMagnitudeIncludesVertical)
                     acceleration = Math.LimitMagnitude(acceleration, MaximumAcceleration);
-                }
                 else{
                     acceleration.y = 0;
                     acceleration = Math.LimitMagnitude(acceleration, MaximumAcceleration);
@@ -149,12 +147,10 @@ namespace Entities.Steering {
         public Vector3 Center => Position + CenterOffset;
 
         public void SetSteering(Steering steering){
-            if (steering.Type == Steering.Types.Velocities){
+            if (steering.Type == Steering.Types.Velocities)
                 SetVelocities(steering.Linear, steering.Angular);
-            }
-            else if (steering.Type == Steering.Types.Accelerations){
+            else if (steering.Type == Steering.Types.Accelerations)
                 SetAccelerations(steering.Linear, steering.Angular);
-            }
             else{
                 throw new NotImplementedException(
                     string.Format("Steering type {0} is not implemented", steering.Type));
@@ -162,12 +158,10 @@ namespace Entities.Steering {
         }
 
         public void AccumulateSteering(Steering steering){
-            if (steering.Type == Steering.Types.Velocities){
+            if (steering.Type == Steering.Types.Velocities)
                 AccumulateVelocities(steering.Linear, steering.Angular);
-            }
-            else if (steering.Type == Steering.Types.Accelerations){
+            else if (steering.Type == Steering.Types.Accelerations)
                 AccumulateAccelerations(steering.Linear, steering.Angular);
-            }
             else{
                 throw new NotImplementedException(
                     string.Format("Steering type {0} is not implemented", steering.Type));
@@ -221,34 +215,22 @@ namespace Entities.Steering {
             var halfDeltaTimeSquared = 0.5f * deltaTime * deltaTime;
             var positionOffset = Velocity * deltaTime + Acceleration * halfDeltaTimeSquared;
 
-            if (IsLockedPositionX){
-                positionOffset.x = 0;
-            }
+            if (IsLockedPositionX) positionOffset.x = 0;
 
-            if (IsLockedPositionY){
-                positionOffset.y = 0;
-            }
+            if (IsLockedPositionY) positionOffset.y = 0;
 
-            if (IsLockedPositionZ){
-                positionOffset.z = 0;
-            }
+            if (IsLockedPositionZ) positionOffset.z = 0;
 
             Position += positionOffset;
 
             var rotationOffset =
                 AngularVelocity * deltaTime + AngularAcceleration * halfDeltaTimeSquared;
 
-            if (IsLockedRotationX){
-                rotationOffset.x = 0;
-            }
+            if (IsLockedRotationX) rotationOffset.x = 0;
 
-            if (IsLockedRotationY){
-                rotationOffset.y = 0;
-            }
+            if (IsLockedRotationY) rotationOffset.y = 0;
 
-            if (IsLockedRotationZ){
-                rotationOffset.z = 0;
-            }
+            if (IsLockedRotationZ) rotationOffset.z = 0;
 
             Rotation += rotationOffset;
 

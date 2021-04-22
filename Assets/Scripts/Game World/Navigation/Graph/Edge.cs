@@ -39,11 +39,10 @@ namespace GameWorld.Navigation.Graph {
         public bool IsLocked => locked || EdgeCollection != null && EdgeCollection.IsLocked;
 
         public void Awake(){
-            if (!IsLocked){
-                color.a = alpha;
-                GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
-                    {color = color};
-            }
+            if (IsLocked) return;
+            color.a = alpha;
+            GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
+                {color = color};
         }
 
         public void Update(){
@@ -55,13 +54,12 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void CalculateCost(){
-            if (!IsLocked){
-                if (FromNode == null || ToNode == null){
-                    Cost = float.MaxValue;
-                }
-                else{
-                    Cost = Vector3.Distance(FromNode.Position, ToNode.Position);
-                }
+            if (IsLocked) return;
+            if (ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)){
+                Cost = float.MaxValue;
+            }
+            else{
+                Cost = Vector3.Distance(FromNode.Position, ToNode.Position);
             }
         }
 
@@ -69,32 +67,30 @@ namespace GameWorld.Navigation.Graph {
             if (!IsLocked && !nameLocked){
                 name =
                     "Edge (" +
-                    (FromNode == null ? "NONE" : FromNode.name) +
+                    (ReferenceEquals(FromNode, null)? "NONE" : FromNode.name) +
                     " --[" + Cost.ToString("F1") + "]--> " +
-                    (ToNode == null ? "NONE" : ToNode.name) +
+                    (ReferenceEquals(ToNode, null) ? "NONE" : ToNode.name) +
                     ")";
             }
         }
 
         public void UpdatePosition(){
-            if (!IsLocked && FromNode != null && ToNode != null){
+            if (!IsLocked && !ReferenceEquals(FromNode, null) && !ReferenceEquals(ToNode, null)){
                 transform.position = (FromNode.Position + ToNode.Position) / 2;
             }
         }
 
         public void UpdateRotation(){
-            if (!IsLocked && FromNode != null && ToNode != null){
-                transform.LookAt(ToNode.Position);
-                transform.Rotate(Vector3.right, 90);
-            }
+            if (IsLocked || ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)) return;
+            transform.LookAt(ToNode.Position);
+            transform.Rotate(Vector3.right, 90);
         }
 
         public void UpdateScale(){
-            if (!IsLocked && FromNode != null && ToNode != null){
-                var scale = transform.localScale;
-                scale.y = Vector3.Distance(FromNode.Position, ToNode.Position) / 2;
-                transform.localScale = scale;
-            }
+            if (IsLocked || ReferenceEquals(FromNode, null)|| ReferenceEquals(ToNode, null)) return;
+            var scale = transform.localScale;
+            scale.y = Vector3.Distance(FromNode.Position, ToNode.Position) / 2;
+            transform.localScale = scale;
         }
     }
 }

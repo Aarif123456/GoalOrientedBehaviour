@@ -21,20 +21,17 @@ namespace Entities.GoalOrientedBehaviour {
                 // if the agent has reached the LRP and it still hasn't found the target
                 // it starts to search by using the explore goal to move to random
                 // map locations
-                if (Epsilon.IsZero(lrp) || Agent.IsAtPosition(lrp)){
+                if (Epsilon.IsZero(lrp) || Agent.IsAtPosition(lrp))
                     AddSubgoal(new Explore(Agent));
-                }
 
                 // else move to the LRP
-                else{
+                else
                     AddSubgoal(new MoveToPosition(Agent, lrp));
-                }
             }
 
             // if there is no active target then this goal can be removed from the queue
-            else{
+            else
                 Status = StatusTypes.Completed;
-            }
         }
 
         public override StatusTypes Process(){
@@ -44,9 +41,7 @@ namespace Entities.GoalOrientedBehaviour {
             Status = ProcessSubgoals();
 
             // if target is in view this goal is satisfied
-            if (Agent.TargetingSystem.IsTargetWithinFieldOfView){
-                Status = StatusTypes.Completed;
-            }
+            if (Agent.TargetingSystem.IsTargetWithinFieldOfView) Status = StatusTypes.Completed;
 
             return Status;
         }

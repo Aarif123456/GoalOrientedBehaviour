@@ -63,7 +63,7 @@ namespace GameWorld {
         /// <summary>
         ///     Initializes a new instance of the Regulator class.
         /// </summary>
-        public Regulator(){
+        private Regulator(){
             _nextUpdateTime = Time.time * 1000 + Random.Range(0, 1000);
             UpdatePeriod = 10;
         }
@@ -80,87 +80,59 @@ namespace GameWorld {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the Regulator class.
-        /// </summary>
-        /// <param name="updatesPerSecond">
-        ///     Number of times to update per second.
-        /// </param>
-        /// <param name="updatePeriodVariator">
-        ///     Parameter for randomly varying the updates per second.
-        /// </param>
-        public Regulator(float updatesPerSecond, long updatePeriodVariator)
-            : this(updatesPerSecond){
-            UpdatePeriodVariator = updatePeriodVariator;
-        }
-
-        /// <summary>
         ///     Gets a value indicating whether the regulator is ready.
         /// </summary>
         public bool IsReady {
             get {
                 // if a regulator is instantiated with a zero freq then it goes
                 // into stealth mode (doesn't regulate)
-                if (UpdatePeriod == 0.0f){
-                    return true;
-                }
+                if (UpdatePeriod == 0.0f) return true;
 
                 // if the regulator is instantiated with a negative freq then it
                 // will never allow the code to flow
-                if (UpdatePeriod < 0.0f){
-                    return false;
-                }
+                if (UpdatePeriod < 0.0f) return false;
 
                 var currentTime = Time.time * 1000;
 
-                if (currentTime >= _nextUpdateTime){
-                    _nextUpdateTime =
-                        currentTime + UpdatePeriod +
-                        (Random.value - Random.value) *
-                        UpdatePeriodVariator;
+                if (!(currentTime >= _nextUpdateTime)) return false;
 
-                    return true;
-                }
+                _nextUpdateTime =
+                    currentTime + UpdatePeriod +
+                    (Random.value - Random.value) *
+                    UpdatePeriodVariator;
 
-                return false;
+                return true;
             }
         }
 
         /// <summary>
         ///     Gets or sets the update period.
         /// </summary>
-        public float UpdatePeriod { get; set; }
+        private float UpdatePeriod { get; set; }
 
         /// <summary>
         ///     Gets or sets the parameter for randomly varying the updates per second.
         /// </summary>
-        public float UpdatePeriodVariator { get; set; }
+        private float UpdatePeriodVariator { get; }
 
         /// <summary>
         ///     Gets or sets the number of updates per second.
         /// </summary>
-        public float UpdatesPerSecond {
+        private float UpdatesPerSecond {
             get {
-                if (0 == UpdatePeriod){
-                    return 0.0f;
-                }
+                if (0 == UpdatePeriod) return 0.0f;
 
-                if (UpdatePeriod < 0.0f){
-                    return -1.0f;
-                }
+                if (UpdatePeriod < 0.0f) return -1.0f;
 
                 return 1000.0f / UpdatePeriod;
             }
 
             set {
-                if (value > 0.0f){
+                if (value > 0.0f)
                     UpdatePeriod = 1000 / value;
-                }
-                else if (value == 0.0f){
+                else if (value == 0.0f)
                     UpdatePeriod = 0;
-                }
-                else if (value < 0.0f){
-                    UpdatePeriod = -1;
-                }
+                else if (value < 0.0f) UpdatePeriod = -1;
             }
         }
     }

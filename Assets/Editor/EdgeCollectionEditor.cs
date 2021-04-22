@@ -10,12 +10,9 @@ public class EdgeCollectionEditor : Editor {
     public override void OnInspectorGUI(){
         edgeCollection = target as EdgeCollection;
 
-        if (ReferenceEquals(edgeCollection, null)){
-            return;
-        }
+        if (ReferenceEquals(edgeCollection, null)) return;
 
-        if (!ReferenceEquals(edgeCollection.Graph, null) &&
-            edgeCollection.Graph.IsLocked){
+        if (edgeCollection.Graph is{IsLocked: true}){
             GUILayout.Label("The edge collection is locked because its");
             GUILayout.Label("graph is locked. Unlock the graph to edit.");
         }
@@ -23,9 +20,8 @@ public class EdgeCollectionEditor : Editor {
             GUILayout.Label("The edge collection is locked. Unlock to edit.");
             edgeCollection.locked = EditorGUILayout.Toggle("\tLocked", edgeCollection.locked);
         }
-        else{
+        else
             DrawDefaultInspector();
-        }
 
         if (!edgeCollection.IsLocked){
             edgeFoldoutStatus = EditorGUILayout.Foldout(edgeFoldoutStatus, "Edges");
@@ -44,22 +40,16 @@ public class EdgeCollectionEditor : Editor {
         }
 
         if (!ReferenceEquals(edgeCollection.Graph, null) &&
-            GUILayout.Button("Edit graph")){
+            GUILayout.Button("Edit graph"))
             Selection.activeGameObject = edgeCollection.Graph.gameObject;
-        }
 
         if (!edgeCollection.IsLocked &&
-            GUILayout.Button("Apply parameters to all edges")){
+            GUILayout.Button("Apply parameters to all edges"))
             edgeCollection.ApplyParametersToEdges();
-        }
 
         if (edgeCollection.IsVisible){
-            if (GUILayout.Button("Hide edges")){
-                edgeCollection.IsVisible = false;
-            }
+            if (GUILayout.Button("Hide edges")) edgeCollection.IsVisible = false;
         }
-        else if (GUILayout.Button("Show edges")){
-            edgeCollection.IsVisible = true;
-        }
+        else if (GUILayout.Button("Show edges")) edgeCollection.IsVisible = true;
     }
 }

@@ -10,12 +10,9 @@ public class NodeCollectionEditor : Editor {
     public override void OnInspectorGUI(){
         nodeCollection = target as NodeCollection;
 
-        if (ReferenceEquals(nodeCollection, null)){
-            return;
-        }
+        if (ReferenceEquals(nodeCollection, null)) return;
 
-        if (!ReferenceEquals(nodeCollection.Graph, null) &&
-            nodeCollection.Graph.IsLocked){
+        if (nodeCollection.Graph is{IsLocked: true}){
             GUILayout.Label("The node collection is locked because its");
             GUILayout.Label("graph is locked. Unlock the graph to edit.");
         }
@@ -23,9 +20,8 @@ public class NodeCollectionEditor : Editor {
             GUILayout.Label("The node collection is locked. Unlock to edit.");
             nodeCollection.locked = EditorGUILayout.Toggle("\tLocked", nodeCollection.locked);
         }
-        else{
+        else
             DrawDefaultInspector();
-        }
 
         if (!nodeCollection.IsLocked){
             nodeFoldoutStatus = EditorGUILayout.Foldout(nodeFoldoutStatus, "Nodes");
@@ -44,39 +40,28 @@ public class NodeCollectionEditor : Editor {
         }
 
         if (!ReferenceEquals(nodeCollection.Graph, null) &&
-            GUILayout.Button("Edit graph")){
+            GUILayout.Button("Edit graph"))
             Selection.activeGameObject = nodeCollection.Graph.gameObject;
-        }
 
         if (!nodeCollection.IsLocked &&
-            !ReferenceEquals(nodeCollection.Graph, null) &&
-            !ReferenceEquals(nodeCollection.Graph.nodePrefab, null) &&
-            GUILayout.Button("Add a node")){
+            nodeCollection.Graph is{nodePrefab:{ }} && GUILayout.Button("Add a node"))
             Selection.activeGameObject = nodeCollection.AddNode(SceneView.lastActiveSceneView.camera);
-        }
 
         if (!nodeCollection.IsLocked &&
-            GUILayout.Button("Apply parameters to all nodes")){
+            GUILayout.Button("Apply parameters to all nodes"))
             nodeCollection.ApplyParametersToNodes();
-        }
 
         if (!nodeCollection.IsLocked &&
-            GUILayout.Button("Drop all nodes to surface")){
+            GUILayout.Button("Drop all nodes to surface"))
             nodeCollection.DropToSurface();
-        }
 
         if (!nodeCollection.IsLocked &&
-            GUILayout.Button("Raycast connections for all nodes")){
+            GUILayout.Button("Raycast connections for all nodes"))
             nodeCollection.RaycastNodes();
-        }
 
         if (nodeCollection.IsVisible){
-            if (GUILayout.Button("Hide nodes")){
-                nodeCollection.IsVisible = false;
-            }
+            if (GUILayout.Button("Hide nodes")) nodeCollection.IsVisible = false;
         }
-        else if (GUILayout.Button("Show nodes")){
-            nodeCollection.IsVisible = true;
-        }
+        else if (GUILayout.Button("Show nodes")) nodeCollection.IsVisible = true;
     }
 }

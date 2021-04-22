@@ -111,21 +111,13 @@ namespace Entities {
 
             Brain.Process();
 
-            if (TargetSelectionRegulator.IsReady){
-                TargetingSystem.Update();
-            }
+            if (TargetSelectionRegulator.IsReady) TargetingSystem.Update();
 
-            if (GoalArbitrationRegulator.IsReady){
-                Brain.Arbitrate();
-            }
+            if (GoalArbitrationRegulator.IsReady) Brain.Arbitrate();
 
-            if (VisionUpdateRegulator.IsReady){
-                SensoryMemory.UpdateVision();
-            }
+            if (VisionUpdateRegulator.IsReady) SensoryMemory.UpdateVision();
 
-            if (WeaponSelectionRegulator.IsReady){
-                WeaponSystem.SelectWeapon();
-            }
+            if (WeaponSelectionRegulator.IsReady) WeaponSystem.SelectWeapon();
         }
 
         protected override void Act(float deltaTime){
@@ -169,9 +161,7 @@ namespace Entities {
             LayerMask obstacleLayers){
             var distance = Vector3.Distance(startPosition, endPosition);
 
-            if (distance <= satisfactionRadius){
-                return true;
-            }
+            if (distance <= satisfactionRadius) return true;
 
             var direction = (endPosition - startPosition) / distance;
 
@@ -280,9 +270,7 @@ namespace Entities {
         public void ReduceHealth(int amount){
             Health -= amount;
 
-            if (Health <= 0){
-                SetDead();
-            }
+            if (Health <= 0) SetDead();
 
             Hit = true;
             HitIndicatorTimer = Parameters.Instance.HitFlashTime;
@@ -310,13 +298,9 @@ namespace Entities {
             var payload = eventArg.EventData;
 
             if (payload.victim != this) // event not for us
-            {
                 return;
-            }
 
-            if (IsDead || IsSpawning){
-                return;
-            }
+            if (IsDead || IsSpawning) return;
 
             ReduceHealth((int) payload.damageInflicted);
 
@@ -331,24 +315,18 @@ namespace Entities {
             var payload = eventArg.EventData;
 
             if (payload.shooter != this) // event not for us
-            {
                 return;
-            }
 
             IncrementScore();
 
-            if (TargetingSystem.Target == payload.victim){
-                TargetingSystem.ClearTarget();
-            }
+            if (TargetingSystem.Target == payload.victim) TargetingSystem.ClearTarget();
         }
 
         private void OnWeaponSound(Event<WeaponSoundEventPayload> eventArg){
             var payload = eventArg.EventData;
 
             if (payload.noiseHearer != this) // event not for us
-            {
                 return;
-            }
 
             SensoryMemory.UpdateWithSoundSource(payload.noiseMaker);
         }

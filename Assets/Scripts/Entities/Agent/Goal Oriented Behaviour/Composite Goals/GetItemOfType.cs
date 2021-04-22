@@ -44,14 +44,11 @@ namespace Entities.GoalOrientedBehaviour {
         public override StatusTypes Process(){
             ActivateIfInactive();
 
-            if (HasItemBeenStolen()){
+            if (HasItemBeenStolen())
                 Terminate();
-            }
             else
                 // process the subgoals
-            {
                 Status = ProcessSubgoals();
-            }
 
             return Status;
         }
@@ -80,9 +77,7 @@ namespace Entities.GoalOrientedBehaviour {
             var payload = eventArg.EventData;
 
             if (payload.agent != Agent) // event not for us
-            {
                 return;
-            }
 
             // clear any existing goals
             RemoveAllSubgoals();
@@ -102,13 +97,9 @@ namespace Entities.GoalOrientedBehaviour {
                 AddSubgoal(new SeekToPosition(Agent, payload.path.Destination));
 
                 if (!Agent.CanMoveTo(payload.path.Destination)){
-                    if (splicePath.Count > 0){
-                        AddSubgoal(new FollowPath(Agent, splicePath));
-                    }
+                    if (splicePath.Count > 0) AddSubgoal(new FollowPath(Agent, splicePath));
 
-                    if (spliceTarget.HasValue){
-                        AddSubgoal(new SeekToPosition(Agent, spliceTarget.Value));
-                    }
+                    if (spliceTarget.HasValue) AddSubgoal(new SeekToPosition(Agent, spliceTarget.Value));
                 }
             }
         }
@@ -117,9 +108,7 @@ namespace Entities.GoalOrientedBehaviour {
             var payload = eventArg.EventData;
 
             if (payload.agent != Agent) // event not for us
-            {
                 return;
-            }
 
             //Debug.Log(Agent.name + " GetItem Got NO path at " + Time.time");
             Status = StatusTypes.Failed;

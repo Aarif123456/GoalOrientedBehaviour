@@ -40,9 +40,7 @@ namespace Entities.GoalOrientedBehaviour {
                 // 'completed' *and* the subgoal list contains additional goals. When this
                 // is the case, to ensure the parent keeps processing its subgoal list we
                 // must return the 'active' status.
-                if (statusOfSubGoals == StatusTypes.Completed && Subgoals.Count > 1){
-                    return StatusTypes.Active;
-                }
+                if (statusOfSubGoals == StatusTypes.Completed && Subgoals.Count > 1) return StatusTypes.Active;
 
                 return statusOfSubGoals;
             }

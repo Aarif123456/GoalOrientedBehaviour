@@ -7,9 +7,7 @@ namespace GameWorld {
 
         public static Visualizers Instance {
             get {
-                if (_instance == null){
-                    _instance = GameObject.Find("Game").GetComponent<Visualizers>();
-                }
+                if (_instance == null) _instance = GameObject.Find("Game").GetComponent<Visualizers>();
 
                 return _instance;
             }

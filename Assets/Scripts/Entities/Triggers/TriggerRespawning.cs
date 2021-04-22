@@ -24,9 +24,7 @@ namespace Entities.Triggers {
 
             TimeUntilRespawn -= Time.deltaTime;
 
-            if (TimeUntilRespawn <= 0 && !IsActive){
-                IsActive = true;
-            }
+            if (TimeUntilRespawn <= 0 && !IsActive) IsActive = true;
         }
 
         /// <summary>

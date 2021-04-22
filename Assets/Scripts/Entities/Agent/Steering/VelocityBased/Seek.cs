@@ -27,9 +27,7 @@ namespace Entities.Steering {
             var distance = direction.magnitude;
             var steering = new Steering{Type = Steering.Types.Velocities};
 
-            if (distance > SatisfactionRadius){
-                steering.Linear = direction / distance * AgentKinematic.MaximumSpeed;
-            }
+            if (distance > SatisfactionRadius) steering.Linear = direction / distance * AgentKinematic.MaximumSpeed;
 
             return steering;
         }

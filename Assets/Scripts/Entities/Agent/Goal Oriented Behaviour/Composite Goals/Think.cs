@@ -43,9 +43,7 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public override void Activate(){
-            if (Agent.IsAiControlled){
-                Arbitrate();
-            }
+            if (Agent.IsAiControlled) Arbitrate();
 
             Status = StatusTypes.Active;
         }
@@ -60,9 +58,7 @@ namespace Entities.GoalOrientedBehaviour {
                 Agent.IsAiControlled){
                 Status = StatusTypes.Inactive;
 
-                if (!Subgoals.IsEmpty()){
-                    Subgoals.Peek().Terminate();
-                }
+                if (!Subgoals.IsEmpty()) Subgoals.Peek().Terminate();
             }
 
             return Status;
@@ -88,9 +84,7 @@ namespace Entities.GoalOrientedBehaviour {
                 }
             }
 
-            if (mostDesirable == null){
-                throw new Exception("Think.Arbitrate: no evaluator selected.");
-            }
+            if (mostDesirable == null) throw new Exception("Think.Arbitrate: no evaluator selected.");
 
             mostDesirable.SetGoal(Agent);
         }
@@ -100,9 +94,7 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalExplore(){
-            if (!NotPresent(GoalTypes.Explore)){
-                return;
-            }
+            if (!NotPresent(GoalTypes.Explore)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new Explore(Agent));
@@ -113,18 +105,14 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalGetItemOfType(ItemTypes itemType){
-            if (!NotPresent(EnumUtility.ItemTypeToGoalType(itemType))){
-                return;
-            }
+            if (!NotPresent(EnumUtility.ItemTypeToGoalType(itemType))) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new GetItemOfType(Agent, itemType));
         }
 
         public void AddGoalAttackTarget(){
-            if (!NotPresent(GoalTypes.AttackTarget)){
-                return;
-            }
+            if (!NotPresent(GoalTypes.AttackTarget)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new AttackTarget(Agent));

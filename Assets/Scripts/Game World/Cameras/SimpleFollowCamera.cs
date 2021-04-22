@@ -65,9 +65,7 @@ namespace GameWorld.Cameras {
         public override void Awake(){
             base.Awake();
 
-            if (target == null){
-                Debug.Log("Please assign a target to the SimpleFollowCamera script.");
-            }
+            if (target == null) Debug.Log("Please assign a target to the SimpleFollowCamera script.");
 
             CameraName = "Simple Follow Camera";
         }
@@ -75,20 +73,20 @@ namespace GameWorld.Cameras {
         // If this behaviour is enabled, LateUpdate is called once per frame
         // after all Update functions have been called.
         public void LateUpdate(){
-            if (target != null){
-                // Convert the angle into a rotation, by which we then reposition the camera.
-                var currentRotation = Quaternion.Euler(0, target.eulerAngles.y, 0);
+            if (ReferenceEquals(target, null)) return;
 
-                // Set the position of the camera on the x-z plane to:
-                // distance meters behind the target
+            // Convert the angle into a rotation, by which we then reposition the camera.
+            var currentRotation = Quaternion.Euler(0, target.eulerAngles.y, 0);
 
-                var position = target.position;
-                position += currentRotation * Vector3.back * distance;
+            // Set the position of the camera on the x-z plane to:
+            // distance meters behind the target
 
-                // Set the height of the camera
-                position.y += height;
-                transform.position = position;
-            }
+            var position = target.position;
+            position += currentRotation * Vector3.back * distance;
+
+            // Set the height of the camera
+            position.y += height;
+            transform.position = position;
         }
     }
 }

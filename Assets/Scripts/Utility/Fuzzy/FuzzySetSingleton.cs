@@ -92,9 +92,7 @@ namespace Utility.Fuzzy {
         ///     The degree of membership in this set of the given value.
         /// </returns>
         public override float CalculateDom(float givenValue){
-            if (givenValue >= MidPoint - LeftOffset && givenValue <= MidPoint + RightOffset){
-                return 1.0f;
-            }
+            if (givenValue >= MidPoint - LeftOffset && givenValue <= MidPoint + RightOffset) return 1.0f;
 
             // out of range of this FLV, return zero
             return 0.0f;

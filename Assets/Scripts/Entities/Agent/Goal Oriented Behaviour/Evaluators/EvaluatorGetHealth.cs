@@ -14,9 +14,7 @@ namespace Entities.GoalOrientedBehaviour {
             // if the distance feature is rated with a value of 1 it means that the
             // item is either not present on the map or too far away to be worth 
             // considering, therefore the desirability is zero
-            if (distance == 1){
-                return 0;
-            }
+            if (distance == 1) return 0;
 
             // the desirability of finding a health item is proportional to the amount
             // of health remaining and inversely proportional to the distance from the

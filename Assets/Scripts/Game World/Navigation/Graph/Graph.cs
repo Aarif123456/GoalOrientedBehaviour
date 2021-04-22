@@ -30,13 +30,9 @@ namespace GameWorld.Navigation.Graph {
                 (edgeCollection == null || edgeCollection.IsVisible);
 
             set {
-                if (nodeCollection != null){
-                    nodeCollection.IsVisible = value;
-                }
+                if (nodeCollection != null) nodeCollection.IsVisible = value;
 
-                if (edgeCollection != null){
-                    edgeCollection.IsVisible = value;
-                }
+                if (edgeCollection != null) edgeCollection.IsVisible = value;
             }
         }
     }

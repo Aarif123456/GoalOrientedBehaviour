@@ -54,9 +54,7 @@ namespace Entities {
             set {
                 isLockedPositionX = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedPositionX = isLockedPositionX;
-                }
+                if (kinematic != null) kinematic.IsLockedPositionX = isLockedPositionX;
             }
         }
 
@@ -66,9 +64,7 @@ namespace Entities {
             set {
                 isLockedPositionY = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedPositionY = isLockedPositionY;
-                }
+                if (kinematic != null) kinematic.IsLockedPositionY = isLockedPositionY;
             }
         }
 
@@ -78,9 +74,7 @@ namespace Entities {
             set {
                 isLockedPositionZ = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedPositionZ = isLockedPositionZ;
-                }
+                if (kinematic != null) kinematic.IsLockedPositionZ = isLockedPositionZ;
             }
         }
 
@@ -90,9 +84,7 @@ namespace Entities {
             set {
                 isLockedRotationX = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedRotationX = isLockedRotationX;
-                }
+                if (kinematic != null) kinematic.IsLockedRotationX = isLockedRotationX;
             }
         }
 
@@ -102,9 +94,7 @@ namespace Entities {
             set {
                 isLockedRotationY = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedRotationY = isLockedRotationY;
-                }
+                if (kinematic != null) kinematic.IsLockedRotationY = isLockedRotationY;
             }
         }
 
@@ -114,9 +104,7 @@ namespace Entities {
             set {
                 isLockedRotationZ = value;
 
-                if (kinematic != null){
-                    kinematic.IsLockedRotationZ = isLockedRotationZ;
-                }
+                if (kinematic != null) kinematic.IsLockedRotationZ = isLockedRotationZ;
             }
         }
 

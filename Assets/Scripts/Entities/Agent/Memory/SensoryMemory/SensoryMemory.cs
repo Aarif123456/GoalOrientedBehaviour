@@ -107,9 +107,7 @@ namespace Entities.Memory.SensoryMemory {
         /// <param name="noiseMaker">The agent that made the sound.</param>
         public void UpdateWithSoundSource(Agent noiseMaker){
             // make sure the agent being examined is not this agent
-            if (Agent == noiseMaker || noiseMaker.SameTeam(Agent)){
-                return;
-            }
+            if (Agent == noiseMaker || noiseMaker.SameTeam(Agent)) return;
 
             // if the agent is already part of the memory then update its data,
             // else create a new memory record and add it to the memory
@@ -124,9 +122,8 @@ namespace Entities.Memory.SensoryMemory {
                 // record the position of the agent
                 info.LastSensedPosition = noiseMaker.Kinematic.Position;
             }
-            else{
+            else
                 info.IsShootable = false;
-            }
 
             // record the time it was sensed
             info.TimeLastSensed = Time.time;
@@ -142,9 +139,7 @@ namespace Entities.Memory.SensoryMemory {
             var agents = EntityManager.FindAll<Agent>();
             foreach (var agent in agents){
                 // make sure the agent being examined is not this agents
-                if (Agent == agent || agent.SameTeam(Agent)){
-                    continue;
-                }
+                if (Agent == agent || agent.SameTeam(Agent)) continue;
 
                 // make sure it is part of the memory map
                 MakeNewRecordIfNotAlreadyPresent(agent);
@@ -165,9 +160,8 @@ namespace Entities.Memory.SensoryMemory {
                             info.TimeBecameVisible = info.TimeLastSensed;
                         }
                     }
-                    else{
+                    else
                         info.IsWithinFieldOfView = false;
-                    }
                 }
                 else{
                     info.IsShootable = false;
@@ -188,9 +182,7 @@ namespace Entities.Memory.SensoryMemory {
             foreach (var kvp in MemoryMap)
                 // if this agent has been updated in the memory recently, add to list
             {
-                if (currentTime - kvp.Value.TimeLastSensed <= MemorySpan){
-                    opponents.Add(kvp.Key);
-                }
+                if (currentTime - kvp.Value.TimeLastSensed <= MemorySpan) opponents.Add(kvp.Key);
             }
 
             return opponents;
@@ -204,9 +196,7 @@ namespace Entities.Memory.SensoryMemory {
         ///     True if opponent can be shot (i.e. its not obscured by walls).
         /// </returns>
         public bool IsOpponentShootable(Agent opponent){
-            if (opponent != null && MemoryMap.ContainsKey(opponent)){
-                return MemoryMap[opponent].IsShootable;
-            }
+            if (opponent != null && MemoryMap.ContainsKey(opponent)) return MemoryMap[opponent].IsShootable;
 
             return false;
         }
@@ -217,9 +207,7 @@ namespace Entities.Memory.SensoryMemory {
         /// <param name="opponent">The opponent.</param>
         /// <returns>True if opponent is within FOV.</returns>
         public bool IsOpponentWithinFieldOfView(Agent opponent){
-            if (opponent != null && MemoryMap.ContainsKey(opponent)){
-                return MemoryMap[opponent].IsWithinFieldOfView;
-            }
+            if (opponent != null && MemoryMap.ContainsKey(opponent)) return MemoryMap[opponent].IsWithinFieldOfView;
 
             return false;
         }
@@ -233,9 +221,7 @@ namespace Entities.Memory.SensoryMemory {
         ///     Attempting to get position of unrecorded agent.
         /// </exception>
         public Vector2 GetLastRecordedPosition(Agent opponent){
-            if (opponent != null && MemoryMap.ContainsKey(opponent)){
-                return MemoryMap[opponent].LastSensedPosition;
-            }
+            if (opponent != null && MemoryMap.ContainsKey(opponent)) return MemoryMap[opponent].LastSensedPosition;
 
             throw new Exception(
                 "SensoryMemory.GetLastRecordedPosition: Attempting to get position of unrecorded agent.");
@@ -248,9 +234,8 @@ namespace Entities.Memory.SensoryMemory {
         /// <returns>The amount of time opponent has been visible.</returns>
         public float GetTimeVisible(Agent opponent){
             if (opponent != null && MemoryMap.ContainsKey(opponent) &&
-                MemoryMap[opponent].IsWithinFieldOfView){
+                MemoryMap[opponent].IsWithinFieldOfView)
                 return Time.time - MemoryMap[opponent].TimeBecameVisible;
-            }
 
             return 0;
         }
@@ -264,9 +249,8 @@ namespace Entities.Memory.SensoryMemory {
         ///     opponent has never been seen or not present).
         /// </returns>
         public float GetTimeOutOfView(Agent opponent){
-            if (opponent != null && MemoryMap.ContainsKey(opponent)){
+            if (opponent != null && MemoryMap.ContainsKey(opponent))
                 return Time.time - MemoryMap[opponent].TimeLastVisible;
-            }
 
             return float.MaxValue;
         }
@@ -278,9 +262,8 @@ namespace Entities.Memory.SensoryMemory {
         /// <returns>The amount of time opponent has been visible.</returns>
         public float GetTimeSinceLastSensed(Agent opponent){
             if (opponent != null && MemoryMap.ContainsKey(opponent) &&
-                MemoryMap[opponent].IsWithinFieldOfView){
+                MemoryMap[opponent].IsWithinFieldOfView)
                 return Time.time - MemoryMap[opponent].TimeLastSensed;
-            }
 
             return 0;
         }
@@ -296,9 +279,7 @@ namespace Entities.Memory.SensoryMemory {
         private void MakeNewRecordIfNotAlreadyPresent(Agent opponent){
             // check to see if this Opponent already exists in the memory. If it doesn't,
             // create a new record
-            if (!MemoryMap.ContainsKey(opponent)){
-                MemoryMap[opponent] = new SensoryMemoryRecord();
-            }
+            if (!MemoryMap.ContainsKey(opponent)) MemoryMap[opponent] = new SensoryMemoryRecord();
         }
     }
 }

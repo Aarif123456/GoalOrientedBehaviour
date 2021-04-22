@@ -66,16 +66,12 @@ namespace Entities.Armory {
                 foreach (var kvp in weaponMap){
                     // grab the desirability of this weapon (desirability is
                     // based upon distance to target and ammo remaining)
-                    if (kvp.Value == null){
-                        continue;
-                    }
+                    if (kvp.Value == null) continue;
 
                     var score = kvp.Value.GetDesirability(distanceToTarget);
 
                     // if it is the most desirable so far select it
-                    if (score <= bestDesirability){
-                        continue;
-                    }
+                    if (score <= bestDesirability) continue;
 
                     bestDesirability = score;
 
@@ -84,9 +80,8 @@ namespace Entities.Armory {
                     //mostDesirable = kvp.Key;
                 }
             }
-            else{
+            else
                 CurrentWeapon = weaponMap[WeaponTypes.Blaster];
-            }
         }
 
         public void AddWeapon(WeaponTypes weaponType){
@@ -107,21 +102,17 @@ namespace Entities.Armory {
                     break;
             }
 
-            if (weaponToAdd == null){
-                return;
-            }
+            if (weaponToAdd == null) return;
 
             // if the agent already holds a weapon of this type, just add its ammo
             var weaponInInventory = GetWeaponFromInventory(weaponType);
 
-            if (weaponInInventory != null){
+            if (weaponInInventory != null)
                 weaponInInventory.IncrementRounds(weaponToAdd.RoundsRemaining);
-            }
 
             // if not already holding, add to inventory
-            else{
+            else
                 weaponMap[weaponType] = weaponToAdd;
-            }
         }
 
         public Weapon GetWeaponFromInventory(WeaponTypes weaponType){
@@ -131,9 +122,7 @@ namespace Entities.Armory {
         public void ChangeWeapon(WeaponTypes weaponType){
             var weaponInInventory = GetWeaponFromInventory(weaponType);
 
-            if (weaponInInventory != null){
-                CurrentWeapon = weaponInInventory;
-            }
+            if (weaponInInventory != null) CurrentWeapon = weaponInInventory;
         }
 
         public void TakeAimAndShoot(float deltaTime){

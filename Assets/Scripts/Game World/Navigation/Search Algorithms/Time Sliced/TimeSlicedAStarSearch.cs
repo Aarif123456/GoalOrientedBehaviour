@@ -27,9 +27,7 @@ namespace GameWorld.Navigation.Graph {
         public HeuristicDelegate H { get; set; }
 
         public override SearchResults CycleOnce(){
-            if (priorityQueue.IsEmpty){
-                return SearchResults.Failure;
-            }
+            if (priorityQueue.IsEmpty) return SearchResults.Failure;
 
             var current = priorityQueue.DeleteMin();
 

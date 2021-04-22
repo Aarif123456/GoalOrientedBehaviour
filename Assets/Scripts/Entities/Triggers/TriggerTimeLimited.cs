@@ -12,9 +12,7 @@ namespace Entities.Triggers {
 
             Lifetime -= Time.deltaTime;
 
-            if (Lifetime <= 0){
-                Destroy(gameObject);
-            }
+            if (Lifetime <= 0) Destroy(gameObject);
         }
     }
 }

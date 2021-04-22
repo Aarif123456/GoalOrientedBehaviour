@@ -26,18 +26,14 @@ namespace GameWorld.Cameras {
         public override void Awake(){
             base.Awake();
 
-            if (target == null){
-                Debug.Log("Provide a target for the camera.");
-            }
+            if (target == null) Debug.Log("Provide a target for the camera.");
 
             CameraName = "Smooth Follow";
         }
 
         public void LateUpdate(){
             // Early out if we don't have a target
-            if (!target){
-                return;
-            }
+            if (!target) return;
 
             // Calculate the current rotation angles
             var wantedRotationAngle = target.eulerAngles.y;

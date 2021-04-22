@@ -37,11 +37,10 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void Awake(){
-            if (!IsLocked){
-                color.a = alpha;
-                GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
-                    {color = color};
-            }
+            if (IsLocked) return;
+            color.a = alpha;
+            GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
+                {color = color};
         }
 
         public void Update(){
@@ -60,72 +59,63 @@ namespace GameWorld.Navigation.Graph {
         GameObject connectedNodeObject = Instantiate(Graph.nodePrefab) as GameObject;
 #endif
 
-            if (connectedNodeObject != null){
-                var connectedNode = connectedNodeObject.GetComponent<Node>();
+            if (ReferenceEquals(connectedNodeObject, null)) return null;
+            var connectedNode = connectedNodeObject.GetComponent<Node>();
 
-                if (camera != null){
-                    connectedNode.CastToCollider(camera.transform.position, camera.transform.forward, 5f, 20f);
-                }
-
-                connectedNode.GenerateNameFromPosition();
-                NodeCollection.ApplyParametersToNode(connectedNode);
-                connectedNodeObject.transform.parent = transform.parent;
-
-                if (!oneWay){
-                    connectedNode.AddConnection(this);
-                }
-
-                AddConnection(connectedNode);
+            if (!ReferenceEquals(camera, null)){
+                connectedNode.CastToCollider(camera.transform.position, camera.transform.forward, 5f, 20f);
             }
+
+            connectedNode.GenerateNameFromPosition();
+            NodeCollection.ApplyParametersToNode(connectedNode);
+            connectedNodeObject.transform.parent = transform.parent;
+
+            if (!oneWay){
+                connectedNode.AddConnection(this);
+            }
+
+            AddConnection(connectedNode);
 
             return connectedNodeObject;
         }
 
         public void AddConnection(Node toNode){
-            if (!IsLocked && toNode != this && Graph != null && toNode.Graph == Graph && Graph.edgeCollection != null){
-                if (neighbours == null){
-                    neighbours = new List<Node>();
-                }
+            if (IsLocked || toNode == this || ReferenceEquals(Graph, null) || toNode.Graph != Graph ||
+                ReferenceEquals(Graph.edgeCollection, null)) return;
+            neighbours ??= new List<Node>();
+            outEdges ??= new List<Edge>();
 
-                if (outEdges == null){
-                    outEdges = new List<Edge>();
-                }
+            if (neighbours.Contains(toNode)) return;
+            var edgeObject = Graph.edgeCollection.AddEdge(this, toNode);
 
-                if (!neighbours.Contains(toNode)){
-                    var edgeObject = Graph.edgeCollection.AddEdge(this, toNode);
+            if (ReferenceEquals(edgeObject, null)) return;
+            neighbours.Add(toNode);
 
-                    if (edgeObject != null){
-                        neighbours.Add(toNode);
+            var edge = edgeObject.GetComponent<Edge>();
 
-                        var edge = edgeObject.GetComponent<Edge>();
-
-                        if (!outEdges.Contains(edge)){
-                            outEdges.Add(edge);
-                        }
-                    }
-                }
+            if (!outEdges.Contains(edge)){
+                outEdges.Add(edge);
             }
         }
 
         public void CastToCollider(Vector3 fromPosition, Vector3 forward, float minDistance, float maxDistance){
-            if (!IsLocked){
-                RaycastHit hit;
-                var ray = new Ray(fromPosition, forward);
-                var flag = false;
+            if (IsLocked) return;
+            RaycastHit hit;
+            var ray = new Ray(fromPosition, forward);
+            var flag = false;
 
-                if (maxDistance > 0f){
-                    flag = Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask);
-                }
-                else{
-                    flag = Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
-                }
+            if (maxDistance > 0f){
+                flag = Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask);
+            }
+            else{
+                flag = Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
+            }
 
-                if (flag){
-                    transform.position = hit.point + Vector3.up * surfaceOffset;
-                }
-                else if (minDistance > 0f){
-                    transform.position = fromPosition + forward.normalized * minDistance + Vector3.up * surfaceOffset;
-                }
+            if (flag){
+                transform.position = hit.point + Vector3.up * surfaceOffset;
+            }
+            else if (minDistance > 0f){
+                transform.position = fromPosition + forward.normalized * minDistance + Vector3.up * surfaceOffset;
             }
         }
 
@@ -139,23 +129,28 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public static void CycleConnection(Node fromNode, Node toNode){
-            if (!fromNode.IsLocked && !toNode.IsLocked){
-                var oneConnectedToTwo = fromNode.IsConnectedTo(toNode);
-                var twoConnectedToOne = toNode.IsConnectedTo(fromNode);
+            if (fromNode.IsLocked || toNode.IsLocked) return;
+            var oneConnectedToTwo = fromNode.IsConnectedTo(toNode);
+            var twoConnectedToOne = toNode.IsConnectedTo(fromNode);
 
-                if (oneConnectedToTwo && twoConnectedToOne){
+            switch (oneConnectedToTwo){
+                case true when twoConnectedToOne:
                     toNode.RemoveConnection(fromNode);
-                }
-                else if (oneConnectedToTwo){
+                    break;
+                case true:
                     toNode.AddConnection(fromNode);
                     fromNode.RemoveConnection(toNode);
-                }
-                else if (twoConnectedToOne){
-                    toNode.RemoveConnection(fromNode);
-                }
-                else{
-                    fromNode.AddConnection(toNode);
-                    toNode.AddConnection(fromNode);
+                    break;
+                default:{
+                    if (twoConnectedToOne){
+                        toNode.RemoveConnection(fromNode);
+                    }
+                    else{
+                        fromNode.AddConnection(toNode);
+                        toNode.AddConnection(fromNode);
+                    }
+
+                    break;
                 }
             }
         }
@@ -170,24 +165,22 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public void DropToSurface(){
-            if (!IsLocked){
-                var forward = new Vector3(0f, -1f, 0f);
-                CastToCollider(transform.position, forward, 0f, 0f);
-            }
+            if (IsLocked) return;
+            var forward = new Vector3(0f, -1f, 0f);
+            CastToCollider(transform.position, forward, 0f, 0f);
         }
 
         public void GenerateNameFromPosition(){
-            if (!IsLocked && !nameLocked){
-                var position = transform.position;
-                name =
-                    "Node (" +
-                    position.x.ToString("F1") +
-                    ", " +
-                    position.y.ToString("F1") +
-                    ", " +
-                    position.z.ToString("F1") +
-                    ")";
-            }
+            if (IsLocked || nameLocked) return;
+            var position = transform.position;
+            name =
+                "Node (" +
+                position.x.ToString("F1") +
+                ", " +
+                position.y.ToString("F1") +
+                ", " +
+                position.z.ToString("F1") +
+                ")";
         }
 
         public bool IsConnectedTo(Node toNode){
@@ -200,73 +193,59 @@ namespace GameWorld.Navigation.Graph {
                     RemoveAllConnections();
                 }
 
-                if (potentialNeighbours != null){
-                    for (var i = 0; i < potentialNeighbours.Length; i++){
-                        var neighbour = potentialNeighbours[i];
+                if (potentialNeighbours == null) return;
+                foreach (var neighbour in potentialNeighbours){
+                    if (ReferenceEquals(neighbour, null) || neighbour == this) continue;
+                    var direction = neighbour.transform.position - transform.position;
 
-                        if (neighbour != null && neighbour != this){
-                            RaycastHit hitInfo;
-                            var direction = neighbour.transform.position - transform.position;
-
-                            if (direction.magnitude <= raycastMaximumDistance &&
-                                (useCapsuleCast &&
-                                 !Physics.CapsuleCast(
-                                     transform.position - (1 - raycastPathRadius) * Vector3.up,
-                                     transform.position + (1 - raycastPathRadius) * Vector3.up,
-                                     raycastPathRadius,
-                                     direction,
-                                     out hitInfo,
-                                     direction.magnitude,
-                                     raycastObstaclesLayerMask) ||
-                                 !useCapsuleCast &&
-                                 !Physics.SphereCast(
-                                     transform.position,
-                                     raycastPathRadius,
-                                     direction,
-                                     out hitInfo,
-                                     direction.magnitude,
-                                     raycastObstaclesLayerMask))){
-                                if (!requireSymmetry){
-                                    AddConnection(neighbour);
-                                }
-                                else{
-                                    AddConnection(neighbour);
-                                    neighbour.AddConnection(this);
-                                }
-                            }
-                        }
+                    if (!(direction.magnitude <= raycastMaximumDistance) || ((!useCapsuleCast ||
+                                                                              Physics.CapsuleCast(
+                                                                                  transform.position - (1 - raycastPathRadius) * Vector3.up,
+                                                                                  transform.position + (1 - raycastPathRadius) * Vector3.up,
+                                                                                  raycastPathRadius,
+                                                                                  direction,
+                                                                                  out _,
+                                                                                  direction.magnitude,
+                                                                                  raycastObstaclesLayerMask)) && (useCapsuleCast || Physics.SphereCast(
+                        transform.position,
+                        raycastPathRadius,
+                        direction,
+                        out _,
+                        direction.magnitude,
+                        raycastObstaclesLayerMask)))) continue;
+                    if (!requireSymmetry){
+                        AddConnection(neighbour);
+                    }
+                    else{
+                        AddConnection(neighbour);
+                        neighbour.AddConnection(this);
                     }
                 }
             }
         }
 
         public void RemoveAllConnections(){
-            if (!IsLocked){
-                neighbours.Clear();
+            if (IsLocked) return;
+            neighbours.Clear();
 
-                for (var i = 0; i < outEdges.Count; i++){
-                    var edge = outEdges[i];
-
-                    if (edge != null){
-                        DestroyImmediate(edge.gameObject);
-                    }
+            foreach (var edge in outEdges){
+                if (!ReferenceEquals(edge, null)){
+                    DestroyImmediate(edge.gameObject);
                 }
-
-                outEdges.Clear();
             }
+
+            outEdges.Clear();
         }
 
         public void RemoveConnection(Node toNode){
-            if (!IsLocked){
-                neighbours.Remove(toNode);
+            if (IsLocked) return;
+            neighbours.Remove(toNode);
 
-                for (var i = 0; i < outEdges.Count; i++){
-                    if (outEdges[i] != null && outEdges[i].ToNode == toNode){
-                        DestroyImmediate(outEdges[i].gameObject);
-                        outEdges.RemoveAt(i);
-                        break;
-                    }
-                }
+            for (var i = 0; i < outEdges.Count; i++){
+                if (outEdges[i] == null || outEdges[i].ToNode != toNode) continue;
+                DestroyImmediate(outEdges[i].gameObject);
+                outEdges.RemoveAt(i);
+                break;
             }
         }
     }

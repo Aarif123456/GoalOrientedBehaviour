@@ -97,9 +97,8 @@ namespace Utility.Fuzzy {
             // test for the case where the left or right offsets are zero
             // (to prevent divide by zero errors below)
             if (Epsilon.IsEqual(RightOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue) ||
-                Epsilon.IsEqual(LeftOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue)){
+                Epsilon.IsEqual(LeftOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue))
                 return 1.0f;
-            }
 
             // find DOM if left of center
             if (givenValue <= PeakPoint && givenValue > PeakPoint - LeftOffset){
@@ -108,9 +107,7 @@ namespace Utility.Fuzzy {
             }
 
             // find DOM if right of center and less than center + right offset
-            if (givenValue > PeakPoint && givenValue <= PeakPoint + RightOffset){
-                return 1.0f;
-            }
+            if (givenValue > PeakPoint && givenValue <= PeakPoint + RightOffset) return 1.0f;
 
             // out of range of this FLV, return zero
             return 0f;

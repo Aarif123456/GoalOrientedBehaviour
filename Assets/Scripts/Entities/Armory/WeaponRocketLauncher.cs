@@ -18,9 +18,7 @@ namespace Entities.Armory {
         }
 
         public override void ShootAt(Vector3 targetPosition){
-            if (RoundsRemaining <= 0 || !IsReadyForNextShot()){
-                return;
-            }
+            if (RoundsRemaining <= 0 || !IsReadyForNextShot()) return;
 
             AddRocket(Agent, targetPosition);
 
@@ -32,9 +30,8 @@ namespace Entities.Armory {
         }
 
         public override float GetDesirability(float distanceToTarget){
-            if (RoundsRemaining == 0){
+            if (RoundsRemaining == 0)
                 LastDesirabilityScore = 0;
-            }
             else{
                 // fuzzify distance and amount of ammo
                 FuzzyModule.Fuzzify("distanceToTarget", distanceToTarget);

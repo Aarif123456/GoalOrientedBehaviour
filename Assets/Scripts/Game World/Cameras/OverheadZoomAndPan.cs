@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace GameWorld.Cameras {
     public class OverheadZoomAndPan : SelectableCamera {
+        private const string ForwardMoveAxis = "Vertical";
+        private const string SideMoveAxis = "Horizontal";
+        private const string ZoomAxis = "Mouse ScrollWheel";
         public Camera overheadCamera;
         public KeyCode homeKey = KeyCode.Home;
         public float moveSpeed = 0.001f;
-        private readonly string forwardMoveAxis = "Vertical";
-        private readonly string sideMoveAxis = "Horizontal";
-        private readonly string zoomAxis = "Mouse ScrollWheel";
         private Vector3 homePosition;
 
         private float maximumZoomOut;
@@ -21,29 +21,24 @@ namespace GameWorld.Cameras {
         }
 
         public void Update(){
-            var zoomDirection = Input.GetAxis(zoomAxis);
+            var zoomDirection = Input.GetAxis(ZoomAxis);
             var size = overheadCamera.orthographicSize;
 
-            if (zoomDirection < 0){
+            if (zoomDirection < 0)
                 size /= 1 - 0.01f * zoomDirection;
-            }
-            else if (zoomDirection > 0){
-                size *= 1 + 0.01f * zoomDirection;
-            }
+            else if (zoomDirection > 0) size *= 1 + 0.01f * zoomDirection;
 
             overheadCamera.orthographicSize = Mathf.Clamp(size, 1, maximumZoomOut);
 
-            var moveX = Input.GetAxis(sideMoveAxis);
-            var moveY = Input.GetAxis(forwardMoveAxis);
+            var moveX = Input.GetAxis(SideMoveAxis);
+            var moveY = Input.GetAxis(ForwardMoveAxis);
 
             var position = overheadCamera.transform.position;
             position.x += moveX * moveSpeed;
             position.z += moveY * moveSpeed;
             overheadCamera.transform.position = position;
 
-            if (Input.GetKeyDown(homeKey)){
-                overheadCamera.transform.position = homePosition;
-            }
+            if (Input.GetKeyDown(homeKey)) overheadCamera.transform.position = homePosition;
         }
     }
 }
