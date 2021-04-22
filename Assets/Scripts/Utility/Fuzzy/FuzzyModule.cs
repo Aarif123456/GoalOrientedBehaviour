@@ -48,93 +48,84 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
+namespace GameBrains.AI {
     /// <summary>
-    /// This class describes a fuzzy module: a collection of fuzzy variables and the rules that
-    /// operate on them.
+    ///     This class describes a fuzzy module: a collection of fuzzy variables and the rules that
+    ///     operate on them.
     /// </summary>
-    public class FuzzyModule
-    {
+    public class FuzzyModule {
         /// <summary>
-        /// When calculating the centroid of the fuzzy manifold this value is used to determine how
-        /// many cross-sections should be sampled.
+        ///     You must pass one of these values to the <see cref="DeFuzzify" />method. This module only
+        ///     supports the MaxAv and Centroid methods.
         /// </summary>
-        public const int CROSS_SECTION_SAMPLE_COUNT = 15;
-
-        /// <summary>
-        /// Initializes a new instance of the FuzzyModule class.
-        /// </summary>
-        public FuzzyModule()
-        {
-            Rules = new List<FuzzyRule>();
-            Variables = new Dictionary<string, FuzzyVariable>();
-        }
-
-        /// <summary>
-        /// You must pass one of these values to the <see cref="DeFuzzify"/>method. This module only
-        /// supports the MaxAv and Centroid methods.
-        /// </summary>
-        public enum DefuzzifyMethod
-        {
+        public enum DefuzzifyMethod {
             MaxAv,
             Centroid
         }
 
         /// <summary>
-        /// Gets a map of all the fuzzy variables this module uses.
+        ///     When calculating the centroid of the fuzzy manifold this value is used to determine how
+        ///     many cross-sections should be sampled.
         /// </summary>
-        public Dictionary<string, FuzzyVariable> Variables { get; private set; }
+        public const int CROSS_SECTION_SAMPLE_COUNT = 15;
 
         /// <summary>
-        /// Gets a list containing all the fuzzy rules.
+        ///     Initializes a new instance of the FuzzyModule class.
         /// </summary>
-        public List<FuzzyRule> Rules { get; private set; }
+        public FuzzyModule(){
+            Rules = new List<FuzzyRule>();
+            Variables = new Dictionary<string, FuzzyVariable>();
+        }
 
         /// <summary>
-        /// This method calls the Fuzzify method of the variable with the same name as the key.
+        ///     Gets a map of all the fuzzy variables this module uses.
+        /// </summary>
+        public Dictionary<string, FuzzyVariable> Variables { get; }
+
+        /// <summary>
+        ///     Gets a list containing all the fuzzy rules.
+        /// </summary>
+        public List<FuzzyRule> Rules { get; }
+
+        /// <summary>
+        ///     This method calls the Fuzzify method of the variable with the same name as the key.
         /// </summary>
         /// <param name="nameOfFlv">Name of the fuzzy linguistic variable.</param>
         /// <param name="val">The value of the fuzzy linguistic variable.</param>
-        public void Fuzzify(string nameOfFlv, float val)
-        {
+        public void Fuzzify(string nameOfFlv, float val){
             // first make sure the key exists
-            if (!Variables.ContainsKey(nameOfFlv))
-            {
-                throw new System.Exception("FuzzyModule.Fuzzify>: key not found.");
-            }                
+            if (!Variables.ContainsKey(nameOfFlv)){
+                throw new Exception("FuzzyModule.Fuzzify>: key not found.");
+            }
 
             Variables[nameOfFlv].Fuzzify(val);
         }
 
         /// <summary>
-        /// Given a fuzzy variable and a defuzzification method this returns a crisp value.
+        ///     Given a fuzzy variable and a defuzzification method this returns a crisp value.
         /// </summary>
         /// <param name="nameOfFlv">Name of the fuzzy linguistic variable.</param>
         /// <param name="method">The defuzzification method.</param>
         /// <returns>A crisp value.</returns>
-        public float DeFuzzify(string nameOfFlv, DefuzzifyMethod method)
-        {
+        public float DeFuzzify(string nameOfFlv, DefuzzifyMethod method){
             // first make sure the key exists
-            if (!Variables.ContainsKey(nameOfFlv))
-            {
-                throw new System.Exception("FuzzyModule.DeFuzzify: key not found.");  
+            if (!Variables.ContainsKey(nameOfFlv)){
+                throw new Exception("FuzzyModule.DeFuzzify: key not found.");
             }
 
             // clear the DOMs of all the consequents of all the rules
             SetConfidencesOfConsequentsToZero();
 
             // process the rules
-            foreach (FuzzyRule rule in Rules)
-            {
+            foreach (var rule in Rules){
                 rule.Calculate();
             }
 
             // now defuzzify the resultant conclusion using the specified method
-            switch (method)
-            {
+            switch (method){
                 case DefuzzifyMethod.Centroid:
                     return Variables[nameOfFlv].DeFuzzifyCentroid(CROSS_SECTION_SAMPLE_COUNT);
 
@@ -146,34 +137,30 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Add a fuzzy rule.
+        ///     Add a fuzzy rule.
         /// </summary>
         /// <param name="antecedent">The antecedent of the rule.</param>
         /// <param name="consequent">The consequent of the rule.</param>
-        public void AddRule(FuzzyTerm antecedent, FuzzyTerm consequent)
-        {
+        public void AddRule(FuzzyTerm antecedent, FuzzyTerm consequent){
             Rules.Add(new FuzzyRule(antecedent, consequent));
         }
 
         /// <summary>
-        /// Creates a new fuzzy variable and returns it.
+        ///     Creates a new fuzzy variable and returns it.
         /// </summary>
         /// <param name="fuzzyVariableName">The fuzzy variable name.</param>
         /// <returns>The new fuzzy variable.</returns>
-        public FuzzyVariable CreateFlv(string fuzzyVariableName)
-        {
+        public FuzzyVariable CreateFlv(string fuzzyVariableName){
             Variables[fuzzyVariableName] = new FuzzyVariable();
 
             return Variables[fuzzyVariableName];
         }
 
         /// <summary>
-        /// Zeros the DOMs of the consequents of each rule.
+        ///     Zeros the DOMs of the consequents of each rule.
         /// </summary>
-        private void SetConfidencesOfConsequentsToZero()
-        {
-            foreach (FuzzyRule rule in Rules)
-            {
+        private void SetConfidencesOfConsequentsToZero(){
+            foreach (var rule in Rules){
                 rule.SetConfidenceOfConsequentToZero();
             }
         }

@@ -48,72 +48,65 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for right shoulder type fuzzy set.
+    ///     Class for right shoulder type fuzzy set.
     /// </summary>
-    public class FuzzySetRightShoulder : FuzzySet
-    {
+    public class FuzzySetRightShoulder : FuzzySet {
         /// <summary>
-        /// Initializes a new instance of the FuzzySetRightShoulder class.
+        ///     Initializes a new instance of the FuzzySetRightShoulder class.
         /// </summary>
         /// <param name="peak">The peak point.</param>
         /// <param name="left">The left offset.</param>
         /// <param name="right">The right offset.</param>
         public FuzzySetRightShoulder(float peak, float left, float right)
-            : base(((peak + right) + peak) / 2)
-        {
+            : base((peak + right + peak) / 2){
             PeakPoint = peak;
             LeftOffset = left;
             RightOffset = right;
         }
 
         /// <summary>
-        /// Gets the peak point.
+        ///     Gets the peak point.
         /// </summary>
-        public float PeakPoint { get; private set; }
+        public float PeakPoint { get; }
 
         /// <summary>
-        /// Gets the left offset.
+        ///     Gets the left offset.
         /// </summary>
-        public float LeftOffset { get; private set; }
+        public float LeftOffset { get; }
 
         /// <summary>
-        /// Gets the right offset.
+        ///     Gets the right offset.
         /// </summary>
-        public float RightOffset { get; private set; }
+        public float RightOffset { get; }
 
         /// <summary>
-        /// Returns the degree of membership in this set of the given value. This does not set
-        /// <see cref="FuzzySet._dom"/> to the degree of membership of the value passed as the
-        /// parameter. This is because the centroid defuzzification method also uses this method to
-        /// determine the DOMs of the values it uses as its sample points.
+        ///     Returns the degree of membership in this set of the given value. This does not set
+        ///     <see cref="FuzzySet._dom" /> to the degree of membership of the value passed as the
+        ///     parameter. This is because the centroid defuzzification method also uses this method to
+        ///     determine the DOMs of the values it uses as its sample points.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
         /// <returns>
-        /// The degree of membership in this set of the given value.
+        ///     The degree of membership in this set of the given value.
         /// </returns>
-        public override float CalculateDom(float givenValue)
-        {
+        public override float CalculateDom(float givenValue){
             // test for the case where the left or right offsets are zero
             // (to prevent divide by zero errors below)
-            if ((Epsilon.IsEqual(RightOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue)) ||
-               (Epsilon.IsEqual(LeftOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue)))
-            {
+            if (Epsilon.IsEqual(RightOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue) ||
+                Epsilon.IsEqual(LeftOffset, 0.0f) && Epsilon.IsEqual(PeakPoint, givenValue)){
                 return 1.0f;
             }
 
             // find DOM if left of center
-            if (givenValue <= PeakPoint && givenValue > (PeakPoint - LeftOffset))
-            {
-                float grad = 1.0f / LeftOffset;
+            if (givenValue <= PeakPoint && givenValue > PeakPoint - LeftOffset){
+                var grad = 1.0f / LeftOffset;
                 return grad * (givenValue - (PeakPoint - LeftOffset));
             }
 
             // find DOM if right of center and less than center + right offset
-            if (givenValue > PeakPoint && givenValue <= PeakPoint + RightOffset)
-            {
+            if (givenValue > PeakPoint && givenValue <= PeakPoint + RightOffset){
                 return 1.0f;
             }
 

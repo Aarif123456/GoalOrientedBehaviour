@@ -48,33 +48,31 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Abstract class to provide an interface for classes able to be used as terms in a fuzzy
-    /// if-then rule base.
+    ///     Abstract class to provide an interface for classes able to be used as terms in a fuzzy
+    ///     if-then rule base.
     /// </summary>
-    public abstract class FuzzyTerm
-    {
+    public abstract class FuzzyTerm {
         /// <summary>
-        /// Clone the term.
+        ///     Clone the term.
         /// </summary>
         /// <returns>A copy of the term.</returns>
         public abstract FuzzyTerm Clone();
 
         /// <summary>
-        /// Retrieves the degree of membership of the term.
+        ///     Retrieves the degree of membership of the term.
         /// </summary>
         /// <returns>The degree of membership of the term.</returns>
         public abstract float GetDom();
 
         /// <summary>
-        /// Clears the degree of membership of the term.
+        ///     Clears the degree of membership of the term.
         /// </summary>
         public abstract void ClearDom();
 
         /// <summary>
-        /// Method for updating the DOM of a consequent when a rule fires.
+        ///     Method for updating the DOM of a consequent when a rule fires.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
         public abstract void OrWithDom(float givenValue);

@@ -48,42 +48,42 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-   /// <summary>
-    /// The base class for events.
+using System;
+
+namespace GameBrains.AI {
+    /// <summary>
+    ///     The base class for events.
     /// </summary>
     /// <typeparam name="T">
-    /// The type of event data.
+    ///     The type of event data.
     /// </typeparam>
-    public sealed class Event<T> : Event
-    {
+    public sealed class Event<T> : Event {
         /// <summary>
-        /// Initializes a new instance of the Event class.
+        ///     Initializes a new instance of the Event class.
         /// </summary>
         /// <param name="eventId">
-        /// The event ID.
+        ///     The event ID.
         /// </param>
         /// <param name="eventType">
-        /// The event type.
+        ///     The event type.
         /// </param>
         /// <param name="lifespan">
-        /// The maximum duration of the event.
+        ///     The maximum duration of the event.
         /// </param>
         /// <param name="dispatchTime">
-        /// The time to dispatch the event (or DISPATCH_IMMEDIATELY).
+        ///     The time to dispatch the event (or DISPATCH_IMMEDIATELY).
         /// </param>
         /// <param name="senderId">
-        /// The sender ID (or SENDER_ID_IRRELEVANT).
+        ///     The sender ID (or SENDER_ID_IRRELEVANT).
         /// </param>
         /// <param name="receiverId">
-        /// The receiver ID (or RECEIVER_ID_IRRELEVANT).
+        ///     The receiver ID (or RECEIVER_ID_IRRELEVANT).
         /// </param>
         /// <param name="eventDelegate">
-        /// The delegate to call when the event is triggered.
+        ///     The delegate to call when the event is triggered.
         /// </param>
         /// <param name="eventData">
-        /// The event data.
+        ///     The event data.
         /// </param>
         private Event(
             int eventId,
@@ -94,46 +94,31 @@ namespace GameBrains.AI
             int receiverId,
             EventDelegate<T> eventDelegate,
             T eventData)
-            : base(eventId, eventType, lifespan, dispatchTime, senderId, receiverId, eventDelegate, typeof(T), eventData)
-        {
-        }
-        
-         private Event()
-        {
+            : base(eventId, eventType, lifespan, dispatchTime, senderId, receiverId, eventDelegate, typeof(T),
+                eventData){
         }
 
-        /// <summary>
-        /// Gets the event data (may be null).
-        /// </summary>
-        public new T EventData
-        {
-            get
-            {
-                return (T)base.EventData;
-            }
-
-            private set
-            {
-                base.EventData = value;
-            }
+        private Event(){
         }
 
         /// <summary>
-        /// Gets the delegate to call when the event is triggered.
+        ///     Gets the event data (may be null).
         /// </summary>
-        public new EventDelegate<T> EventDelegate
-        {
-            get
-            {
-                return (EventDelegate<T>)base.EventDelegate;
-            }
+        public new T EventData {
+            get => (T) base.EventData;
 
-            private set
-            {
-                base.EventDelegate = value;
-            }
+            private set => base.EventData = value;
         }
-        
+
+        /// <summary>
+        ///     Gets the delegate to call when the event is triggered.
+        /// </summary>
+        public new EventDelegate<T> EventDelegate {
+            get => (EventDelegate<T>) base.EventDelegate;
+
+            private set => base.EventDelegate = value;
+        }
+
         public static Event<T> Obtain(
             int eventId,
             EventType eventType,
@@ -142,26 +127,24 @@ namespace GameBrains.AI
             int senderId,
             int receiverId,
             EventDelegate<T> eventDelegate,
-            T eventData)
-        {
+            T eventData){
             // TODO: make events poolable to reduce garbage
             return new Event<T>(
-                    eventId,
-                    eventType,
-                    lifespan,
-                    dispatchTime,
-                    senderId,
-                    receiverId,
-                    eventDelegate,
-                    eventData);
+                eventId,
+                eventType,
+                lifespan,
+                dispatchTime,
+                senderId,
+                receiverId,
+                eventDelegate,
+                eventData);
         }
-        
+
         /// <summary>
-        /// Returns a System.String that represents the event.
+        ///     Returns a System.String that represents the event.
         /// </summary>
         /// <returns>A System.String that represents the event.</returns>
-        public override string ToString()
-        {
+        public override string ToString(){
             return string.Format(
                 "Id:{0}, Type:{1}, Lifespan:{2} Sender:{3}, Receiver:{4}, Data:{5}",
                 EventId,
@@ -173,31 +156,25 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Trigger event.
+        ///     Trigger event.
         /// </summary>
         /// <param name="delegateToFire">
-        /// The event delegate to fire.
+        ///     The event delegate to fire.
         /// </param>
-        internal override void Fire(System.Delegate delegateToFire)
-        {
+        internal override void Fire(Delegate delegateToFire){
             var eventDelegate = delegateToFire as EventDelegate<T>;
-            if (eventDelegate != null)
-            {
+            if (eventDelegate != null){
                 eventDelegate(this);
             }
         }
 
-        internal override void Send()
-        {
-            if (ReceiverId != EventManager.RECEIVER_ID_IRRELEVANT)
-            {
-                Entity entity = EntityManager.Find<Entity>(ReceiverId);
-                if (entity != null)
-                {
+        internal override void Send(){
+            if (ReceiverId != EventManager.RECEIVER_ID_IRRELEVANT){
+                var entity = EntityManager.Find<Entity>(ReceiverId);
+                if (entity != null){
                     entity.HandleEvent(this);
                 }
             }
         }
     }
 }
-

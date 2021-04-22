@@ -1,42 +1,36 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
+using UnityEngine;
 
-    public class Arrive : Seek
-    {
-        private float brakingRadius;
-        private float timeToTarget;
+namespace GameBrains.AI {
+    public class Arrive : Seek {
+        private readonly float brakingRadius;
+        private readonly float timeToTarget;
 
-        public Arrive(Kinematic agentKinematic, Kinematic targetKinematic, float timeToTarget, float brakingRadius, float satisfactionRadius)
-            : base(agentKinematic, targetKinematic)
-        {
+        public Arrive(Kinematic agentKinematic, Kinematic targetKinematic, float timeToTarget, float brakingRadius,
+            float satisfactionRadius)
+            : base(agentKinematic, targetKinematic){
             this.timeToTarget = timeToTarget;
             this.brakingRadius = brakingRadius;
             SatisfactionRadius = satisfactionRadius;
         }
 
-        public override Steering Steer()
-        {
-            Vector3 direction = OtherKinematic.Position - AgentKinematic.Position;
-            float distance = direction.magnitude;
+        public override Steering Steer(){
+            var direction = OtherKinematic.Position - AgentKinematic.Position;
+            var distance = direction.magnitude;
 
-            if (timeToTarget <= 0f || distance > brakingRadius)
-            {
+            if (timeToTarget <= 0f || distance > brakingRadius){
                 return base.Steer();
             }
-            
+
             Vector3 velocity;
-            
-            if (distance <= SatisfactionRadius)
-            {
+
+            if (distance <= SatisfactionRadius){
                 velocity = Vector3.zero;
             }
-            else
-            {
+            else{
                 velocity = direction / timeToTarget;
             }
 
-            return new Steering { Type = Steering.Types.Velocities, Linear = velocity };
+            return new Steering{Type = Steering.Types.Velocities, Linear = velocity};
         }
     }
 }

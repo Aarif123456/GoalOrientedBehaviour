@@ -1,8 +1,6 @@
-namespace GameBrains.AI
-{
-    public enum SearchTypes
-    {
-        AStar, 
+namespace GameBrains.AI {
+    public enum SearchTypes {
+        AStar,
         Dijkstra
     }
 }

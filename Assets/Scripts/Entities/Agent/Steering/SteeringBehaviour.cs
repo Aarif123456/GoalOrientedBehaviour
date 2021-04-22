@@ -1,61 +1,30 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
-    public abstract class SteeringBehaviour
-    {
-        private Kinematic agentKinematic;
-        private Kinematic otherKinematic;
-        
+using UnityEngine;
+
+namespace GameBrains.AI {
+    public abstract class SteeringBehaviour {
         protected SteeringBehaviour(Agent agent, Vector3 otherPosition)
-            : this(agent.Kinematic, otherPosition)
-        {
-        }
-        
-        protected SteeringBehaviour(Kinematic agentKinematic, Vector3 otherPosition)
-            : this(agentKinematic, new Kinematic { Position = otherPosition })
-        {
-        }
-        
-        protected SteeringBehaviour(Kinematic agentKinematic)
-            : this(agentKinematic, null)
-        {
-        }
-        
-        protected SteeringBehaviour(Kinematic agentKinematic, Kinematic otherKinematic)
-        {
-            this.agentKinematic = agentKinematic;
-            this.otherKinematic = otherKinematic;
-        }
-        
-        public Kinematic AgentKinematic 
-        {
-            get 
-            {
-                return agentKinematic;
-            }
-            
-            set 
-            {
-                agentKinematic = value;
-            }
+            : this(agent.Kinematic, otherPosition){
         }
 
-        public Kinematic OtherKinematic 
-        {
-            get 
-            {
-                return otherKinematic;
-            }
-            
-            set 
-            {
-                otherKinematic = value;
-            }
+        protected SteeringBehaviour(Kinematic agentKinematic, Vector3 otherPosition)
+            : this(agentKinematic, new Kinematic{Position = otherPosition}){
         }
+
+        protected SteeringBehaviour(Kinematic agentKinematic)
+            : this(agentKinematic, null){
+        }
+
+        protected SteeringBehaviour(Kinematic agentKinematic, Kinematic otherKinematic){
+            AgentKinematic = agentKinematic;
+            OtherKinematic = otherKinematic;
+        }
+
+        public Kinematic AgentKinematic { get; set; }
+
+        public Kinematic OtherKinematic { get; set; }
 
         public abstract Steering Steer();
-        
+
 //        public virtual Steering Steer(Kinematic agentKinematic)
 //        {
 //            throw new System.NotSupportedException(

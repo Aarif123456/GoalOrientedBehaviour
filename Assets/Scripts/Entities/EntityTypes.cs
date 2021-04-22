@@ -1,49 +1,41 @@
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
+using System.ComponentModel;
 
-    public enum EntityTypes
-    {
-        [Description("Default entity type")]
-        DefaultEntityType = -1, 
+namespace GameBrains.AI {
+    public enum EntityTypes {
+        [Description("Default entity type")] DefaultEntityType = -1,
 
-        Wall, 
+        Wall,
 
-        Agent, 
+        Agent,
 
-        Unused, 
+        Unused,
 
-        Waypoint, 
+        Waypoint,
 
-        Health, 
+        Health,
 
-        [Description("Spawn point")]
-        SpawnPoint, 
+        [Description("Spawn point")] SpawnPoint,
 
-        Railgun, 
+        Railgun,
         Slug,
 
-        [Description("Rocket launcher")]
-        RocketLauncher, 
+        [Description("Rocket launcher")] RocketLauncher,
         Rocket,
 
         Shotgun,
         Pellet,
 
-        Blaster, 
+        Blaster,
         Bolt,
 
-        Obstacle, 
+        Obstacle,
 
-        [Description("Sliding door")]
-        SlidingDoor, 
+        [Description("Sliding door")] SlidingDoor,
 
-        [Description("Door Trigger")]
-        DoorTrigger, 
-        
+        [Description("Door Trigger")] DoorTrigger,
+
         Flag,
-        
-        [Description("Sound Notifier")]
-        SoundNotifier,
+
+        [Description("Sound Notifier")] SoundNotifier
     }
 }

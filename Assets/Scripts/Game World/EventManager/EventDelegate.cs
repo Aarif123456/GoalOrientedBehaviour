@@ -48,17 +48,17 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Called whenever the associated Event fires.
+    ///     Called whenever the associated Event fires.
     /// </summary>
     /// <typeparam name="T">
-    /// The type of event data.
+    ///     The type of event data.
     /// </typeparam>
     /// <param name="eventT">
-    /// The event.
-    /// /// </param>
+    ///     The event.
+    ///     ///
+    /// </param>
     public delegate void EventDelegate<T>(Event<T> eventT);
 
     public delegate bool MessageDelegate<T>(Event<T> eventT);

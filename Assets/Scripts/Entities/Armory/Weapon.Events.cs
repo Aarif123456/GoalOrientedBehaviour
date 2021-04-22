@@ -48,67 +48,55 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
-    
-    using UnityEngine;
+using System.ComponentModel;
+using UnityEngine;
 
-    public static partial class Events
-    {
-        [Description("DamageInflicted")]
-        public static readonly EventType DamageInflicted = (EventType)Count++;
-        
-        [Description("EntityDestroyed")]
-        public static readonly EventType EntityDestroyed = (EventType)Count++;
-        
-        [Description("WeaponSound")]
-        public static readonly EventType WeaponSound = (EventType)Count++;
+namespace GameBrains.AI {
+    public static partial class Events {
+        [Description("DamageInflicted")] public static readonly EventType DamageInflicted = (EventType) Count++;
+
+        [Description("EntityDestroyed")] public static readonly EventType EntityDestroyed = (EventType) Count++;
+
+        [Description("WeaponSound")] public static readonly EventType WeaponSound = (EventType) Count++;
     }
-    
-    public struct DamageInflictedEventPayload
-    {
+
+    public struct DamageInflictedEventPayload {
         public Agent shooter;
         public Entity victim;
         public Vector3 hitPoint;
         public float damageInflicted;
-        
+
         public DamageInflictedEventPayload(
             Agent shooter,
             Entity victim,
             Vector3 hitPoint,
-            float damageInflicted)
-        {
+            float damageInflicted){
             this.shooter = shooter;
             this.victim = victim;
             this.hitPoint = hitPoint;
             this.damageInflicted = damageInflicted;
         }
     }
-    
-    public struct EntityDestroyedEventPayload
-    {
+
+    public struct EntityDestroyedEventPayload {
         public Agent shooter;
         public Entity victim;
-        
+
         public EntityDestroyedEventPayload(
             Agent shooter,
-            Entity victim)
-        {
+            Entity victim){
             this.shooter = shooter;
             this.victim = victim;
         }
     }
-    
-    public struct WeaponSoundEventPayload
-    {
+
+    public struct WeaponSoundEventPayload {
         public Agent noiseHearer;
         public Agent noiseMaker;
-        
+
         public WeaponSoundEventPayload(
             Agent noiseHearer,
-            Agent noiseMaker)
-        {
+            Agent noiseMaker){
             this.noiseHearer = noiseHearer;
             this.noiseMaker = noiseMaker;
         }

@@ -48,48 +48,43 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// A Fuzzy Rule class.
+    ///     A Fuzzy Rule class.
     /// </summary>
-    public class FuzzyRule
-    {
+    public class FuzzyRule {
         /// <summary>
-        /// Initializes a new instance of the FuzzyRule class.
+        ///     Initializes a new instance of the FuzzyRule class.
         /// </summary>
         /// <param name="antecedent">The antecedent of the fuzzy rule.</param>
         /// <param name="consequent">The consequent of the fuzzy rule.</param>
-        public FuzzyRule(FuzzyTerm antecedent, FuzzyTerm consequent)
-        {
+        public FuzzyRule(FuzzyTerm antecedent, FuzzyTerm consequent){
             Antecedent = antecedent.Clone();
             Consequent = consequent.Clone();
         }
 
         /// <summary>
-        /// Gets the antecedent (usually a composite of several fuzzy sets and operators).
+        ///     Gets the antecedent (usually a composite of several fuzzy sets and operators).
         /// </summary>
-        public FuzzyTerm Antecedent { get; private set; }
+        public FuzzyTerm Antecedent { get; }
 
         /// <summary>
-        /// Gets the consequent (usually a single fuzzy set, but can be several ANDed together).
+        ///     Gets the consequent (usually a single fuzzy set, but can be several ANDed together).
         /// </summary>
-        public FuzzyTerm Consequent { get; private set; }
+        public FuzzyTerm Consequent { get; }
 
         /// <summary>
-        /// Clear the degree of membership of the consequent.
+        ///     Clear the degree of membership of the consequent.
         /// </summary>
-        public void SetConfidenceOfConsequentToZero()
-        {
+        public void SetConfidenceOfConsequentToZero(){
             Consequent.ClearDom();
         }
 
         /// <summary>
-        /// This method updates the DOM (the confidence) of the consequent term with the DOM of the
-        /// antecedent term. 
+        ///     This method updates the DOM (the confidence) of the consequent term with the DOM of the
+        ///     antecedent term.
         /// </summary>
-        public void Calculate()
-        {
+        public void Calculate(){
             Consequent.OrWithDom(Antecedent.GetDom());
         }
     }

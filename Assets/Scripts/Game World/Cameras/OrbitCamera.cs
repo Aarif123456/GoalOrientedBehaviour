@@ -51,10 +51,8 @@
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras
-{
-    public class OrbitCamera : TargetedCamera
-    {
+namespace GameBrains.Cameras {
+    public class OrbitCamera : TargetedCamera {
         // Whether the camera is controllable by the player.
         public bool isControllable = true;
 
@@ -76,46 +74,39 @@ namespace GameBrains.Cameras
         public float yMaxLimit = 80;
 
         private float currentDistance = 10.0f;
-        private float x = 0.0f;
-        private float y = 0.0f;
-        private float distanceVelocity = 0.0f;
-        
-        public override void Awake()
-        {
+        private float distanceVelocity;
+        private float x;
+        private float y;
+
+        public override void Awake(){
             base.Awake();
-            
-            if (target == null)
-            {
+
+            if (target == null){
                 Debug.Log("Provide a target for the camera.");
             }
+
             CameraName = "Orbit Camera";
         }
 
-        public void Start()
-        {
-            Vector3 angles = transform.eulerAngles;
+        public void Start(){
+            var angles = transform.eulerAngles;
             x = angles.y;
             y = angles.x;
             currentDistance = distance;
 
             // Make the rigid body not change rotation.
-            if (GetComponent<Rigidbody>())
-            {
+            if (GetComponent<Rigidbody>()){
                 GetComponent<Rigidbody>().freezeRotation = true;
             }
         }
-        
-        public void LateUpdate()
-        {
-            if (target)
-            {
-                if (isControllable)
-                {
+
+        public void LateUpdate(){
+            if (target){
+                if (isControllable){
                     x += Input.GetAxis(sideLookAxis) * xSpeed * 0.02f;
                     y -= Input.GetAxis(verticalAxis) * ySpeed * 0.02f;
                 }
-                else
-                {
+                else{
                     // TODO: Add ability for AI control?
                     x = 0;
                     y = 0;
@@ -123,40 +114,34 @@ namespace GameBrains.Cameras
 
                 y = ClampAngle(y, yMinLimit, yMaxLimit);
 
-                Quaternion rotation = Quaternion.Euler(y, x, 0);
-                Vector3 targetPos = target.position + targetOffset;
-                Vector3 direction = rotation * -Vector3.forward;
+                var rotation = Quaternion.Euler(y, x, 0);
+                var targetPos = target.position + targetOffset;
+                var direction = rotation * -Vector3.forward;
 
-                float targetDistance = AdjustLineOfSight(targetPos, direction);
-                currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref distanceVelocity, closerSnapLag * 0.3f);
+                var targetDistance = AdjustLineOfSight(targetPos, direction);
+                currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref distanceVelocity,
+                    closerSnapLag * 0.3f);
 
                 transform.rotation = rotation;
                 transform.position = targetPos + direction * currentDistance;
             }
         }
 
-        private float AdjustLineOfSight(Vector3 target, Vector3 direction)
-        {
+        private float AdjustLineOfSight(Vector3 target, Vector3 direction){
             RaycastHit hit;
-            if (Physics.Raycast(target, direction, out hit, distance, lineOfSightMask.value))
-            {
+            if (Physics.Raycast(target, direction, out hit, distance, lineOfSightMask.value)){
                 return hit.distance - closerRadius;
             }
-            else
-            {
-                return distance;
-            }
+
+            return distance;
         }
 
-        private static float ClampAngle(float angle, float min, float max)
-        {
-            if (angle < -360)
-            {
+        private static float ClampAngle(float angle, float min, float max){
+            if (angle < -360){
                 angle += 360;
             }
 
-            if (angle > 360)
-            {
+            if (angle > 360){
                 angle -= 360;
             }
 

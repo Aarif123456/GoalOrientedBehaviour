@@ -1,17 +1,14 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
-    public class EvaluatorExplore : Evaluator
-    {
+using UnityEngine;
+
+namespace GameBrains.AI {
+    public class EvaluatorExplore : Evaluator {
         public EvaluatorExplore(float characterBias)
-            : base(characterBias)
-        {
+            : base(characterBias){
         }
-        public override float CalculateDesirability(Agent agent)
-        {
+
+        public override float CalculateDesirability(Agent agent){
             // small value so explore is desired if nothing else is
-            float desirability = 0.05f;
+            var desirability = 0.05f;
 
             desirability *= characterBias;
 
@@ -20,9 +17,8 @@ namespace GameBrains.AI
 
             return desirability;
         }
-        
-        public override void SetGoal(Agent agent)
-        {
+
+        public override void SetGoal(Agent agent){
             agent.Brain.AddGoalExplore();
         }
     }

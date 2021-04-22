@@ -1,18 +1,15 @@
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
-    
-    public enum ItemTypes
-    {
-        Blaster, 
+using System.ComponentModel;
 
-        Health, 
+namespace GameBrains.AI {
+    public enum ItemTypes {
+        Blaster,
 
-        Railgun, 
+        Health,
 
-        [Description("Rocket launcher")]
-        RocketLauncher, 
+        Railgun,
 
-        Shotgun, 
+        [Description("Rocket launcher")] RocketLauncher,
+
+        Shotgun
     }
 }

@@ -48,68 +48,60 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for Very fuzzy set.
+    ///     Class for Very fuzzy set.
     /// </summary>
-    public class FzVery : FuzzyTerm
-    {
+    public class FzVery : FuzzyTerm {
         /// <summary>
-        /// Initializes a new instance of the FzVery class from the given fuzzy set.
+        ///     Initializes a new instance of the FzVery class from the given fuzzy set.
         /// </summary>
         /// <param name="fzSet">The given fuzzy set.</param>
-        public FzVery(FzSet fzSet)
-        {
+        public FzVery(FzSet fzSet){
             Set = fzSet.Set;
         }
 
         /// <summary>
-        /// Initializes a new instance of the FzVery class from the given fuzzy set.
+        ///     Initializes a new instance of the FzVery class from the given fuzzy set.
         /// </summary>
         /// <param name="fzVery">The given fuzzy set.</param>
-        public FzVery(FzVery fzVery)
-        {
+        public FzVery(FzVery fzVery){
             Set = fzVery.Set;
         }
 
         /// <summary>
-        /// Gets the fuzzy set.
+        ///     Gets the fuzzy set.
         /// </summary>
-        public FuzzySet Set { get; private set; }
+        public FuzzySet Set { get; }
 
         /// <summary>
-        /// Clone this.
+        ///     Clone this.
         /// </summary>
         /// <returns>A copy of this.</returns>
-        public override FuzzyTerm Clone()
-        {
+        public override FuzzyTerm Clone(){
             return new FzVery(this);
         }
 
         /// <summary>
-        /// Retrieves the degree of membership of the term.
+        ///     Retrieves the degree of membership of the term.
         /// </summary>
         /// <returns>The degree of membership of the term.</returns>
-        public override float GetDom()
-        {
+        public override float GetDom(){
             return Set.Dom * Set.Dom;
         }
 
         /// <summary>
-        /// Clears the degree of membership of the term.
+        ///     Clears the degree of membership of the term.
         /// </summary>
-        public override void ClearDom()
-        {
+        public override void ClearDom(){
             Set.ClearDom();
         }
 
         /// <summary>
-        /// Method for updating the DOM of a consequent when a rule fires.
+        ///     Method for updating the DOM of a consequent when a rule fires.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
-        public override void OrWithDom(float givenValue)
-        {
+        public override void OrWithDom(float givenValue){
             Set.OrWithDom(givenValue * givenValue);
         }
     }

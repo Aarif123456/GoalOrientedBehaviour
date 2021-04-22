@@ -48,87 +48,77 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for fuzzy OR.
+    ///     Class for fuzzy OR.
     /// </summary>
-    public class FzOr : FuzzyTerm
-    {
+    public class FzOr : FuzzyTerm {
         /// <summary>
-        /// Initializes a new instance of the FzOr class from the given FzOr term.
+        ///     Initializes a new instance of the FzOr class from the given FzOr term.
         /// </summary>
         /// <param name="fzOr">The given FzOr term.</param>
-        public FzOr(FzOr fzOr)
-        {
+        public FzOr(FzOr fzOr){
             Terms = new List<FuzzyTerm>();
-            foreach (FuzzyTerm term in fzOr.Terms)
-            {
+            foreach (var term in fzOr.Terms){
                 Terms.Add(term.Clone());
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the FzOr class using two terms.
+        ///     Initializes a new instance of the FzOr class using two terms.
         /// </summary>
         /// <param name="op1">The first fuzzy term.</param>
         /// <param name="op2">The second fuzzy term.</param>
-        public FzOr(FuzzyTerm op1, FuzzyTerm op2)
-        {
-            Terms = new List<FuzzyTerm> { op1.Clone(), op2.Clone() };
+        public FzOr(FuzzyTerm op1, FuzzyTerm op2){
+            Terms = new List<FuzzyTerm>{op1.Clone(), op2.Clone()};
         }
 
         /// <summary>
-        /// Initializes a new instance of the FzOr class using three terms.
+        ///     Initializes a new instance of the FzOr class using three terms.
         /// </summary>
         /// <param name="op1">The first fuzzy term.</param>
         /// <param name="op2">The second fuzzy term.</param>
         /// <param name="op3">The third fuzzy term.</param>
-        public FzOr(FuzzyTerm op1, FuzzyTerm op2, FuzzyTerm op3)
-        {
-            Terms = new List<FuzzyTerm> { op1.Clone(), op2.Clone(), op3.Clone() };
+        public FzOr(FuzzyTerm op1, FuzzyTerm op2, FuzzyTerm op3){
+            Terms = new List<FuzzyTerm>{op1.Clone(), op2.Clone(), op3.Clone()};
         }
 
         /// <summary>
-        /// Initializes a new instance of the FzOr class using four terms.
+        ///     Initializes a new instance of the FzOr class using four terms.
         /// </summary>
         /// <param name="op1">The first fuzzy term.</param>
         /// <param name="op2">The second fuzzy term.</param>
         /// <param name="op3">The third fuzzy term.</param>
         /// <param name="op4">The fourth fuzzy term.</param>
-        public FzOr(FuzzyTerm op1, FuzzyTerm op2, FuzzyTerm op3, FuzzyTerm op4)
-        {
-            Terms = new List<FuzzyTerm> { op1.Clone(), op2.Clone(), op3.Clone(), op4.Clone() };
+        public FzOr(FuzzyTerm op1, FuzzyTerm op2, FuzzyTerm op3, FuzzyTerm op4){
+            Terms = new List<FuzzyTerm>{op1.Clone(), op2.Clone(), op3.Clone(), op4.Clone()};
         }
 
         /// <summary>
-        /// Gets the list of terms. An instance of this class may AND together up to 4 terms.
+        ///     Gets the list of terms. An instance of this class may AND together up to 4 terms.
         /// </summary>
-        public List<FuzzyTerm> Terms { get; private set; }
+        public List<FuzzyTerm> Terms { get; }
 
         /// <summary>
-        /// Clone this FzOr term.
+        ///     Clone this FzOr term.
         /// </summary>
         /// <returns>A cop of this FzOr term.</returns>
-        public override FuzzyTerm Clone()
-        {
+        public override FuzzyTerm Clone(){
             return new FzOr(this);
         }
 
         /// <summary>
-        /// The OR operator returns the maximum DOM of the sets it is operating on.
+        ///     The OR operator returns the maximum DOM of the sets it is operating on.
         /// </summary>
         /// <returns>The maximum DOM of the ORed sets.</returns>
-        public override float GetDom()
-        {
-            float largest = float.MinValue;
+        public override float GetDom(){
+            var largest = float.MinValue;
 
-            foreach (FuzzyTerm term in Terms)
-            {
-                if (term.GetDom() > largest)
-                {
+            foreach (var term in Terms){
+                if (term.GetDom() > largest){
                     largest = term.GetDom();
                 }
             }
@@ -137,26 +127,24 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Clears the degree of membership of the term.
+        ///     Clears the degree of membership of the term.
         /// </summary>
         /// <remarks>
-        ///  Unused.
+        ///     Unused.
         /// </remarks>
-        public override void ClearDom()
-        {
-            throw new System.Exception("FzOR.ClearDOM: invalid context.");
+        public override void ClearDom(){
+            throw new Exception("FzOR.ClearDOM: invalid context.");
         }
 
         /// <summary>
-        ///  Method for updating the DOM of a consequent when a rule fires.
+        ///     Method for updating the DOM of a consequent when a rule fires.
         /// </summary>
         /// <remarks>
-        ///  Unused.
+        ///     Unused.
         /// </remarks>
         /// <param name="givenValue">The given value.</param>
-        public override void OrWithDom(float givenValue)
-        {
-            throw new System.Exception("FzOR.OrWithDom: invalid context.");
+        public override void OrWithDom(float givenValue){
+            throw new Exception("FzOR.OrWithDom: invalid context.");
         }
     }
 }

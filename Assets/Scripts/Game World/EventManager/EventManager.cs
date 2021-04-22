@@ -51,127 +51,129 @@
 using System.Collections.Generic;
 using GameBrains.AI;
 using UnityEngine;
-
+using Debug = System.Diagnostics.Debug;
 using Event = GameBrains.AI.Event;
 using EventType = GameBrains.AI.EventType;
 
 /// <summary>
-/// Manager for events. Events can be fired for immediate processing or queued for later processing. Objects that
-/// subscribe to an event are notified when it is processed via its event delegate. Objects cease to be notified
-/// when they unsubscribe from an event. Events can also be scheduled and can be directed to specified receivers.
+///     Manager for events. Events can be fired for immediate processing or queued for later processing. Objects that
+///     subscribe to an event are notified when it is processed via its event delegate. Objects cease to be notified
+///     when they unsubscribe from an event. Events can also be scheduled and can be directed to specified receivers.
 /// </summary>
-public sealed partial class EventManager : MonoBehaviour
-{
+public sealed partial class EventManager : MonoBehaviour {
     /// <summary>
-    /// The id of the sender is irrelevant (system generated).
+    ///     The id of the sender is irrelevant (system generated).
     /// </summary>
     public const int SENDER_ID_IRRELEVANT = -1;
 
     /// <summary>
-    /// The id of the receiver is irrelevant (system generated).
+    ///     The id of the receiver is irrelevant (system generated).
     /// </summary>
     public const int RECEIVER_ID_IRRELEVANT = -1;
 
     /// <summary>
-    /// Event should be dispatched without delay.
+    ///     Event should be dispatched without delay.
     /// </summary>
     public const double NO_DELAY = 0.0f;
 
+    private static EventManager _instance;
+
     /// <summary>
-    /// Dictionary used to get event subscribers by event type.
+    ///     Dictionary used to get event subscribers by event type.
     /// </summary>
     private readonly Dictionary<EventType, List<Subscription>> _eventSubscribers =
         new Dictionary<EventType, List<Subscription>>();
 
     /// <summary>
-    /// Priority queue to gather events as they are enqueued.
+    ///     Priority queue to gather events as they are enqueued.
     /// </summary>
     private PriorityQueue<Event, double> _eventGatherQueue =
         new PriorityQueue<Event, double>(PriorityQueue<Event, double>.PriorityOrder.LowFirst);
 
     /// <summary>
-    /// Priority queue of events taken from the <see cref="_eventGatherQueue"/> that can now be processed.
+    ///     Priority queue of events taken from the <see cref="_eventGatherQueue" /> that can now be processed.
     /// </summary>
     private PriorityQueue<Event, double> _eventProcessQueue =
         new PriorityQueue<Event, double>(PriorityQueue<Event, double>.PriorityOrder.LowFirst);
 
     /// <summary>
-    /// The next event id.
+    ///     A value indicating whether the event manager is currently processing events.
+    /// </summary>
+    private bool _isProcessingEvents;
+
+    /// <summary>
+    ///     The next event id.
     /// </summary>
     private int _nextEventId;
 
-    /// <summary>
-    /// A value indicating whether the event manager is currently processing events.
-    /// </summary>
-    private bool _isProcessingEvents;
-    
-    private static EventManager _instance;
-    
-    public static EventManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
+    public static EventManager Instance {
+        get {
+            if (_instance == null){
                 _instance = GameObject.Find("Game").GetComponent<EventManager>();
             }
-            
+
             return _instance;
         }
     }
 
+    /// <summary>
+    ///     Process all events.
+    /// </summary>
+    public void Update(){
+        // Fire a (non-queued) update event per cycle. Trigger processes the
+        // event immediately without putting it on the event queue.
+        Fire(Events.ImmediateUpdate, Time.time);
+
+        // post a (queued) update event per cycle.
+        Enqueue(Events.QueuedUpdate, Time.time);
+
+        while (ProcessEvents()){
+        }
+    }
+
     public void Subscribe<T>(
-       EventType eventType,
-       EventDelegate<T> eventDelegate)
-    {
+        EventType eventType,
+        EventDelegate<T> eventDelegate){
         Subscribe(eventType, eventDelegate, null);
     }
 
     public void Subscribe<T>(
         EventType eventType,
         EventDelegate<T> eventDelegate,
-        object eventKey)
-    {
+        object eventKey){
         var subscriptionToAdd = new Subscription(eventDelegate, eventKey);
 
-        lock (_eventSubscribers)
-        {
+        lock (_eventSubscribers){
             List<Subscription> eventSubscriptionList;
             if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
-                eventSubscriptionList != null)
-            {
-                if (!eventSubscriptionList.Contains(subscriptionToAdd))
-                {
+                eventSubscriptionList != null){
+                if (!eventSubscriptionList.Contains(subscriptionToAdd)){
                     eventSubscriptionList.Add(subscriptionToAdd);
                 }
 
                 return;
             }
 
-            _eventSubscribers[eventType] = new List<Subscription> { subscriptionToAdd };
+            _eventSubscribers[eventType] = new List<Subscription>{subscriptionToAdd};
         }
     }
 
     public void Unsubscribe<T>(
-       EventType eventType,
-       EventDelegate<T> eventDelegate)
-    {
+        EventType eventType,
+        EventDelegate<T> eventDelegate){
         Unsubscribe(eventType, eventDelegate, null);
     }
 
     public void Unsubscribe<T>(
         EventType eventType,
         EventDelegate<T> eventDelegate,
-        object eventKey)
-    {
+        object eventKey){
         var subscriptionToRemove = new Subscription(eventDelegate, eventKey);
 
-        lock (_eventSubscribers)
-        {
+        lock (_eventSubscribers){
             List<Subscription> eventSubscriptionList;
             if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
-                eventSubscriptionList != null)
-            {
+                eventSubscriptionList != null){
                 eventSubscriptionList.Remove(subscriptionToRemove);
             }
         }
@@ -179,51 +181,51 @@ public sealed partial class EventManager : MonoBehaviour
 
     public int Enqueue<T>(
         EventType eventType,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null,
+            eventData, null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         double delay,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null,
+            eventData, null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         double delay,
         EventDelegate<T> eventDelegate,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
+            eventDelegate, eventData, null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         EventDelegate<T> eventDelegate,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
+            eventDelegate, eventData, null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         double delay,
         int receiverId,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, receiverId, null, eventData,
+            null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         int receiverId,
-        T eventData)
-    {
-        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
+        T eventData){
+        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, receiverId, null, eventData,
+            null);
     }
 
     public int Enqueue<T>(
@@ -231,17 +233,15 @@ public sealed partial class EventManager : MonoBehaviour
         double delay,
         int senderId,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         return Enqueue(eventType, Event.Lifespans.Level, delay, senderId, receiverId, null, eventData, null);
     }
 
     public int Enqueue<T>(
-       EventType eventType,
-       int senderId,
-       int receiverId,
-       T eventData)
-    {
+        EventType eventType,
+        int senderId,
+        int receiverId,
+        T eventData){
         return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, null, eventData, null);
     }
 
@@ -251,9 +251,9 @@ public sealed partial class EventManager : MonoBehaviour
         int receiverId,
         EventDelegate<T> eventDelegate,
         T eventData,
-        object eventKey)
-    {
-        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, eventDelegate, eventData, eventKey);
+        object eventKey){
+        return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, eventDelegate, eventData,
+            eventKey);
     }
 
     public int Enqueue<T>(
@@ -263,25 +263,24 @@ public sealed partial class EventManager : MonoBehaviour
         int receiverId,
         EventDelegate<T> eventDelegate,
         T eventData,
-        object eventKey)
-    {
-        return Enqueue(eventType, Event.Lifespans.Level, delay, senderId, receiverId, eventDelegate, eventData, eventKey);
+        object eventKey){
+        return Enqueue(eventType, Event.Lifespans.Level, delay, senderId, receiverId, eventDelegate, eventData,
+            eventKey);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         Event.Lifespan lifespan,
-        T eventData)
-    {
-        return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
+        T eventData){
+        return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData,
+            null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         Event.Lifespan lifespan,
         double delay,
-        T eventData)
-    {
+        T eventData){
         return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
     }
 
@@ -290,18 +289,18 @@ public sealed partial class EventManager : MonoBehaviour
         Event.Lifespan lifespan,
         double delay,
         EventDelegate<T> eventDelegate,
-        T eventData)
-    {
-        return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
+        T eventData){
+        return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
+            eventData, null);
     }
 
     public int Enqueue<T>(
         EventType eventType,
         Event.Lifespan lifespan,
         EventDelegate<T> eventDelegate,
-        T eventData)
-    {
-        return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
+        T eventData){
+        return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
+            eventData, null);
     }
 
     public int Enqueue<T>(
@@ -309,8 +308,7 @@ public sealed partial class EventManager : MonoBehaviour
         Event.Lifespan lifespan,
         double delay,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
     }
 
@@ -318,8 +316,7 @@ public sealed partial class EventManager : MonoBehaviour
         EventType eventType,
         Event.Lifespan lifespan,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
     }
 
@@ -329,18 +326,16 @@ public sealed partial class EventManager : MonoBehaviour
         double delay,
         int senderId,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         return Enqueue(eventType, lifespan, delay, senderId, receiverId, null, eventData, null);
     }
 
     public int Enqueue<T>(
-       EventType eventType,
-       Event.Lifespan lifespan,
-       int senderId,
-       int receiverId,
-       T eventData)
-    {
+        EventType eventType,
+        Event.Lifespan lifespan,
+        int senderId,
+        int receiverId,
+        T eventData){
         return Enqueue(eventType, lifespan, NO_DELAY, senderId, receiverId, null, eventData, null);
     }
 
@@ -351,8 +346,7 @@ public sealed partial class EventManager : MonoBehaviour
         int receiverId,
         EventDelegate<T> eventDelegate,
         T eventData,
-        object eventKey)
-    {
+        object eventKey){
         return Enqueue(eventType, lifespan, NO_DELAY, senderId, receiverId, eventDelegate, eventData, eventKey);
     }
 
@@ -364,8 +358,7 @@ public sealed partial class EventManager : MonoBehaviour
         int receiverId,
         EventDelegate<T> eventDelegate,
         T eventData,
-        object eventKey)
-    {
+        object eventKey){
         var eventToSchedule =
             Event<T>.Obtain(
                 ++_nextEventId,
@@ -377,8 +370,7 @@ public sealed partial class EventManager : MonoBehaviour
                 eventDelegate,
                 eventData);
 
-        lock (_eventGatherQueue)
-        {
+        lock (_eventGatherQueue){
             _eventGatherQueue.Enqueue(eventToSchedule, eventToSchedule.DispatchTime);
         }
 
@@ -387,24 +379,21 @@ public sealed partial class EventManager : MonoBehaviour
 
     public void Fire<T>(
         EventType eventType,
-        T eventData)
-    {
+        T eventData){
         Fire(eventType, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
     }
 
     public void Fire<T>(
-       EventType eventType,
-       EventDelegate<T> eventDelegate,
-       T eventData)
-    {
+        EventType eventType,
+        EventDelegate<T> eventDelegate,
+        T eventData){
         Fire(eventType, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
     }
 
     public void Fire<T>(
         EventType eventType,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         Fire(eventType, SENDER_ID_IRRELEVANT, receiverId, eventData);
     }
 
@@ -412,117 +401,85 @@ public sealed partial class EventManager : MonoBehaviour
         EventType eventType,
         int senderId,
         int receiverId,
-        T eventData)
-    {
+        T eventData){
         Fire(eventType, senderId, receiverId, null, eventData, null);
     }
 
     public void Fire<T>(
-       EventType eventType,
-       int senderId,
-       int receiverId,
-       EventDelegate<T> eventDelegate,
-       T eventData,
-       object eventKey)
-    {
+        EventType eventType,
+        int senderId,
+        int receiverId,
+        EventDelegate<T> eventDelegate,
+        T eventData,
+        object eventKey){
         var eventToFire =
-            Event<T>.Obtain(++_nextEventId, eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, eventDelegate, eventData);
+            Event<T>.Obtain(++_nextEventId, eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId,
+                eventDelegate, eventData);
         Fire(eventToFire);
     }
 
     /// <summary>
-    /// Remove the event with the given event ID.
+    ///     Remove the event with the given event ID.
     /// </summary>
     /// <param name="eventId">
-    /// The ID of the event to remove.
+    ///     The ID of the event to remove.
     /// </param>
     /// <returns>
-    /// True if the event was removed.
+    ///     True if the event was removed.
     /// </returns>
-    public bool Remove(int eventId)
-    {
-        lock (_eventGatherQueue)
-        {
+    public bool Remove(int eventId){
+        lock (_eventGatherQueue){
             return _eventGatherQueue.Remove(i => i.EventId == eventId);
         }
     }
 
-    public void RemoveAll(Event.Lifespan lifespan)
-    {
-        lock (_eventGatherQueue)
-        {
+    public void RemoveAll(Event.Lifespan lifespan){
+        lock (_eventGatherQueue){
             _eventGatherQueue.Remove(i => i.EventLifespan == lifespan);
         }
     }
 
     /// <summary>
-    /// Process all events.
-    /// </summary>
-    public void Update()
-    {
-        // Fire a (non-queued) update event per cycle. Trigger processes the
-        // event immediately without putting it on the event queue.
-        Fire(Events.ImmediateUpdate, Time.time);
-
-        // post a (queued) update event per cycle.
-        Enqueue(Events.QueuedUpdate, Time.time);
-
-        while (ProcessEvents())
-        {
-        }
-    }
-
-    /// <summary>
-    /// Processes all events queued up since last ProcessEvents call.
+    ///     Processes all events queued up since last ProcessEvents call.
     /// </summary>
     /// <returns>
-    /// True if any events were processed.
+    ///     True if any events were processed.
     /// </returns>
-    private bool ProcessEvents()
-    {
+    private bool ProcessEvents(){
         // if already processing event, leave.
-        if (_isProcessingEvents)
-        {
+        if (_isProcessingEvents){
             return false;
         }
 
         // if no events to process, leave.
-        if (_eventGatherQueue.Count == 0 || _eventGatherQueue.Peek().Priority > Time.time)
-        {
+        if (_eventGatherQueue.Count == 0 || _eventGatherQueue.Peek().Priority > Time.time){
             return false;
         }
 
         _isProcessingEvents = true;
 
-        if (_eventProcessQueue.Count != 0)
-        {
-            System.Diagnostics.Debug.WriteLine("EventManager: event process list should be empty at this point.");
+        if (_eventProcessQueue.Count != 0){
+            Debug.WriteLine("EventManager: event process list should be empty at this point.");
         }
 
-        lock (_eventGatherQueue)
-        {
+        lock (_eventGatherQueue){
             // We use a double buffer scheme (gather, process) to minimize lock time.
             Swap(ref _eventProcessQueue, ref _eventGatherQueue);
         }
 
-        while (_eventProcessQueue.Count > 0 && _eventProcessQueue.Peek().Priority <= Time.time)
-        {
+        while (_eventProcessQueue.Count > 0 && _eventProcessQueue.Peek().Priority <= Time.time){
             Fire(_eventProcessQueue.Dequeue().Value);
         }
 
-        lock (_eventGatherQueue)
-        {
+        lock (_eventGatherQueue){
             // transfer remaining events
-            while (_eventProcessQueue.Count > 0)
-            {
+            while (_eventProcessQueue.Count > 0){
                 var queueItem = _eventProcessQueue.Dequeue();
                 var unprocessedEvent = queueItem.Value;
-                if (unprocessedEvent.EventLifespan == Event.Lifespans.Cycle)
-                {
+                if (unprocessedEvent.EventLifespan == Event.Lifespans.Cycle){
                     //unprocessedEvent.Recycle(); // shouldn't happen. If it does, event is skipped.
                 }
-                else
-                {
+                else{
                     _eventGatherQueue.Enqueue(queueItem);
                 }
             }
@@ -537,51 +494,43 @@ public sealed partial class EventManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Fire an event (call the subscriber delegates).
+    ///     Fire an event (call the subscriber delegates).
     /// </summary>
     /// <param name="eventToFire">
-    /// The event to fire.
+    ///     The event to fire.
     /// </param>
-    private void Fire(Event eventToFire)
-    {
+    private void Fire(Event eventToFire){
         // call subscriber delegates
         List<Subscription> subscriptionList;
         if (eventToFire.EventType != Events.Message &&
-            _eventSubscribers.TryGetValue(eventToFire.EventType, out subscriptionList))
-        {
-            if (subscriptionList != null)
-            {
-                for (var i = 0; i < subscriptionList.Count; i++)
-                {
+            _eventSubscribers.TryGetValue(eventToFire.EventType, out subscriptionList)){
+            if (subscriptionList != null){
+                for (var i = 0; i < subscriptionList.Count; i++){
                     eventToFire.Fire(subscriptionList[i].EventDelegate);
                 }
             }
         }
 
         // notify specified receiver
-        if (eventToFire.ReceiverId != RECEIVER_ID_IRRELEVANT)
-        {
-            if (EntityManager.Find<Entity>(eventToFire.ReceiverId))
-            {
+        if (eventToFire.ReceiverId != RECEIVER_ID_IRRELEVANT){
+            if (EntityManager.Find<Entity>(eventToFire.ReceiverId)){
                 eventToFire.Send();
             }
         }
-        else if (eventToFire.EventDelegate != null)
-        {
+        else if (eventToFire.EventDelegate != null){
             eventToFire.Fire(eventToFire.EventDelegate);
         }
 
         //eventToFire.Recycle();
     }
-    
+
     /// <summary>
-    /// Swap references to two objects.
+    ///     Swap references to two objects.
     /// </summary>
     /// <typeparam name="T">Type of objects to swap.</typeparam>
     /// <param name="a">First object to swap.</param>
     /// <param name="b">Second object to swap.</param>
-    private void Swap<T>(ref T a, ref T b)
-    {
+    private void Swap<T>(ref T a, ref T b){
         var tmp = a;
         a = b;
         b = tmp;

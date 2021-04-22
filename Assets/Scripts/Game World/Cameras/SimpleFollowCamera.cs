@@ -51,10 +51,8 @@
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras
-{
-    public class SimpleFollowCamera : TargetedCamera
-    {
+namespace GameBrains.Cameras {
+    public class SimpleFollowCamera : TargetedCamera {
         // The distance in the x-z plane to the target.
         public float distance = 7.0f;
 
@@ -64,12 +62,10 @@ namespace GameBrains.Cameras
         // After all objects are initialized, Awake is called when the script
         // is being loaded. This occurs before any Start calls.
         // Use Awake instead of the constructor for initialization.
-        public override void Awake()
-        {
+        public override void Awake(){
             base.Awake();
-            
-            if (target == null)
-            {
+
+            if (target == null){
                 Debug.Log("Please assign a target to the SimpleFollowCamera script.");
             }
 
@@ -78,17 +74,15 @@ namespace GameBrains.Cameras
 
         // If this behaviour is enabled, LateUpdate is called once per frame
         // after all Update functions have been called.
-        public void LateUpdate()
-        {
-            if (target != null)
-            {
+        public void LateUpdate(){
+            if (target != null){
                 // Convert the angle into a rotation, by which we then reposition the camera.
-                Quaternion currentRotation = Quaternion.Euler(0, target.eulerAngles.y, 0);
+                var currentRotation = Quaternion.Euler(0, target.eulerAngles.y, 0);
 
                 // Set the position of the camera on the x-z plane to:
                 // distance meters behind the target
 
-                Vector3 position = target.position;
+                var position = target.position;
                 position += currentRotation * Vector3.back * distance;
 
                 // Set the height of the camera

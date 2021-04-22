@@ -1,20 +1,15 @@
-namespace GameBrains.AI
-{
-    public class Stop : SteeringBehaviour
-    {
+namespace GameBrains.AI {
+    public class Stop : SteeringBehaviour {
         public Stop(Kinematic agentKinematic)
-            : base(agentKinematic)
-        {
+            : base(agentKinematic){
         }
-        
+
         public Stop(Agent agent)
-            : this(agent.Kinematic)
-        {
+            : this(agent.Kinematic){
         }
-        
-        public override Steering Steer()
-        {
-            return new Steering { Type = Steering.Types.Velocities };
+
+        public override Steering Steer(){
+            return new Steering{Type = Steering.Types.Velocities};
         }
     }
 }

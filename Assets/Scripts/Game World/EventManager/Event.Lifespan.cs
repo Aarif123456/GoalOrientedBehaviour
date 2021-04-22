@@ -48,32 +48,25 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    public abstract partial class Event
-    {
-        public struct Lifespan
-        {
+namespace GameBrains.AI {
+    public abstract partial class Event {
+        public struct Lifespan {
             private readonly int _lifespan;
 
             public Lifespan(int lifespan)
-                : this()
-            {
+                : this(){
                 _lifespan = lifespan;
             }
 
-            public static implicit operator int(Lifespan lifespan)
-            {
+            public static implicit operator int(Lifespan lifespan){
                 return lifespan._lifespan;
             }
 
-            public static explicit operator Lifespan(int lifespan)
-            {
+            public static explicit operator Lifespan(int lifespan){
                 return new Lifespan(lifespan);
             }
 
-            public override string ToString()
-            {
+            public override string ToString(){
                 return Lifespans.GetDescription(this);
             }
         }

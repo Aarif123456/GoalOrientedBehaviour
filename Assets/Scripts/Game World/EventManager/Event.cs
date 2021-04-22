@@ -48,39 +48,39 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    public abstract partial class Event
-    {
+using System;
+
+namespace GameBrains.AI {
+    public abstract partial class Event {
         /// <summary>
-        /// Initializes a new instance of the Event class.
+        ///     Initializes a new instance of the Event class.
         /// </summary>
         /// <param name="eventId">
-        /// The event ID.
+        ///     The event ID.
         /// </param>
         /// <param name="eventType">
-        /// The event type.
+        ///     The event type.
         /// </param>
         /// <param name="lifespan">
-        /// The maximum duration of the event.
+        ///     The maximum duration of the event.
         /// </param>
         /// <param name="dispatchTime">
-        /// The time to dispatch the event (or DISPATCH_IMMEDIATELY).
+        ///     The time to dispatch the event (or DISPATCH_IMMEDIATELY).
         /// </param>
         /// <param name="senderId">
-        /// The sender ID (or SENDER_ID_IRRELEVANT).
+        ///     The sender ID (or SENDER_ID_IRRELEVANT).
         /// </param>
         /// <param name="receiverId">
-        /// The receiver ID (or RECEIVER_ID_IRRELEVANT).
+        ///     The receiver ID (or RECEIVER_ID_IRRELEVANT).
         /// </param>
         /// <param name="eventDelegate">
-        /// The delegate to call when the event is triggered.
+        ///     The delegate to call when the event is triggered.
         /// </param>
         /// <param name="eventDataType">
-        /// The type of event data.
+        ///     The type of event data.
         /// </param>
         /// <param name="eventData">
-        /// The event data.
+        ///     The event data.
         /// </param>
         protected Event(
             int eventId,
@@ -89,10 +89,9 @@ namespace GameBrains.AI
             double dispatchTime,
             int senderId,
             int receiverId,
-            System.Delegate eventDelegate,
-            System.Type eventDataType,
-            object eventData)
-        {
+            Delegate eventDelegate,
+            Type eventDataType,
+            object eventData){
             EventId = eventId;
             EventType = eventType;
             EventLifespan = lifespan;
@@ -104,64 +103,63 @@ namespace GameBrains.AI
             EventData = eventData;
         }
 
-        internal protected Event()
-        {
+        protected internal Event(){
         }
 
         /// <summary>
-        /// The event id for tracking the event.
+        ///     The event id for tracking the event.
         /// </summary>
         public int EventId { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the event type.
+        ///     Gets or sets the event type.
         /// </summary>
         public EventType EventType { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the maximum duration of the event.
+        ///     Gets or sets the maximum duration of the event.
         /// </summary>
         public Lifespan EventLifespan { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the time to dispatch the event. Events can be dispatched immediately, queued for the next
-        /// processing cycle or delayed for a specified amount of time. If a delay is necessary this field is stamped
-        /// with the time the event should be dispatched.
+        ///     Gets or sets the time to dispatch the event. Events can be dispatched immediately, queued for the next
+        ///     processing cycle or delayed for a specified amount of time. If a delay is necessary this field is stamped
+        ///     with the time the event should be dispatched.
         /// </summary>
         public double DispatchTime { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the ID of the game object that sent this event (or Event.SENDER_ID_IRRELEVANT).
+        ///     Gets or sets the ID of the game object that sent this event (or Event.SENDER_ID_IRRELEVANT).
         /// </summary>
         public int SenderId { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the ID of the intended receiver of this event (or Event.RECEIVER_ID_IRRELEVANT).
+        ///     Gets or sets the ID of the intended receiver of this event (or Event.RECEIVER_ID_IRRELEVANT).
         /// </summary>
         public int ReceiverId { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the type of event data.
+        ///     Gets or sets the type of event data.
         /// </summary>
-        public System.Type EventDataType { get; protected set; }
+        public Type EventDataType { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the event data (or null).
+        ///     Gets or sets the event data (or null).
         /// </summary>
         public object EventData { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the delegate to call when the event is triggered.
+        ///     Gets or sets the delegate to call when the event is triggered.
         /// </summary>
-        public System.Delegate EventDelegate { get; protected set; }
+        public Delegate EventDelegate { get; protected set; }
 
         /// <summary>
-        /// Trigger event.
+        ///     Trigger event.
         /// </summary>
         /// <param name="eventDelegate">
-        /// The event delegate.
+        ///     The event delegate.
         /// </param>
-        internal abstract void Fire(System.Delegate eventDelegate);
+        internal abstract void Fire(Delegate eventDelegate);
 
         internal abstract void Send();
     }

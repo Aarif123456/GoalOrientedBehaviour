@@ -1,47 +1,33 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
-    public class Seek : SteeringBehaviour
-    {
+using UnityEngine;
+
+namespace GameBrains.AI {
+    public class Seek : SteeringBehaviour {
         protected float satisfactionRadius = 1;
-        
+
         public Seek(Kinematic agentKinematic)
-            : base(agentKinematic, new Kinematic())
-        {
-        }
-        
-        public Seek(Kinematic agentKinematic, Vector3 targetPosition)
-            : base(agentKinematic, targetPosition)
-        {
-        }
-        
-        public Seek(Kinematic agentKinematic, Kinematic targetKinematic)
-            : base(agentKinematic, targetKinematic)
-        {
-        }
-        
-        public float SatisfactionRadius 
-        {
-            get 
-            {
-                return satisfactionRadius;
-            }
-            
-            set 
-            {
-                satisfactionRadius = value;
-            }
+            : base(agentKinematic, new Kinematic()){
         }
 
-        public override Steering Steer()
-        {
-            Vector3 direction = OtherKinematic.Position - AgentKinematic.Position;
-            float distance = direction.magnitude;
-            Steering steering = new Steering { Type = Steering.Types.Velocities };
-            
-            if (distance > SatisfactionRadius)
-            {
+        public Seek(Kinematic agentKinematic, Vector3 targetPosition)
+            : base(agentKinematic, targetPosition){
+        }
+
+        public Seek(Kinematic agentKinematic, Kinematic targetKinematic)
+            : base(agentKinematic, targetKinematic){
+        }
+
+        public float SatisfactionRadius {
+            get => satisfactionRadius;
+
+            set => satisfactionRadius = value;
+        }
+
+        public override Steering Steer(){
+            var direction = OtherKinematic.Position - AgentKinematic.Position;
+            var distance = direction.magnitude;
+            var steering = new Steering{Type = Steering.Types.Velocities};
+
+            if (distance > SatisfactionRadius){
                 steering.Linear = direction / distance * AgentKinematic.MaximumSpeed;
             }
 

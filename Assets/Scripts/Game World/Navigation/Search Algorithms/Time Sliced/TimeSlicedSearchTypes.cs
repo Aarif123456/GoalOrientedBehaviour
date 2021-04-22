@@ -1,8 +1,6 @@
-namespace GameBrains.AI
-{
-    public enum TimeSlicedSearchTypes
-    {
-        AStar, 
+namespace GameBrains.AI {
+    public enum TimeSlicedSearchTypes {
+        AStar,
         Dijkstra
     }
 }

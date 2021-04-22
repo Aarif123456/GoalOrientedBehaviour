@@ -1,9 +1,7 @@
-namespace GameBrains.AI
-{
-    public enum SearchResults
-    {
-        Success, 
-        Failure, 
+namespace GameBrains.AI {
+    public enum SearchResults {
+        Success,
+        Failure,
         Running
     }
 }

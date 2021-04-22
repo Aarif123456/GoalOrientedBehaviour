@@ -52,16 +52,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Add to the component menu.
-namespace GameBrains.Cameras
-{
+namespace GameBrains.Cameras {
 /* Fades out any objects between the player and this transform.
    The renderers shader is first changed to be an Alpha/Diffuse, then alpha is faded out to fadedOutAlpha.
    Only objects
 
    In order to catch all occluders, 5 rays are casted. occlusionRadius is the distance between them.
 */
-    public class FadeOutLineOfSight : TargetedCamera
-    {
+    public class FadeOutLineOfSight : TargetedCamera {
         public LayerMask layerMask = 2;
         public float fadeSpeed = 1.0f;
         public float occlusionRadius = 0.3f;
@@ -69,84 +67,69 @@ namespace GameBrains.Cameras
 
         private readonly List<FadeOutLOSInfo> fadedOutObjects = new List<FadeOutLOSInfo>();
 
-        public class FadeOutLOSInfo
-        {
-            public Renderer renderer;
-            public Material[] originalMaterials;
-            public Material[] alphaMaterials;
-            public bool needFadeOut = true;
-        }
-
         // After all objects are initialized, Awake is called when the script
         // is being loaded. This occurs before any Start calls.
         // Use Awake instead of the constructor for initialization.
-        public override void Awake()
-        {
+        public override void Awake(){
             base.Awake();
-            
-            if (!target)
-            {
+
+            if (!target){
                 Debug.Log("Please assign a target to the camera.");
             }
-            CameraName = "Fade Out Line Of Sight"; 
+
+            CameraName = "Fade Out Line Of Sight";
         }
 
         // If this behaviour is enabled, LateUpdate is called once per frame
         // after all Update functions have been called.
-        public void LateUpdate()
-        {
-            if (!target)
-            {
+        public void LateUpdate(){
+            if (!target){
                 return;
             }
 
-            Vector3 from = transform.position;
-            Vector3 to = target.position;
-            float castDistance = Vector3.Distance(to, from);
+            var from = transform.position;
+            var to = target.position;
+            var castDistance = Vector3.Distance(to, from);
 
             // Mark all objects as not needing fade out
-            foreach (FadeOutLOSInfo fade in fadedOutObjects)
-            {
+            foreach (var fade in fadedOutObjects){
                 fade.needFadeOut = false;
             }
 
-            Vector3[] offsets = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, occlusionRadius, 0), new Vector3(0, -occlusionRadius, 0), new Vector3(occlusionRadius, 0, 0), new Vector3(-occlusionRadius, 0, 0) };
+            Vector3[] offsets ={
+                new Vector3(0, 0, 0), new Vector3(0, occlusionRadius, 0), new Vector3(0, -occlusionRadius, 0),
+                new Vector3(occlusionRadius, 0, 0), new Vector3(-occlusionRadius, 0, 0)
+            };
 
             // We cast 5 rays to really make sure even occluders that are partly occluding the player are faded out
-            foreach (Vector3 offset in offsets)
-            {
-                Vector3 relativeOffset = transform.TransformDirection(offset);
+            foreach (var offset in offsets){
+                var relativeOffset = transform.TransformDirection(offset);
 
                 // Find all blocking objects which we want to hide
-                RaycastHit[] hits  = Physics.RaycastAll(from + relativeOffset, to - from, castDistance, layerMask.value);
-                foreach (RaycastHit hit in hits)
-                {
-                    if (hit.transform.gameObject == target.gameObject)
-                    {
+                var hits = Physics.RaycastAll(from + relativeOffset, to - from, castDistance, layerMask.value);
+                foreach (var hit in hits){
+                    if (hit.transform.gameObject == target.gameObject){
                         continue;
                     }
-                
+
                     // Make sure we have a renderer
-                    Renderer hitRenderer = hit.collider.GetComponent<Renderer>();
-                    if (hitRenderer == null || !hitRenderer.enabled)
-                    {
+                    var hitRenderer = hit.collider.GetComponent<Renderer>();
+                    if (hitRenderer == null || !hitRenderer.enabled){
                         continue;
                     }
 
                     var info = FindLosInfo(hitRenderer);
 
                     // We are not fading this renderer already, so insert into faded objects map
-                    if (info == null)
-                    {
+                    if (info == null){
                         info = new FadeOutLOSInfo();
                         info.originalMaterials = hitRenderer.sharedMaterials;
                         info.alphaMaterials = new Material[info.originalMaterials.Length];
                         info.renderer = hitRenderer;
-                        for (int i = 0; i < info.originalMaterials.Length; i++)
-                        {
-                            Material newMaterial = new Material(Shader.Find("Alpha/Diffuse"));
+                        for (var i = 0; i < info.originalMaterials.Length; i++){
+                            var newMaterial = new Material(Shader.Find("Alpha/Diffuse"));
                             newMaterial.mainTexture = info.originalMaterials[i].mainTexture;
-                            Color color = info.originalMaterials[i].color;
+                            var color = info.originalMaterials[i].color;
                             color.a = 1.0f;
                             newMaterial.color = color;
                             info.alphaMaterials[i] = newMaterial;
@@ -156,60 +139,50 @@ namespace GameBrains.Cameras
                         fadedOutObjects.Add(info);
                     }
                     // Just mark the renderer as needing fade out
-                    else
-                    {
+                    else{
                         info.needFadeOut = true;
                     }
                 }
             }
 
             // Now go over all renderers and do the actual fading!
-            float fadeDelta = fadeSpeed * Time.deltaTime;
-            for (int i = 0; i < fadedOutObjects.Count; i++)
-            {
+            var fadeDelta = fadeSpeed * Time.deltaTime;
+            for (var i = 0; i < fadedOutObjects.Count; i++){
                 var fade = fadedOutObjects[i];
                 // Fade out up to minimum alpha value
-                if (fade.needFadeOut)
-                {
-                    foreach (Material alphaMaterial in fade.alphaMaterials)
-                    {
-                        float alpha = alphaMaterial.color.a;
+                if (fade.needFadeOut){
+                    foreach (var alphaMaterial in fade.alphaMaterials){
+                        var alpha = alphaMaterial.color.a;
                         alpha -= fadeDelta;
                         alpha = Mathf.Max(alpha, fadedOutAlpha);
-                        Color color = alphaMaterial.color;
+                        var color = alphaMaterial.color;
                         color.a = alpha;
                         alphaMaterial.color = color;
                     }
                 }
                 // Fade back in
-                else
-                {
+                else{
                     var totallyFadedIn = 0;
-                    foreach (Material alphaMaterial in fade.alphaMaterials)
-                    {
-                        float alpha = alphaMaterial.color.a;
+                    foreach (var alphaMaterial in fade.alphaMaterials){
+                        var alpha = alphaMaterial.color.a;
                         alpha += fadeDelta;
                         alpha = Mathf.Min(alpha, 1.0f);
-                        Color color = alphaMaterial.color;
+                        var color = alphaMaterial.color;
                         color.a = alpha;
                         alphaMaterial.color = color;
-                        if (alpha >= 0.99)
-                        {
+                        if (alpha >= 0.99){
                             totallyFadedIn++;
                         }
                     }
 
                     // All alpha materials are faded back to 100%
                     // Thus we can switch back to the original materials
-                    if (totallyFadedIn == fade.alphaMaterials.Length)
-                    {
-                        if (fade.renderer)
-                        {
+                    if (totallyFadedIn == fade.alphaMaterials.Length){
+                        if (fade.renderer){
                             fade.renderer.sharedMaterials = fade.originalMaterials;
                         }
 
-                        foreach (Material newMaterial in fade.alphaMaterials)
-                        {
+                        foreach (var newMaterial in fade.alphaMaterials){
                             Destroy(newMaterial);
                         }
 
@@ -220,16 +193,21 @@ namespace GameBrains.Cameras
             }
         }
 
-        private FadeOutLOSInfo FindLosInfo(Renderer r)
-        {
-            foreach (FadeOutLOSInfo fade in fadedOutObjects)
-            {
-                if (r == fade.renderer)
-                {
+        private FadeOutLOSInfo FindLosInfo(Renderer r){
+            foreach (var fade in fadedOutObjects){
+                if (r == fade.renderer){
                     return fade;
                 }
             }
+
             return null;
+        }
+
+        public class FadeOutLOSInfo {
+            public Material[] alphaMaterials;
+            public bool needFadeOut = true;
+            public Material[] originalMaterials;
+            public Renderer renderer;
         }
     }
 }

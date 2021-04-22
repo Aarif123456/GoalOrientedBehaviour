@@ -48,29 +48,23 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    public sealed class EventType
-    {
+namespace GameBrains.AI {
+    public sealed class EventType {
         private readonly int _eventType;
 
-        public EventType(int eventType)
-        {
+        public EventType(int eventType){
             _eventType = eventType;
         }
 
-        public static implicit operator int(EventType eventType)
-        {
+        public static implicit operator int(EventType eventType){
             return eventType._eventType;
         }
 
-        public static explicit operator EventType(int eventType)
-        {
+        public static explicit operator EventType(int eventType){
             return new EventType(eventType);
         }
 
-        public override string ToString()
-        {
+        public override string ToString(){
             return Events.GetDescription(this);
         }
     }

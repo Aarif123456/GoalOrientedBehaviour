@@ -48,121 +48,110 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
+using UnityEngine;
+
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for handling small things.
+    ///     Class for handling small things.
     /// </summary>
-    public class Epsilon
-    {
+    public class Epsilon {
         /// <summary>
-        /// The default Epsilon value.
+        ///     The default Epsilon value.
         /// </summary>
         private const float DEFAULT_EPSILON = 0.000001f;
 
         /// <summary>
-        /// The Epsilon value used in comparisons.
+        ///     The Epsilon value used in comparisons.
         /// </summary>
         private static EpsilonTester _epsilonTester =
             new EpsilonTester(DEFAULT_EPSILON);
 
         /// <summary>
-        /// Gets or sets the Epsilon value used in comparisons.
+        ///     Gets or sets the Epsilon value used in comparisons.
         /// </summary>
-        public float Value
-        {
-            get { return _epsilonTester.Value; }
-            set { _epsilonTester.Value = value; }
+        public float Value {
+            get => _epsilonTester.Value;
+            set => _epsilonTester.Value = value;
         }
 
         /// <summary>
-        /// Tests if <paramref name="a"/> and <paramref name="b"/>are nearly equal.
+        ///     Tests if <paramref name="a" /> and <paramref name="b" />are nearly equal.
         /// </summary>
         /// <param name="a">Float value a.</param>
         /// <param name="b">Float value b.</param>
         /// <returns>
-        /// True if <paramref name="a"/> and <paramref name="b"/>are nearly equal.
+        ///     True if <paramref name="a" /> and <paramref name="b" />are nearly equal.
         /// </returns>
-        public static bool IsEqual(float a, float b)
-        {
+        public static bool IsEqual(float a, float b){
             return IsZero(a - b);
         }
 
         /// <summary>
-        /// Tests if vectors <paramref name="v1"/> and <paramref name="v2"/>are nearly equal.
+        ///     Tests if vectors <paramref name="v1" /> and <paramref name="v2" />are nearly equal.
         /// </summary>
         /// <param name="v1">Vector v1.</param>
         /// <param name="v2">Vector v2.</param>
         /// <returns>
-        /// True if vectors <paramref name="v1"/> and <paramref name="v2"/>are nearly equal.
+        ///     True if vectors <paramref name="v1" /> and <paramref name="v2" />are nearly equal.
         /// </returns>
-        public static bool IsEqual(Vector2 v1, Vector2 v2)
-        {
+        public static bool IsEqual(Vector2 v1, Vector2 v2){
             return IsZero(v1 - v2);
         }
 
         /// <summary>
-        /// Tests if <paramref name="a"/> and <paramref name="b"/>are not nearly equal.
+        ///     Tests if <paramref name="a" /> and <paramref name="b" />are not nearly equal.
         /// </summary>
         /// <param name="a">Float value a.</param>
         /// <param name="b">Float value b.</param>
         /// <returns>
-        /// True if <paramref name="a"/> and <paramref name="b"/>are not nearly equal.
+        ///     True if <paramref name="a" /> and <paramref name="b" />are not nearly equal.
         /// </returns>
-        public static bool IsNotEqual(float a, float b)
-        {
+        public static bool IsNotEqual(float a, float b){
             return IsNotZero(a - b);
         }
 
         /// <summary>
-        /// Tests if <paramref name="f"/> is not nearly zero.
+        ///     Tests if <paramref name="f" /> is not nearly zero.
         /// </summary>
         /// <param name="f">Float to test.</param>
-        /// <returns>True if <paramref name="f"/> is not nearly zero.</returns>
-        public static bool IsNotZero(float f)
-        {
+        /// <returns>True if <paramref name="f" /> is not nearly zero.</returns>
+        public static bool IsNotZero(float f){
             return _epsilonTester.FloatIsNotZero(f);
         }
 
         /// <summary>
-        /// Tests if <paramref name="f"/> is nearly zero.
+        ///     Tests if <paramref name="f" /> is nearly zero.
         /// </summary>
         /// <param name="f">Float to test.</param>
-        /// <returns>True if <paramref name="f"/> is nearly zero.</returns>
-        public static bool IsZero(float f)
-        {
+        /// <returns>True if <paramref name="f" /> is nearly zero.</returns>
+        public static bool IsZero(float f){
             return _epsilonTester.FloatIsZero(f);
         }
 
         /// <summary>
-        /// Tests if <paramref name="v"/> is nearly zero.
+        ///     Tests if <paramref name="v" /> is nearly zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
-        /// <returns>True if <paramref name="v"/> is nearly zero.</returns>
-        public static bool IsZero(Vector2 v)
-        {
+        /// <returns>True if <paramref name="v" /> is nearly zero.</returns>
+        public static bool IsZero(Vector2 v){
             return _epsilonTester.VectorIsZero(v);
         }
 
         /// <summary>
-        /// Tests if <paramref name="v"/> is nearly zero.
+        ///     Tests if <paramref name="v" /> is nearly zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
-        /// <returns>True <paramref name="v"/> is nearly zero.</returns>
-        public static bool IsZero(Vector3 v)
-        {
+        /// <returns>True <paramref name="v" /> is nearly zero.</returns>
+        public static bool IsZero(Vector3 v){
             return _epsilonTester.VectorIsZero(v);
         }
 
         /// <summary>
-        /// Tests if <paramref name="v"/> is nearly zero.
+        ///     Tests if <paramref name="v" /> is nearly zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
-        /// <returns>True if <paramref name="v"/> is nearly zero.</returns>
-        public static bool IsZero(Vector4 v)
-        {
+        /// <returns>True if <paramref name="v" /> is nearly zero.</returns>
+        public static bool IsZero(Vector4 v){
             return _epsilonTester.VectorIsZero(v);
         }
     }

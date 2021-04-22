@@ -1,39 +1,32 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
+using UnityEngine;
 
-    public class Align : SteeringBehaviour
-    {
-        private float satisfactionRadius;
-        private float timeToTarget;
-        
+namespace GameBrains.AI {
+    public class Align : SteeringBehaviour {
+        private readonly float satisfactionRadius;
+        private readonly float timeToTarget;
+
         public Align(Kinematic agentKinematic, Kinematic targetKinematic, float timeToTarget, float satisfactionRadius)
-            : base(agentKinematic, targetKinematic)
-        {
+            : base(agentKinematic, targetKinematic){
             this.timeToTarget = timeToTarget;
             this.satisfactionRadius = satisfactionRadius;
         }
 
-        public override Steering Steer()
-        {
-            Vector3 angularDirection = Math.WrapAngles(OtherKinematic.Rotation - AgentKinematic.Rotation);
-            
+        public override Steering Steer(){
+            var angularDirection = Math.WrapAngles(OtherKinematic.Rotation - AgentKinematic.Rotation);
+
             Vector3 angularVelocity;
 
-            if (angularDirection.magnitude <= satisfactionRadius)
-            {
+            if (angularDirection.magnitude <= satisfactionRadius){
                 angularVelocity = Vector3.zero;
             }
-            else if (timeToTarget <= 0f)
-            {
+            else if (timeToTarget <= 0f){
                 angularVelocity = angularDirection;
             }
-            else
-            {
+            else{
                 angularVelocity = angularDirection / timeToTarget;
             }
-                
-            return new Steering { Type = Steering.Types.Velocities, Angular = angularVelocity };
+
+            return new Steering{Type = Steering.Types.Velocities, Angular = angularVelocity};
         }
     }
 }

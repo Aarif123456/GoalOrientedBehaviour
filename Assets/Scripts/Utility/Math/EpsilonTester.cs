@@ -48,81 +48,72 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.Runtime.InteropServices;
-    
-    using UnityEngine;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
+namespace GameBrains.AI {
     /// <summary>
-    /// Use this to test for values close to zero. If you use the default epsilon value then use the
-    /// static version of this (Epsilon) instead.
+    ///     Use this to test for values close to zero. If you use the default epsilon value then use the
+    ///     static version of this (Epsilon) instead.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct EpsilonTester
-    {
+    public struct EpsilonTester {
         /// <summary>
-        /// The Epsilon value used in comparisons.
+        ///     The Epsilon value used in comparisons.
         /// </summary>
         public float Value;
 
         /// <summary>
-        /// Initializes a new instance of the EpsilonTester struct with given epsilon. If the
-        /// default constructor used then epsilon will be 0.
+        ///     Initializes a new instance of the EpsilonTester struct with given epsilon. If the
+        ///     default constructor used then epsilon will be 0.
         /// </summary>
         /// <param name="epsilon">Initial epsilon.</param>
-        public EpsilonTester(float epsilon)
-        {
+        public EpsilonTester(float epsilon){
             Value = epsilon;
         }
 
         /// <summary>
-        /// Test if  given float is near zero.
+        ///     Test if  given float is near zero.
         /// </summary>
         /// <param name="f">Float to test.</param>
         /// <returns>True if not close to zero.</returns>
-        public bool FloatIsNotZero(float f)
-        {
+        public bool FloatIsNotZero(float f){
             return Mathf.Abs(f) >= Value;
         }
 
         /// <summary>
-        /// Test if  given float is near zero.
+        ///     Test if  given float is near zero.
         /// </summary>
         /// <param name="f">Float to test.</param>
         /// <returns>True if close to zero.</returns>
-        public bool FloatIsZero(float f)
-        {
+        public bool FloatIsZero(float f){
             return Mathf.Abs(f) < Value;
         }
 
         /// <summary>
-        /// Test if given vector is close to zero.
+        ///     Test if given vector is close to zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
         /// <returns>True if close to zero.</returns>
-        public bool VectorIsZero(Vector2 v)
-        {
+        public bool VectorIsZero(Vector2 v){
             return Vector2.Dot(v, v) <= Value;
         }
 
         /// <summary>
-        /// Test if given vector is close to zero.
+        ///     Test if given vector is close to zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
         /// <returns>True if close to zero.</returns>
-        public bool VectorIsZero(Vector3 v)
-        {
+        public bool VectorIsZero(Vector3 v){
             return Vector3.Dot(v, v) <= Value;
         }
 
         /// <summary>
-        /// Test if given vector is close to zero.
+        ///     Test if given vector is close to zero.
         /// </summary>
         /// <param name="v">Vector to test.</param>
         /// <returns>True if close to zero.</returns>
-        public bool VectorIsZero(Vector4 v)
-        {
+        public bool VectorIsZero(Vector4 v){
             return Vector4.Dot(v, v) <= Value;
         }
     }

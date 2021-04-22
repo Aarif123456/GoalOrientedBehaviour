@@ -48,30 +48,24 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
+using System.ComponentModel;
 
-    public static partial class Events
-    {
-        public static int Count { get; private set; }
+namespace GameBrains.AI {
+    public static partial class Events {
+        public static int Count { get; }
 
-        public static string GetDescription(EventType eventType)
-        {
-            foreach (var fieldInfo in typeof(Events).GetFields())
-            {
-                if ((EventType)fieldInfo.GetValue(null) != eventType)
-                {
+        public static string GetDescription(EventType eventType){
+            foreach (var fieldInfo in typeof(Events).GetFields()){
+                if ((EventType) fieldInfo.GetValue(null) != eventType){
                     continue;
                 }
 
-                DescriptionAttribute[] attributes =
-                    (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
+                var attributes =
+                    (DescriptionAttribute[]) fieldInfo.GetCustomAttributes(
                         typeof(DescriptionAttribute),
                         false);
 
-                if (attributes.Length > 0)
-                {
+                if (attributes.Length > 0){
                     return attributes[0].Description;
                 }
             }

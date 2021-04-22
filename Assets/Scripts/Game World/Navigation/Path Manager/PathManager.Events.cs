@@ -48,123 +48,100 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
-    
-    using UnityEngine;
+using System.ComponentModel;
+using UnityEngine;
 
-    public static partial class Events
-    {
+namespace GameBrains.AI {
+    public static partial class Events {
         [Description("PathToPositionRequest")]
-        public static readonly EventType PathToPositionRequest = (EventType)Count++;
-        
-        [Description("PathToPositionReady")]
-        public static readonly EventType PathToPositionReady = (EventType)Count++;
-        
+        public static readonly EventType PathToPositionRequest = (EventType) Count++;
+
+        [Description("PathToPositionReady")] public static readonly EventType PathToPositionReady = (EventType) Count++;
+
         [Description("NoPathToPositionAvailable")]
-        public static readonly EventType NoPathToPositionAvailable = (EventType)Count++;
-        
-        [Description("PathToItemRequest")]
-        public static readonly EventType PathToItemRequest = (EventType)Count++;
-        
-        [Description("PathToItemReady")]
-        public static readonly EventType PathToItemReady = (EventType)Count++;
-        
+        public static readonly EventType NoPathToPositionAvailable = (EventType) Count++;
+
+        [Description("PathToItemRequest")] public static readonly EventType PathToItemRequest = (EventType) Count++;
+
+        [Description("PathToItemReady")] public static readonly EventType PathToItemReady = (EventType) Count++;
+
         [Description("NoPathToItemAvailable")]
-        public static readonly EventType NoPathToItemAvailable = (EventType)Count++;
-        
-        [Description("FollowCompleted")]
-        public static readonly EventType FollowCompleted = (EventType)Count++;
-        
-        [Description("FollowFailed")]
-        public static readonly EventType FollowFailed = (EventType)Count++;
-        
-        [Description("TraversalCompleted")]
-        public static readonly EventType TraversalCompleted = (EventType)Count++;
-        
-        [Description("TraversalFailed")]
-        public static readonly EventType TraversalFailed = (EventType)Count++;
-        
-        [Description("Arrival")]
-        public static readonly EventType Arrival = (EventType)Count++;
+        public static readonly EventType NoPathToItemAvailable = (EventType) Count++;
+
+        [Description("FollowCompleted")] public static readonly EventType FollowCompleted = (EventType) Count++;
+
+        [Description("FollowFailed")] public static readonly EventType FollowFailed = (EventType) Count++;
+
+        [Description("TraversalCompleted")] public static readonly EventType TraversalCompleted = (EventType) Count++;
+
+        [Description("TraversalFailed")] public static readonly EventType TraversalFailed = (EventType) Count++;
+
+        [Description("Arrival")] public static readonly EventType Arrival = (EventType) Count++;
     }
-    
-    public struct PathToPositionRequestEventPayload
-    {
+
+    public struct PathToPositionRequestEventPayload {
         public Agent agent;
         public Vector3 destination;
-        
+
         public PathToPositionRequestEventPayload(
             Agent agent,
-            Vector3 destination)
-        {
+            Vector3 destination){
             this.agent = agent;
             this.destination = destination;
         }
     }
-    
-    public struct PathToPositionReadyEventPayload
-    {
+
+    public struct PathToPositionReadyEventPayload {
         public Agent agent;
         public Path path;
-        
+
         public PathToPositionReadyEventPayload(
             Agent agent,
-            Path path)
-        {
+            Path path){
             this.agent = agent;
             this.path = path;
         }
     }
-    
-    public struct NoPathToPositionAvailableEventPayload
-    {
+
+    public struct NoPathToPositionAvailableEventPayload {
         public Agent agent;
-        
-        public NoPathToPositionAvailableEventPayload(Agent agent)
-        {
+
+        public NoPathToPositionAvailableEventPayload(Agent agent){
             this.agent = agent;
         }
     }
-    
-    public struct PathToItemRequestEventPayload
-    {
+
+    public struct PathToItemRequestEventPayload {
         public Agent agent;
         public ItemTypes itemType;
-        
+
         public PathToItemRequestEventPayload(
             Agent agent,
-            ItemTypes itemType)
-        {
+            ItemTypes itemType){
             this.agent = agent;
             this.itemType = itemType;
         }
     }
-    
-    public struct PathToItemReadyEventPayload
-    {
+
+    public struct PathToItemReadyEventPayload {
         public Agent agent;
         public Path path;
         public Entity itemEntity;
-        
+
         public PathToItemReadyEventPayload(
             Agent agent,
             Path path,
-            Entity itemEntity)
-        {
+            Entity itemEntity){
             this.agent = agent;
             this.path = path;
             this.itemEntity = itemEntity;
         }
     }
-    
-    public struct NoPathToItemAvailableEventPayload
-    {
+
+    public struct NoPathToItemAvailableEventPayload {
         public Agent agent;
-        
-        public NoPathToItemAvailableEventPayload(Agent agent)
-        {
+
+        public NoPathToItemAvailableEventPayload(Agent agent){
             this.agent = agent;
         }
     }

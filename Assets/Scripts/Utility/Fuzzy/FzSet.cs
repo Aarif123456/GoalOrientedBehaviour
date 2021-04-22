@@ -48,59 +48,52 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for fuzzy set proxy.
+    ///     Class for fuzzy set proxy.
     /// </summary>
-    public class FzSet : FuzzyTerm
-    {
+    public class FzSet : FuzzyTerm {
         /// <summary>
-        /// Initializes a new instance of the FzSet class from the given fuzzy set.
+        ///     Initializes a new instance of the FzSet class from the given fuzzy set.
         /// </summary>
         /// <param name="fuzzySet">The given fuzzy set.</param>
-        public FzSet(FuzzySet fuzzySet)
-        {
+        public FzSet(FuzzySet fuzzySet){
             Set = fuzzySet;
         }
 
         /// <summary>
-        /// Gets the fuzzy set.
+        ///     Gets the fuzzy set.
         /// </summary>
-        public FuzzySet Set { get; private set; }
+        public FuzzySet Set { get; }
 
         /// <summary>
-        /// Clone this fuzzy set.
+        ///     Clone this fuzzy set.
         /// </summary>
         /// <returns>A copy of this fuzzy set.</returns>
-        public override FuzzyTerm Clone()
-        {
+        public override FuzzyTerm Clone(){
             return new FzSet(Set);
         }
 
         /// <summary>
-        /// Retrieves the degree of membership of the term.
+        ///     Retrieves the degree of membership of the term.
         /// </summary>
         /// <returns>The degree of membership of the term.</returns>
-        public override float GetDom()
-        {
+        public override float GetDom(){
             return Set.Dom;
         }
 
         /// <summary>
-        /// Clears the degree of membership of the term.
+        ///     Clears the degree of membership of the term.
         /// </summary>
-        public override void ClearDom()
-        {
+        public override void ClearDom(){
             Set.ClearDom();
         }
 
         /// <summary>
-        /// Method for updating the DOM of a consequent when a rule fires.
+        ///     Method for updating the DOM of a consequent when a rule fires.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
-        public override void OrWithDom(float givenValue)
-        {
+        public override void OrWithDom(float givenValue){
             Set.OrWithDom(givenValue);
         }
     }

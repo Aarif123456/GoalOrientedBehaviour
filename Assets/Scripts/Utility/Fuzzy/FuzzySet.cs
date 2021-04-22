@@ -48,48 +48,41 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+using System;
+
+namespace GameBrains.AI {
     /// <summary>
-    /// Class to define an interface for a fuzzy set.
+    ///     Class to define an interface for a fuzzy set.
     /// </summary>
-    public abstract class FuzzySet
-    {
+    public abstract class FuzzySet {
         private float _dom;
 
         /// <summary>
-        /// Initializes a new instance of the FuzzySet class.
+        ///     Initializes a new instance of the FuzzySet class.
         /// </summary>
         /// <param name="representativeValue">The representative value of the fuzzy set.</param>
-        protected FuzzySet(float representativeValue)
-        {
+        protected FuzzySet(float representativeValue){
             _dom = 0.0f;
             RepresentativeValue = representativeValue;
         }
 
         /// <summary>
-        /// Gets the maximum of the set's membership function. For instance, if the set is
-        /// triangular then this will be the peak point of the  triangular. If the set has a plateau
-        /// then this value will be the mid-point of the plateau. This value is set in the
-        /// constructor to avoid run-time calculation of mid-point values.
+        ///     Gets the maximum of the set's membership function. For instance, if the set is
+        ///     triangular then this will be the peak point of the  triangular. If the set has a plateau
+        ///     then this value will be the mid-point of the plateau. This value is set in the
+        ///     constructor to avoid run-time calculation of mid-point values.
         /// </summary>
-        public float RepresentativeValue { get; private set; }
+        public float RepresentativeValue { get; }
 
         /// <summary>
-        /// Gets or sets the degree of membership of a given value in this set.
+        ///     Gets or sets the degree of membership of a given value in this set.
         /// </summary>
-        public float Dom
-        {
-            get
-            {
-                return _dom;
-            }
+        public float Dom {
+            get => _dom;
 
-            set
-            {
-                if (value < 0 || value > 1)
-                {
-                    throw new System.Exception("FuzzySet.SetDOM: invalid value.");
+            set {
+                if (value < 0 || value > 1){
+                    throw new Exception("FuzzySet.SetDOM: invalid value.");
                 }
 
                 _dom = value;
@@ -97,36 +90,33 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Returns the degree of membership in this set of the given value. This does not set
-        /// <see cref="_dom"/> to the degree of membership of the value passed as the parameter.
-        /// This is because the centroid defuzzification method also uses this method to determine
-        /// the DOMs of the values it uses as its sample points.
+        ///     Returns the degree of membership in this set of the given value. This does not set
+        ///     <see cref="_dom" /> to the degree of membership of the value passed as the parameter.
+        ///     This is because the centroid defuzzification method also uses this method to determine
+        ///     the DOMs of the values it uses as its sample points.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
         /// <returns>
-        /// The degree of membership in this set of the given value.
+        ///     The degree of membership in this set of the given value.
         /// </returns>
         public abstract float CalculateDom(float givenValue);
 
         /// <summary>
-        /// If this fuzzy set is part of a consequent FLV, and it is fired by a rule then this
-        /// method sets the DOM (in this context, the DOM represents a confidence level) to the
-        /// maximum of the parameter value or the set's existing <see cref="_dom"/> value.
+        ///     If this fuzzy set is part of a consequent FLV, and it is fired by a rule then this
+        ///     method sets the DOM (in this context, the DOM represents a confidence level) to the
+        ///     maximum of the parameter value or the set's existing <see cref="_dom" /> value.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
-        public void OrWithDom(float givenValue)
-        {
-            if (givenValue > _dom)
-            {
+        public void OrWithDom(float givenValue){
+            if (givenValue > _dom){
                 _dom = givenValue;
             }
         }
 
         /// <summary>
-        /// Clear the degree of membership.
+        ///     Clear the degree of membership.
         /// </summary>
-        public void ClearDom()
-        {
+        public void ClearDom(){
             _dom = 0.0f;
         }
     }

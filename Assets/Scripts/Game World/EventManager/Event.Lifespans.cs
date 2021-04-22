@@ -48,41 +48,31 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.ComponentModel;
-    
-    public abstract partial class Event
-    {
-        public static partial class Lifespans
-        {
-            [Description("Cycle")]
-            public static readonly Lifespan Cycle = (Lifespan)Count++;
+using System.ComponentModel;
 
-            [Description("Level")]
-            public static readonly Lifespan Level = (Lifespan)Count++;
+namespace GameBrains.AI {
+    public abstract partial class Event {
+        public static class Lifespans {
+            [Description("Cycle")] public static readonly Lifespan Cycle = (Lifespan) Count++;
 
-            [Description("Game")]
-            public static readonly Lifespan Game = (Lifespan)Count++;
+            [Description("Level")] public static readonly Lifespan Level = (Lifespan) Count++;
 
-            public static int Count { get; private set; }
+            [Description("Game")] public static readonly Lifespan Game = (Lifespan) Count++;
 
-            public static string GetDescription(Lifespan lifespan)
-            {
-                foreach (var fieldInfo in typeof(Lifespans).GetFields())
-                {
-                    if ((Lifespan)fieldInfo.GetValue(null) != lifespan)
-                    {
+            public static int Count { get; }
+
+            public static string GetDescription(Lifespan lifespan){
+                foreach (var fieldInfo in typeof(Lifespans).GetFields()){
+                    if ((Lifespan) fieldInfo.GetValue(null) != lifespan){
                         continue;
                     }
 
-                    DescriptionAttribute[] attributes =
-                        (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
+                    var attributes =
+                        (DescriptionAttribute[]) fieldInfo.GetCustomAttributes(
                             typeof(DescriptionAttribute),
                             false);
 
-                    if (attributes.Length > 0)
-                    {
+                    if (attributes.Length > 0){
                         return attributes[0].Description;
                     }
                 }

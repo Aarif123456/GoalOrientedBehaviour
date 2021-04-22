@@ -48,70 +48,62 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using UnityEngine;
+using UnityEngine;
 
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for implementing Fairly fuzzy term.
+    ///     Class for implementing Fairly fuzzy term.
     /// </summary>
-    public class FzFairly : FuzzyTerm
-    {
+    public class FzFairly : FuzzyTerm {
         /// <summary>
-        /// Initializes a new instance of the FzFairly class from the given fuzzy term.
+        ///     Initializes a new instance of the FzFairly class from the given fuzzy term.
         /// </summary>
         /// <param name="fuzzyTerm">A fuzzy term.</param>
-        public FzFairly(FzSet fuzzyTerm)
-        {
+        public FzFairly(FzSet fuzzyTerm){
             Set = fuzzyTerm.Set;
         }
 
         /// <summary>
-        /// Initializes a new instance of the FzFairly class from the given FzFairly term.
+        ///     Initializes a new instance of the FzFairly class from the given FzFairly term.
         /// </summary>
         /// <param name="fzFairly">The given FzFairly term.</param>
-        public FzFairly(FzFairly fzFairly)
-        {
+        public FzFairly(FzFairly fzFairly){
             Set = fzFairly.Set;
         }
 
         /// <summary>
-        /// Gets the fuzzy set.
+        ///     Gets the fuzzy set.
         /// </summary>
-        public FuzzySet Set { get; private set; }
+        public FuzzySet Set { get; }
 
         /// <summary>
-        /// Retrieves the degree of membership of the term.
+        ///     Retrieves the degree of membership of the term.
         /// </summary>
         /// <returns>The degree of membership of the term.</returns>
-        public override float GetDom()
-        {
+        public override float GetDom(){
             return Mathf.Sqrt(Set.Dom);
         }
 
         /// <summary>
-        /// Clone this fuzzy term.
+        ///     Clone this fuzzy term.
         /// </summary>
         /// <returns>A copy of this fuzzy term.</returns>
-        public override FuzzyTerm Clone()
-        {
+        public override FuzzyTerm Clone(){
             return new FzFairly(this);
         }
 
         /// <summary>
-        /// Clears the degree of membership of the term.
+        ///     Clears the degree of membership of the term.
         /// </summary>
-        public override void ClearDom()
-        {
+        public override void ClearDom(){
             Set.ClearDom();
         }
 
         /// <summary>
-        /// Method for updating the DOM of a consequent when a rule fires.
+        ///     Method for updating the DOM of a consequent when a rule fires.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
-        public override void OrWithDom(float givenValue)
-        {
+        public override void OrWithDom(float givenValue){
             Set.OrWithDom(Mathf.Sqrt(givenValue));
         }
     }

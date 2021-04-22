@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class ShowThots : MonoBehaviour 
-{
+public class ShowThots : MonoBehaviour {
 //    public GameObject weeble;
 //    public GameObject thotsDisplayObject;
 //    public GameObject thotsPanelObject;

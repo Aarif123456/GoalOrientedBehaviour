@@ -48,20 +48,17 @@
 
 #endregion Copyright © ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
+using UnityEngine;
+
+namespace GameBrains.AI {
     /// <summary>
-    /// Class to implement short term memory of sensory info.
+    ///     Class to implement short term memory of sensory info.
     /// </summary>
-    public class SensoryMemoryRecord
-    {
+    public class SensoryMemoryRecord {
         /// <summary>
-        /// Initializes a new instance of the SensoryMemoryRecord class.
+        ///     Initializes a new instance of the SensoryMemoryRecord class.
         /// </summary>
-        public SensoryMemoryRecord()
-        {
+        public SensoryMemoryRecord(){
             TimeLastSensed = -999;
             TimeBecameVisible = -999;
             TimeLastVisible = 0;
@@ -70,39 +67,39 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Gets or sets the time the opponent was last sensed (seen or heard). This is used to
-        /// determine if a bot can 'remember' this record or not.  (if Time.TimeNow -
-        /// _timeLastSensed is greater than the bot's memory span, the data in this record is made
-        /// unavailable to clients).
+        ///     Gets or sets the time the opponent was last sensed (seen or heard). This is used to
+        ///     determine if a bot can 'remember' this record or not.  (if Time.TimeNow -
+        ///     _timeLastSensed is greater than the bot's memory span, the data in this record is made
+        ///     unavailable to clients).
         /// </summary>
         public float TimeLastSensed { get; set; }
 
         /// <summary>
-        /// Gets or sets the current time when an opponent first becomes visible. It can be useful
-        /// to know how long an opponent has been visible. It's then a simple matter to calculate
-        /// how long the opponent has been in view: Time.TimeNow - TimeBecameVisible.
+        ///     Gets or sets the current time when an opponent first becomes visible. It can be useful
+        ///     to know how long an opponent has been visible. It's then a simple matter to calculate
+        ///     how long the opponent has been in view: Time.TimeNow - TimeBecameVisible.
         /// </summary>
         public float TimeBecameVisible { get; set; }
 
         /// <summary>
-        /// Gets or sets the last time an opponent was seen.
+        ///     Gets or sets the last time an opponent was seen.
         /// </summary>
         public float TimeLastVisible { get; set; }
 
         /// <summary>
-        /// Gets or sets a vector marking the position where the opponent was last sensed. This can
-        /// be used to help hunt down an opponent if it goes out of view.
+        ///     Gets or sets a vector marking the position where the opponent was last sensed. This can
+        ///     be used to help hunt down an opponent if it goes out of view.
         /// </summary>
         public Vector2 LastSensedPosition { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether an opponent is within the field of view of the owner.
+        ///     Gets or sets a value indicating whether an opponent is within the field of view of the owner.
         /// </summary>
         public bool IsWithinFieldOfView { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether there is no obstruction between the opponent and the
-        /// owner, permitting a shot.
+        ///     Gets or sets a value indicating whether there is no obstruction between the opponent and the
+        ///     owner, permitting a shot.
         /// </summary>
         public bool IsShootable { get; set; }
     }

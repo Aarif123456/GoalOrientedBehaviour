@@ -48,82 +48,73 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
-    using System.Collections.Generic;
-    
-    using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
+namespace GameBrains.AI {
     /// <summary>
-    /// Class to implement a fuzzy variable.
+    ///     Class to implement a fuzzy variable.
     /// </summary>
-    public class FuzzyVariable
-    {
+    public class FuzzyVariable {
         /// <summary>
-        /// Initializes a new instance of the FuzzyVariable class.
+        ///     Initializes a new instance of the FuzzyVariable class.
         /// </summary>
-        public FuzzyVariable()
-        {
+        public FuzzyVariable(){
             MemberSets = new Dictionary<string, FuzzySet>();
             MinRange = 0.0f;
             MaxRange = 0.0f;
         }
 
         /// <summary>
-        /// Gets the member sets of the variable.
+        ///     Gets the member sets of the variable.
         /// </summary>
-        public Dictionary<string, FuzzySet> MemberSets { get; private set; }
+        public Dictionary<string, FuzzySet> MemberSets { get; }
 
         /// <summary>
-        /// Gets or sets the minimum value of the range of this variable.
+        ///     Gets or sets the minimum value of the range of this variable.
         /// </summary>
         public float MinRange { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum value of the range of this variable.
+        ///     Gets or sets the maximum value of the range of this variable.
         /// </summary>
         public float MaxRange { get; set; }
 
         /// <summary>
-        /// Takes a crisp value and calculates its degree of membership for each set in the
-        /// variable.
+        ///     Takes a crisp value and calculates its degree of membership for each set in the
+        ///     variable.
         /// </summary>
         /// <param name="crispValue">The crisp value.</param>
-        public void Fuzzify(float crispValue)
-        {
+        public void Fuzzify(float crispValue){
             // make sure the value is within the bounds of this variable
-            if (crispValue < MinRange || crispValue > MaxRange)
-            {
-                System.Diagnostics.Debug.WriteLine("FuzzyVariable.Fuzzify>: value out of range.");
+            if (crispValue < MinRange || crispValue > MaxRange){
+                Debug.WriteLine("FuzzyVariable.Fuzzify>: value out of range.");
                 return;
             }
 
             // for each set in the flv calculate the DOM for the given value
-            foreach (KeyValuePair<string, FuzzySet> kvp in MemberSets)
-            {
+            foreach (var kvp in MemberSets){
                 kvp.Value.Dom = kvp.Value.CalculateDom(crispValue);
             }
         }
 
         /// <summary>
-        /// Defuzzifies the value by averaging the maxima of the sets that have fired.
+        ///     Defuzzifies the value by averaging the maxima of the sets that have fired.
         /// </summary>
         /// <returns>Sum (maxima * DOM) / sum (DOMs).</returns>
-        public float DeFuzzifyMaxAv()
-        {
-            float bottom = 0.0f;
-            float top = 0.0f;
+        public float DeFuzzifyMaxAv(){
+            var bottom = 0.0f;
+            var top = 0.0f;
 
-            foreach (KeyValuePair<string, FuzzySet> kvp in MemberSets)
-            {
+            foreach (var kvp in MemberSets){
                 bottom += kvp.Value.Dom;
 
                 top += kvp.Value.RepresentativeValue * kvp.Value.Dom;
             }
 
             // make sure bottom is not equal to zero
-            if (Epsilon.IsEqual(0, bottom))
-            {
+            if (Epsilon.IsEqual(0, bottom)){
                 return 0.0f;
             }
 
@@ -131,17 +122,16 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Defuzzify the variable using the centroid method.
+        ///     Defuzzify the variable using the centroid method.
         /// </summary>
         /// <param name="sampleCount">The number of samples to use.</param>
         /// <returns>A crisp value.</returns>
-        public float DeFuzzifyCentroid(int sampleCount)
-        {
+        public float DeFuzzifyCentroid(int sampleCount){
             // calculate the step size
-            float stepSize = (MaxRange - MinRange) / sampleCount;
+            var stepSize = (MaxRange - MinRange) / sampleCount;
 
-            float totalArea = 0.0f;
-            float sumOfMoments = 0.0f;
+            var totalArea = 0.0f;
+            var sumOfMoments = 0.0f;
 
             // step through the range of this variable in increments equal to
             // stepSize adding up the contribution (lower of CalculateDOM or
@@ -154,14 +144,13 @@ namespace GameBrains.AI
             // In addition the moment of each slice is calculated and summed.
             // Dividing the total area by the sum of the moments gives the
             // centroid. (Just like calculating the center of mass of an object)
-            for (int sample = 1; sample <= sampleCount; ++sample)
-            {
+            for (var sample = 1; sample <= sampleCount; ++sample)
                 // for each set get the contribution to the area. This is the
                 // lower of the value returned from CalculateDOM or the actual
                 // DOM of the fuzzified value itself   
-                foreach (KeyValuePair<string, FuzzySet> kvp in MemberSets)
-                {
-                    float contribution =
+            {
+                foreach (var kvp in MemberSets){
+                    var contribution =
                         Mathf.Min(
                             kvp.Value.CalculateDom(MinRange + sample * stepSize),
                             kvp.Value.Dom);
@@ -173,8 +162,7 @@ namespace GameBrains.AI
             }
 
             // make sure total area is not equal to zero
-            if (Epsilon.IsEqual(0, totalArea))
-            {
+            if (Epsilon.IsEqual(0, totalArea)){
                 return 0.0f;
             }
 
@@ -182,7 +170,7 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Adds a triangular shaped fuzzy set to the variable.
+        ///     Adds a triangular shaped fuzzy set to the variable.
         /// </summary>
         /// <param name="name">The fuzzy set name.</param>
         /// <param name="minimumBound">The minimum bound.</param>
@@ -193,9 +181,8 @@ namespace GameBrains.AI
             string name,
             float minimumBound,
             float peak,
-            float maximumBound)
-        {
-            MemberSets[name] = 
+            float maximumBound){
+            MemberSets[name] =
                 new FuzzySetTriangle(peak, peak - minimumBound, maximumBound - peak);
 
             // adjust range if necessary
@@ -205,7 +192,7 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Adds a left shoulder type fuzzy set.
+        ///     Adds a left shoulder type fuzzy set.
         /// </summary>
         /// <param name="name">The fuzzy set name.</param>
         /// <param name="minimumBound">The minimum bound.</param>
@@ -216,9 +203,8 @@ namespace GameBrains.AI
             string name,
             float minimumBound,
             float peak,
-            float maximumBound)
-        {
-            MemberSets[name] = 
+            float maximumBound){
+            MemberSets[name] =
                 new FuzzySetLeftShoulder(peak, peak - minimumBound, maximumBound - peak);
 
             // adjust range if necessary
@@ -228,7 +214,7 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Adds a right shoulder type fuzzy set.
+        ///     Adds a right shoulder type fuzzy set.
         /// </summary>
         /// <param name="name">The fuzzy set name.</param>
         /// <param name="minimumBound">The minimum bound.</param>
@@ -239,8 +225,7 @@ namespace GameBrains.AI
             string name,
             float minimumBound,
             float peak,
-            float maximumBound)
-        {
+            float maximumBound){
             MemberSets[name] =
                 new FuzzySetRightShoulder(
                     peak,
@@ -254,7 +239,7 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// Adds a singleton fuzzy set to the variable.
+        ///     Adds a singleton fuzzy set to the variable.
         /// </summary>
         /// <param name="name">The fuzzy set name.</param>
         /// <param name="minimumBound">The minimum bound.</param>
@@ -265,8 +250,7 @@ namespace GameBrains.AI
             string name,
             float minimumBound,
             float peak,
-            float maximumBound)
-        {
+            float maximumBound){
             MemberSets[name] =
                 new FuzzySetSingleton(
                     peak,
@@ -279,20 +263,17 @@ namespace GameBrains.AI
         }
 
         /// <summary>
-        /// This method is called with the upper and lower bound of a set each time a new set is
-        /// added to adjust the upper and lower range values accordingly.
+        ///     This method is called with the upper and lower bound of a set each time a new set is
+        ///     added to adjust the upper and lower range values accordingly.
         /// </summary>
         /// <param name="minimumBound">The minimum bound.</param>
         /// <param name="maximumBound">The maximum bound.</param>
-        private void AdjustRangeToFit(float minimumBound, float maximumBound)
-        {
-            if (minimumBound < MinRange)
-            {
+        private void AdjustRangeToFit(float minimumBound, float maximumBound){
+            if (minimumBound < MinRange){
                 MinRange = minimumBound;
             }
 
-            if (maximumBound > MaxRange)
-            {
+            if (maximumBound > MaxRange){
                 MaxRange = maximumBound;
             }
         }

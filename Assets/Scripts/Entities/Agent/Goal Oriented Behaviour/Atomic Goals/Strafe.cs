@@ -1,18 +1,15 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
-    public class Strafe : Goal
-    {
-        private Vector3 strafeTarget;
+using UnityEngine;
+
+namespace GameBrains.AI {
+    public class Strafe : Goal {
+        private readonly Face look;
+        private readonly float satisfactionRadius;
+        private readonly Seek seek;
         private bool clockwise;
-        private Seek seek;
-        private Face look;
-        private float satisfactionRadius;
-        
+        private Vector3 strafeTarget;
+
         public Strafe(Agent agent, Agent targetAgent)
-            : base(agent, GoalTypes.Strafe)
-        {
+            : base(agent, GoalTypes.Strafe){
             clockwise = Random.Range(0, 2) == 0;
             satisfactionRadius = 0.1f;
             seek = new Seek(agent.Kinematic);
@@ -20,64 +17,53 @@ namespace GameBrains.AI
             //look = new Face(Agent.Kinematic, targetAgent.Kinematic);
             look = new Face(Agent.Kinematic, targetAgent.Kinematic.Position);
         }
-        
-        public override void Activate()
-        {
+
+        public override void Activate(){
             Status = StatusTypes.Active;
-            
+
             Agent.SteeringBehaviours.Add(seek);
             Agent.SteeringBehaviours.Add(look);
             Agent.IsStrafing = true;
-            
-            if (clockwise)
-            {
-                if (Agent.CanStepRight(0, out strafeTarget))
-                {
+
+            if (clockwise){
+                if (Agent.CanStepRight(0, out strafeTarget)){
                     seek.OtherKinematic.Position = strafeTarget;
                 }
-                else
-                {
+                else{
                     Status = StatusTypes.Inactive;
                     clockwise = !clockwise;
                 }
             }
-            else
-            {
-                if (Agent.CanStepLeft(0, out strafeTarget))
-                {
+            else{
+                if (Agent.CanStepLeft(0, out strafeTarget)){
                     seek.OtherKinematic.Position = strafeTarget;
                 }
-                else
-                {
+                else{
                     Status = StatusTypes.Inactive;
                     clockwise = !clockwise;
                 }
             }
         }
-        
-        public override StatusTypes Process()
-        {
+
+        public override StatusTypes Process(){
             // if status is inactive, call Activate()
             ActivateIfInactive();
-            
+
             // if target goes out of view terminate
-            if (!Agent.TargetingSystem.IsTargetWithinFieldOfView)
-            {
+            if (!Agent.TargetingSystem.IsTargetWithinFieldOfView){
                 Status = StatusTypes.Completed;
             }
 
             // else if agent reaches the target position set status to inactive so
             // the goal is reactivated on the next update-step
-            else if (Agent.IsAtPosition(strafeTarget, satisfactionRadius))
-            {
+            else if (Agent.IsAtPosition(strafeTarget, satisfactionRadius)){
                 Status = StatusTypes.Inactive;
             }
 
             return Status;
         }
-        
-        public override void Terminate()
-        {
+
+        public override void Terminate(){
             Agent.SteeringBehaviours.Remove(seek);
             Agent.SteeringBehaviours.Remove(look);
             Agent.IsStrafing = false;

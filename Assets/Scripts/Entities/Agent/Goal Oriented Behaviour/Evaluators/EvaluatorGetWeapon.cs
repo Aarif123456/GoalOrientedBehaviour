@@ -1,34 +1,28 @@
-namespace GameBrains.AI
-{
-    using UnityEngine;
-    
-    public class EvaluatorGetWeapon : Evaluator
-    {
+using UnityEngine;
+
+namespace GameBrains.AI {
+    public class EvaluatorGetWeapon : Evaluator {
         private readonly WeaponTypes weaponType;
-        
+
         public EvaluatorGetWeapon(float characterBias, WeaponTypes weaponType)
-            : base(characterBias)
-        {
+            : base(characterBias){
             this.weaponType = weaponType;
         }
-        
-        public override float CalculateDesirability(Agent agent)
-        {
+
+        public override float CalculateDesirability(Agent agent){
             // grab the distance to the closest instance of the weapon type
-            float distance = Feature.DistanceToItem(agent, EnumUtility.WeaponTypeToItemType(weaponType));
+            var distance = Feature.DistanceToItem(agent, EnumUtility.WeaponTypeToItemType(weaponType));
 
             // if the distance feature is rated with a value of 1 it means that the
             // item is either not present on the map or too far away to be worth 
             // considering, therefore the desirability is zero
-            if (distance == 1)
-            {
+            if (distance == 1){
                 return 0;
             }
 
             // value used to tweak the desirability
             float tweaker;
-            switch (weaponType)
-            {
+            switch (weaponType){
                 case WeaponTypes.Railgun:
                     tweaker =
                         Parameters.Instance.AgentRailgunGoalTweaker;
@@ -46,12 +40,12 @@ namespace GameBrains.AI
                     break;
             }
 
-            float health = Feature.Health(agent);
+            var health = Feature.Health(agent);
 
-            float weaponStrength = Feature.IndividualWeaponStrength(agent, weaponType);
+            var weaponStrength = Feature.IndividualWeaponStrength(agent, weaponType);
 
-            float desirability = (tweaker * health * (1 - weaponStrength)) / distance;
-            
+            var desirability = tweaker * health * (1 - weaponStrength) / distance;
+
             desirability *= characterBias;
 
             // ensure the value is in the range 0 to 1
@@ -59,9 +53,8 @@ namespace GameBrains.AI
 
             return desirability;
         }
-        
-        public override void SetGoal(Agent agent)
-        {
+
+        public override void SetGoal(Agent agent){
             agent.Brain.AddGoalGetItemOfType(EnumUtility.WeaponTypeToItemType(weaponType));
         }
     }

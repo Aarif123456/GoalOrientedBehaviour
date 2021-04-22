@@ -48,56 +48,51 @@
 
 #endregion Copyright � ThotLab Games 2011. Licensed under the terms of the Microsoft Reciprocal Licence (Ms-RL).
 
-namespace GameBrains.AI
-{
+namespace GameBrains.AI {
     /// <summary>
-    /// Class for singleton fuzzy set.
+    ///     Class for singleton fuzzy set.
     /// </summary>
-    public class FuzzySetSingleton : FuzzySet
-    {
+    public class FuzzySetSingleton : FuzzySet {
         /// <summary>
-        /// Initializes a new instance of the FuzzySetSingleton class.
+        ///     Initializes a new instance of the FuzzySetSingleton class.
         /// </summary>
         /// <param name="mid">The mid-point.</param>
         /// <param name="left">The left offset.</param>
         /// <param name="right">The right offset.</param>
         public FuzzySetSingleton(float mid, float left, float right)
-            : base(mid)
-        {
+            : base(mid){
             MidPoint = mid;
             LeftOffset = left;
             RightOffset = right;
         }
 
         /// <summary>
-        /// Gets the mid-point.
+        ///     Gets the mid-point.
         /// </summary>
-        public float MidPoint { get; private set; }
+        public float MidPoint { get; }
 
         /// <summary>
-        /// Gets the left offset.
+        ///     Gets the left offset.
         /// </summary>
-        public float LeftOffset { get; private set; }
+        public float LeftOffset { get; }
 
         /// <summary>
-        /// Gets the right offset.
+        ///     Gets the right offset.
         /// </summary>
-        public float RightOffset { get; private set; }
+        public float RightOffset { get; }
 
         /// <summary>
-        /// Returns the degree of membership in this set of the given value. This does not set
-        /// <see cref="FuzzySet._dom"/> to the degree of membership of the value passed as the
-        /// parameter. This is because the centroid defuzzification method also uses this method to
-        /// determine the DOMs of the values it uses as its sample points.
+        ///     Returns the degree of membership in this set of the given value. This does not set
+        ///     <see cref="FuzzySet._dom" /> to the degree of membership of the value passed as the
+        ///     parameter. This is because the centroid defuzzification method also uses this method to
+        ///     determine the DOMs of the values it uses as its sample points.
         /// </summary>
         /// <param name="givenValue">The given value.</param>
         /// <returns>
-        /// The degree of membership in this set of the given value.
+        ///     The degree of membership in this set of the given value.
         /// </returns>
-        public override float CalculateDom(float givenValue)
-        {
-            if (givenValue >= (MidPoint - LeftOffset) && givenValue <= (MidPoint + RightOffset))
-            {
+        public override float CalculateDom(float givenValue){
+            if (givenValue >= MidPoint - LeftOffset && givenValue <= MidPoint + RightOffset){
                 return 1.0f;
             }
 

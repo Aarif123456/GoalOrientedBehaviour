@@ -1,7 +1,4 @@
-namespace GameBrains.AI
-{
-    public class PathEdge
-    {
-        
+namespace GameBrains.AI {
+    public class PathEdge {
     }
 }
