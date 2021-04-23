@@ -4,7 +4,6 @@ using Common;
 using Entities.Armory;
 using UnityEngine;
 using Utility.DataStructures;
-using Random = UnityEngine.Random;
 
 namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
@@ -15,31 +14,18 @@ namespace Entities.GoalOrientedBehaviour {
         private float bestDesirability;
         private Evaluator mostDesirable;
 
-        public Think(Agent agent)
+        public Think(Agent agent, Biases biases = new Biases())
             : base(agent, GoalTypes.Think){
-            //// these biases could be loaded in from a script on a per bot basis
-            //// but for now we'll just give them some random values
-            const float LOW_RANGE_OF_BIAS = 0.5f;
-            const float HIGH_RANGE_OF_BIAS = 1.5f;
-
-            var healthBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-            var exploreBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-            var attackBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-
-            ////float evadeBias =  Random.Range(lowRangeOfBias, highRangeOfBias);
-
-            var shotgunBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-            var rocketLauncherBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-            var railgunBias = Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-
             //// create the evaluator objects
-            evaluators.Add(new EvaluatorGetHealth(healthBias));
-            evaluators.Add(new EvaluatorExplore(exploreBias));
-            evaluators.Add(new EvaluatorAttackTarget(attackBias));
-            ////evaluators.Add(new EvaluatorEvadeBot(evadeBias));
-            evaluators.Add(new EvaluatorGetWeapon(shotgunBias, WeaponTypes.Shotgun));
-            evaluators.Add(new EvaluatorGetWeapon(railgunBias, WeaponTypes.Railgun));
-            evaluators.Add(new EvaluatorGetWeapon(rocketLauncherBias, WeaponTypes.RocketLauncher));
+            evaluators.Add(new EvaluatorGetHealth(biases.HealthBias));
+            evaluators.Add(new EvaluatorExplore(biases.ExploreBias));
+            evaluators.Add(new EvaluatorAttackTarget(biases.AttackBias));
+            /* TODO add in evaluate to do allow agent to evade */
+            ////evaluators.Add(new EvaluatorEvadeBot(biases.EvadeBias));
+            evaluators.Add(new EvaluatorGetWeapon(biases.ShotgunBias, WeaponTypes.Shotgun));
+            evaluators.Add(new EvaluatorGetWeapon(biases.RailgunBias, WeaponTypes.Railgun));
+            evaluators.Add(new EvaluatorGetWeapon(biases.RocketLauncherBias, 
+                WeaponTypes.RocketLauncher));
         }
 
         public override void Activate(){
