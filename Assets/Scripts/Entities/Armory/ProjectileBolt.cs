@@ -51,12 +51,5 @@ namespace Entities.Armory {
             Kinematic.SetVelocity(directionToTarget * Parameters.Instance.BoltMaximumSpeed);
         }
 
-        private void ProcessImpact(Entity hitEntity, Vector3 hitPoint){
-            ImpactPoint = hitPoint;
-            HasImpacted = true;
-            SetDead();
-            Destroy(gameObject);
-            Weapon.OnProjectileRemoved();
-        }
     }
 }

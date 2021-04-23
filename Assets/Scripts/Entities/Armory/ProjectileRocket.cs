@@ -69,13 +69,5 @@ namespace Entities.Armory {
                         DamageInflicted * fallOffFactor));
             }
         }
-
-        private void ProcessImpact(Entity hitEntity, Vector3 hitPoint){
-            ImpactPoint = hitPoint;
-            HasImpacted = true;
-            SetDead();
-            Destroy(gameObject);
-            Weapon.OnProjectileRemoved();
-        }
     }
 }

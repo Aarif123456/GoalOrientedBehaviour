@@ -10,7 +10,7 @@ namespace Entities {
 
         protected Motor motor;
 
-        public List<SteeringBehaviour> SteeringBehaviours { get; set; }
+        public List<SteeringBehaviour> SteeringBehaviours { get; private set; }
 
         public float CloseEnoughDistance {
             get => closeEnoughDistance;
@@ -33,7 +33,7 @@ namespace Entities {
 
         public override void Update(){
             base.Update();
-
+            
             if (motor is{enabled: true}) motor.UpdateFromGameObject(this, Time.deltaTime);
         }
 

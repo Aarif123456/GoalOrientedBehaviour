@@ -44,13 +44,5 @@ namespace Entities.Armory {
 
             Kinematic.SetVelocity(directionToTarget * Parameters.Instance.SlugMaximumSpeed);
         }
-
-        private void ProcessImpact(Entity hitEntity, Vector3 hitPoint){
-            ImpactPoint = hitPoint;
-            HasImpacted = true;
-            SetDead();
-            Destroy(gameObject);
-            Weapon.OnProjectileRemoved();
-        }
     }
 }

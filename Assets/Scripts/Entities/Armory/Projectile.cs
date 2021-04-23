@@ -71,5 +71,13 @@ namespace Entities.Armory {
 
             Spawn(OriginPosition);
         }
+
+        protected virtual void ProcessImpact(Entity hitEntity, Vector3 hitPoint){
+            ImpactPoint = hitPoint;
+            HasImpacted = true;
+            SetDead();
+            Destroy(gameObject);
+            Weapon.OnProjectileRemoved();
+        }
     }
 }
