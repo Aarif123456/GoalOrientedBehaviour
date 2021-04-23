@@ -59,7 +59,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Utility.Data_Structures {
+namespace Utility.DataStructures {
     /// <summary>
     ///     A priority queue item whose value is of type
     ///     <typeparamref name="TValue" /> and whose priority is of type

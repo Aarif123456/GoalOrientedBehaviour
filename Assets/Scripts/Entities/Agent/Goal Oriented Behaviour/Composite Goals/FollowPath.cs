@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GameWorld.Navigation.Graph;
 using UnityEngine;
-using Utility.Data_Structures;
+using Utility.DataStructures;
 
 namespace Entities.GoalOrientedBehaviour {
     public class FollowPath : CompositeGoal {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Common;
 using GameWorld.Managers;
 using UnityEngine;
-using Utility.Data_Structures;
+using Utility.DataStructures;
 using Utility.Fuzzy;
 
 namespace Entities.Armory {

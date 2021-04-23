@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Utility.Data_Structures {
+namespace Utility.DataStructures {
     /// <summary>
     ///     Extensions to the generic list class to give it an interface like a Deque (combination Stack/Queue).
     /// </summary>

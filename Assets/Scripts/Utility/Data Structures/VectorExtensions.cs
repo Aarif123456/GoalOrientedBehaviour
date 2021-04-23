@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utility.Data_Structures {
+namespace Utility.DataStructures {
     public static class VectorExtensions {
         public static float ToAngle(this Vector3 vector){
             return (Mathf.Atan2(-vector.z, vector.x) - Mathf.PI / 2) * Mathf.Rad2Deg;

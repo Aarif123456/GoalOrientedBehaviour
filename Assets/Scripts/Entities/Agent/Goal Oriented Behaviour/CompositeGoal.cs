@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Utility.Data_Structures;
+using Utility.DataStructures;
 
 namespace Entities.GoalOrientedBehaviour {
     public abstract class CompositeGoal : Goal {
