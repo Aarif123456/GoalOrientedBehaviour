@@ -8,11 +8,13 @@ using Random = UnityEngine.Random;
 
 namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
-        private readonly List<Evaluator> evaluators = new List<Evaluator>();
+        public readonly List<Evaluator> evaluators = new List<Evaluator>();
 
         //private Evaluator prevMostDesirable;
         private bool arbitrateTickTock;
         private float bestDesirability;
+        /* add a small boast to reduce the chance of flip flopping between goals */
+        private const float consistencyBoast = 0.05f;
         private Evaluator mostDesirable;
 
         private static float CreateRandomValue(){
@@ -68,9 +70,8 @@ namespace Entities.GoalOrientedBehaviour {
 
         public void Arbitrate(){
             arbitrateTickTock = !arbitrateTickTock;
-            //prevMostDesirable = mostDesirable;
-
             bestDesirability = 0.0f;
+            var prevMostDesirable = mostDesirable;
             mostDesirable = null;
 
             // iterate through all the evaluators to find the highest scoring one
@@ -78,6 +79,7 @@ namespace Entities.GoalOrientedBehaviour {
                 var desirability = evaluator.CalculateDesirability(Agent);
 
                 if (!(bestDesirability < desirability)) continue;
+                if(ReferenceEquals(evaluator, mostDesirable)) desirability += consistencyBoast;
                 bestDesirability = desirability;
                 mostDesirable = evaluator;
             }
@@ -92,7 +94,7 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalExplore(){
-            if (!NotPresent(GoalTypes.Explore)) return;
+            if (Agent.IsAiControlled && !NotPresent(GoalTypes.Explore)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new Explore(Agent));
@@ -103,14 +105,14 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalGetItemOfType(ItemTypes itemType){
-            if (!NotPresent(EnumUtility.ItemTypeToGoalType(itemType))) return;
+            if (Agent.IsAiControlled && !NotPresent(EnumUtility.ItemTypeToGoalType(itemType))) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new GetItemOfType(Agent, itemType));
         }
 
         public void AddGoalAttackTarget(){
-            if (!NotPresent(GoalTypes.AttackTarget)) return;
+            if (Agent.IsAiControlled && !NotPresent(GoalTypes.AttackTarget)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new AttackTarget(Agent));

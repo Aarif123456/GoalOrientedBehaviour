@@ -6,6 +6,7 @@ namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetHealth : Evaluator {
         public EvaluatorGetHealth(float characterBias)
             : base(characterBias){
+                GoalName = "Get Health";
         }
 
         public override float CalculateDesirability(Agent agent){

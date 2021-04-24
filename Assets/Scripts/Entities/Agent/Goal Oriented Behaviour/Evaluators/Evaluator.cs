@@ -1,7 +1,7 @@
 namespace Entities.GoalOrientedBehaviour {
     public abstract class Evaluator {
         protected float characterBias;
-
+        public string GoalName { get; protected set; }
         protected Evaluator(float characterBias){
             this.characterBias = characterBias;
         }

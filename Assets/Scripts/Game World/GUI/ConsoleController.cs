@@ -102,7 +102,7 @@ namespace GameWorld.GUI {
             ShowAgentStats(agent);
             ViewSelection(agent);
             ShowThoughts(agent);
-
+            ControlAgent(agent);
             // Make the windows be draggable.
             UnityEngine.GUI.DragWindow();
         }
@@ -179,6 +179,31 @@ namespace GameWorld.GUI {
                 GUILayout.Label(message.Text, style);
             }
             GUILayout.EndScrollView();
+        }
+
+        /* Allow user to set agent goal */
+        private void ControlAgent(Agent agent){
+            int maxButtonInRow = 2;
+            int curButtons=0;
+            GUILayout.BeginVertical();
+                agent.IsAiControlled = GUILayout.Toggle(agent.IsAiControlled, "Is AI controlled");
+                if(!agent.IsAiControlled){
+                    GUILayout.BeginHorizontal();
+                    foreach(var evalutor in agent.Brain.evaluators){
+                        if (GUILayout.Button(evalutor.GoalName, GUILayout.ExpandWidth(true))){
+                            evalutor.SetGoal(agent);
+                        }
+                        curButtons++;
+                        if(curButtons >= maxButtonInRow){
+                            GUILayout.EndHorizontal();
+                            GUILayout.BeginHorizontal();
+                            curButtons = 0;
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+                }
+
+            GUILayout.EndVertical();
         }
     }
 }

@@ -1,6 +1,7 @@
 using Common;
 using Entities.Armory;
 using UnityEngine;
+using System;
 
 namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetWeapon : Evaluator {
@@ -9,6 +10,7 @@ namespace Entities.GoalOrientedBehaviour {
         public EvaluatorGetWeapon(float characterBias, WeaponTypes weaponType)
             : base(characterBias){
             this.weaponType = weaponType;
+            GoalName = "Get Weapon: " + EnumUtility.GetDescription(weaponType);
         }
 
         public override float CalculateDesirability(Agent agent){
