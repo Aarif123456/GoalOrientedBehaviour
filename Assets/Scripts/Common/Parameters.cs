@@ -15,8 +15,8 @@ namespace Common {
         public float agentGoalAppraisalUpdateFrequency = 0.5f;
 
         /* How often the vision is updated - system has memory 
-    * so this can be resource intensive
-    */
+        * so this can be resource intensive
+        */
         public float agentVisionUpdateFrequency = 4;
 
         /* How often we check to see if we have a target */

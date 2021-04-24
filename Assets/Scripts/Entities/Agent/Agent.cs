@@ -272,7 +272,7 @@ namespace Entities {
             Health -= amount;
 
             if (Health <= 0) SetDead();
-
+            /* TODO create hit indicator */
             Hit = true;
             HitIndicatorTimer = Parameters.Instance.HitFlashTime;
         }

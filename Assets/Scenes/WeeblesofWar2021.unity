@@ -10362,6 +10362,7 @@ GameObject:
   - component: {fileID: 2666}
   - component: {fileID: 2583}
   - component: {fileID: 923}
+  - component: {fileID: 1210}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -10482,9 +10483,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windowId: 0
-  positionOffset: {x: 197.58, y: 50}
-  minimumWindowWidth: 150
-  minimumColumnWidth: 120
+  positionOffset: {x: 212.73, y: 50}
+  minimumWindowWidth: 200
+  minimumColumnWidth: 180
 --- !u!4 &924 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1c97205f279ebd54fa46d30ea70b7215, type: 3}
@@ -11915,6 +11916,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 1c97205f279ebd54fa46d30ea70b7215, type: 3}
   m_PrefabInstance: {fileID: 3370}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61be20041e7640419129222a9acd489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1250
 Transform:
   m_ObjectHideFlags: 0
@@ -13447,7 +13460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f8495972c884349a83a3c6a2b9e2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPointPrefab: {fileID: 100000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
   boltPrefab: {fileID: 100000, guid: 30a08d47275543644a193acb65a36732, type: 3}
   rocketPrefab: {fileID: 100000, guid: a9bdb25c8d5a17748b33fc6cc52d27f6, type: 3}
   slugPrefab: {fileID: 100000, guid: faf5eed4d7dce664f8ca5648c20798c4, type: 3}
@@ -13722,15 +13734,15 @@ MonoBehaviour:
   agentReactionTime: 0.2
   agentAimPersistenceTime: 1
   agentAimAccuracy: 0
-  agentMaximumHealth: 100
+  agentMaximumHealth: 20
   agentHealthGoalTweaker: 1
   agentShotgunGoalTweaker: 1
   agentRailgunGoalTweaker: 1
   agentRocketLauncherGoalTweaker: 1
   agentAggroGoalTweaker: 1
-  maximumSearchCyclesPerUpdateStep: 1000
-  defaultHealthGiven: 50
-  healthRespawnDelay: 30
+  maximumSearchCyclesPerUpdateStep: 200
+  defaultHealthGiven: 20
+  healthRespawnDelay: 70
   weaponRespawnDelay: 15
   blasterFiringFrequency: 1
   blasterMaximumSpeed: 25
@@ -13748,7 +13760,7 @@ MonoBehaviour:
   rocketLauncherFiringFrequency: 1.5
   rocketLauncherDefaultRounds: 5
   rocketLauncherMaximumRoundsCarried: 15
-  rocketLauncherIdealRange: 100
+  rocketLauncherIdealRange: 60
   rocketLauncherSoundRange: 60
   maximumActiveRockets: 2
   rocketIsHeatSeeking: 0
@@ -13762,7 +13774,7 @@ MonoBehaviour:
   railgunFiringFrequency: 1
   railgunDefaultRounds: 5
   railgunMaximumRoundsCarried: 15
-  railgunIdealRange: 55
+  railgunIdealRange: 50
   railgunSoundRange: 40
   maximumActiveSlugs: 5
   slugMaximumSpeed: 60
@@ -13776,7 +13788,7 @@ MonoBehaviour:
   shotgunMaximumRoundsCarried: 30
   shotgunBallsInShell: 10
   shotgunSpread: 20
-  shotgunIdealRange: 10
+  shotgunIdealRange: 5
   shotgunSoundRange: 90
   maximumActivePellets: 10
   pelletMaximumSpeed: 40
@@ -18096,6 +18108,10 @@ PrefabInstance:
       value: RedSpawnPoint (-47, 0, -23)
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
       value: -47
       objectReference: {fileID: 0}
@@ -18153,6 +18169,10 @@ PrefabInstance:
       value: BlueSpawnPoint (24, 0, 33)
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24
       objectReference: {fileID: 0}
@@ -18200,6 +18220,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_Name
       value: RedSpawnPoint (-24, 0, -33)
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18259,6 +18283,10 @@ PrefabInstance:
       value: RedSpawnPoint (-24, 0, 13)
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
       objectReference: {fileID: 0}
@@ -18316,6 +18344,10 @@ PrefabInstance:
       value: BlueSpawnPoint (24, 0, -13)
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24
       objectReference: {fileID: 0}
@@ -18365,6 +18397,10 @@ PrefabInstance:
       value: BlueSpawnPoint (47, 0, -35)
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
       value: 47
       objectReference: {fileID: 0}
@@ -18412,6 +18448,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_Name
       value: RedSpawnPoint (-47, 0, 35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9ef382f465bf33e469184ec341a15777, type: 3}
       propertyPath: m_LocalPosition.x
