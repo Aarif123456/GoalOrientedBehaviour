@@ -4,6 +4,7 @@ using Common;
 using Entities.Armory;
 using UnityEngine;
 using Utility.DataStructures;
+using Random = UnityEngine.Random;
 
 namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
@@ -14,8 +15,22 @@ namespace Entities.GoalOrientedBehaviour {
         private float bestDesirability;
         private Evaluator mostDesirable;
 
-        public Think(Agent agent, Biases biases = new Biases())
+        private static float CreateRandomValue(){
+            const float LOW_RANGE_OF_BIAS = 0.5f;
+            const float HIGH_RANGE_OF_BIAS = 1.5f;
+            return Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
+        }
+        public Think(Agent agent)
             : base(agent, GoalTypes.Think){
+            var biases = new Biases{
+                HealthBias = CreateRandomValue(),
+                ExploreBias = CreateRandomValue(),
+                AttackBias = CreateRandomValue(),
+                EvadeBias = CreateRandomValue(),
+                ShotgunBias = CreateRandomValue(),
+                RailgunBias = CreateRandomValue(),
+                RocketLauncherBias = CreateRandomValue()
+            };
             //// create the evaluator objects
             evaluators.Add(new EvaluatorGetHealth(biases.HealthBias));
             evaluators.Add(new EvaluatorExplore(biases.ExploreBias));
@@ -60,10 +75,10 @@ namespace Entities.GoalOrientedBehaviour {
 
             // iterate through all the evaluators to find the highest scoring one
             foreach (var evaluator in evaluators){
-                var desirabilty = evaluator.CalculateDesirability(Agent);
+                var desirability = evaluator.CalculateDesirability(Agent);
 
-                if (!(bestDesirability < desirabilty)) continue;
-                bestDesirability = desirabilty;
+                if (!(bestDesirability < desirability)) continue;
+                bestDesirability = desirability;
                 mostDesirable = evaluator;
             }
 
