@@ -2,22 +2,28 @@ What is this? 🤔
 This project is about exploring goal oriented behaviour based on chapter 7-10 of Mat Buckland's book
 
 Given
-1. 
+1. Meta editors in Editor directory, will probably not touch
+2. ShowThots - Can use to visualize the thought process of weebles
+3. Parameters - Can modify depending on program
+4. Enum Utility - Allows us to add new things, like weapons and other item
+5. Steering behaviour - might not modify if I want to add steering behaviours or possible inherit 
+6. Armory
+    - projectiles
+    - weapons
+7. Atomic goals - seek to position - is stuck - not implemented 
+
 
 TODO
 1. [Documentation] Document your work. Explain what parts you attempted, how your approach is supposed to work, which parts of the code you modified, removed or added. 
 
 2. [Bug Fixing] 
-    
+    - Weeble keeps moving back to old location - happens if we manually teleport Weeble
+
 3. [Implementation ideas]
-    a) The goal here is to provide useful information to help you complete the other parts of the assignment.
-        i) Add visual/audio indications to clarify what is happening. 
-        - Weeble status (health, score, etc)
-        - Weeble thoughts (text bubble?)
         - Weeble got hit indicator - can make it flash red
         ii) Include visual/audio/log debugging aids 
 
-    b) Tune the parameters and evaluators. Some parameters in Parameters.cs are not used or were set based on a larger map. You can remove unused parameters (or make use of them). You should also adjust the values of the parameters to be sensible. For example, what should the sound range for the shotgun be? What should the rate of fire be? How many searches should be allowed per update?
+    
 
     c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
         - Consider atomic vs composite goals
@@ -30,19 +36,52 @@ TODO
     b) Implement the ability to pickup the enemy flag at the base and carry it back to your base. If you are killed while carrying the flag, simply return the flag to its base or implement a means for the flag to be dropped where you died so either a team-mate or the enemy can pick it up. This may require implementing a new form or Trigger.
 
     c) Improve issues with the frame rate so that the game plays smoothly with 3, 4 or 5 weebles per team.
+        - Pathfinding
+        - garbage collector
+        - string concatenation 
+        - other inefficiency 
 
     d) Design and implement more goal-oriented behaviours and a corresponding evaluators and relevant features. Make use of the low walls and elevated areas for cover and good sniping locations.
 
     e) Add an additional weapon type.
+        - landmine 
 
     f)Add additional cameras such as one to follow weebles in first or third person. Add the ability to switch between cameras. Perhaps add a mini-map/overhead view as a sub-window of the Weeble camera.
 
 4. Find ways to make it awesome!
-    i) Make them aim where the target will be, not where they are now.
-    ii) sound effects
-    iii) explosion
+    a) Make them aim where the target will be, not where they are now.
+    b) sound effects
+    c) explosion
+    d) custom map from map file
+    e) loading page - with loading bar while map loads (pre-computation)
+    f)setting changing possible main menu
+    g) character that can move
+    h) Implementing smell 
+
 
 In progress:
-
+    finish up a) add in though and hit indicator
+    implement goals
+    figure out why they don't spawn
 
 Completed: 
+    [Bug Fixing]
+        - Weeble Alice had the wrong short-name
+        - Added in Wall layers so Weeble does get stuck 
+    
+        -    
+    [Implementation ideas]
+        - Made biases into a separate class to make it easier to expand 
+
+        a) The goal here is to provide useful information to help you complete the other parts of the assignment.
+            i) Add visual/audio indications to clarify what is happening. 
+            - Weeble status (health, score, etc)
+            - Weeble thoughts (text bubble?)
+            - Added in option to forcibly add goal to agent to make debugging easier 
+        b) Tune the parameters and evaluators. Some parameters in Parameters.cs are not used or were set based on a larger map. You can remove unused parameters (or make use of them). You should also adjust the values of the parameters to be sensible. For example, what should the sound range for the shotgun be? What should the rate of fire be? How many searches should be allowed per update?
+            - Made ideal range of weapons smaller
+            - Activated blasters
+            - Made the game check for paths less frequently 
+            - shrunk max and min distance in Features 
+
+
