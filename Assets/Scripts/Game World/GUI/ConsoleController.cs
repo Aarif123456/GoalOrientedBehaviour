@@ -4,15 +4,13 @@ using Entities;
 using GameWorld.Cameras;
 using UnityEngine;
 
-/* Used for entity manager and agent */
-/* Used to select view*/
-
 // Add to the component menu.
 namespace GameWorld.GUI {
     [AddComponentMenu("Scripts/GUI/Console Controller")]
     public class ConsoleController : WindowManager {
         private const string WindowTitle = "Console Controller";
         public Vector2 positionOffset = new Vector2(0, 50);
+
         public int minimumWindowWidth = 150;
         public int minimumColumnWidth = 120;
 
@@ -21,34 +19,29 @@ namespace GameWorld.GUI {
         private string[] camerasNames;
         private int curAgent;
         private int curCamera = -1;
-        private int height;
-        private int width;
         private Rect windowRectangle;
+        private MessageManager messageManager;
+        // The variable to control where the scrollview 'looks' into its child elements.
+        private Vector2 scrollPosition;
 
-        private float x;
-        private float y;
-
+        public void Awake(){
+            windowRectangle = new Rect(positionOffset.x, positionOffset.y, minimumWindowWidth, 0);
+        }
         /********************************************************************************************************************/
         // If this behaviour is enabled, Start is called once
         // after all Awake calls and before all any Update calls.
-        public new void Start(){
+        public override void Start(){
             base.Start(); // initializes the window id
             /* Get list of all Agents*/
             agents = EntityManager.FindAll<Agent>();
             GetViews();
+            messageManager = MessageManager.Instance;
         }
 
         /********************************************************************************************************************/
         // If this behaviour is enabled, OnGUI is called for rendering and handling GUI events.
         // It might be called several times per frame (one call per event).
         public void OnGUI(){
-            if (width != Screen.width || height != Screen.height){
-                x = Screen.width * 0.02f + positionOffset.x;
-                y = Screen.height * 0.02f + positionOffset.y;
-                width = Screen.width;
-                height = Screen.height;
-                windowRectangle = new Rect(x, y, minimumWindowWidth, 0); // GUILayout will determine height
-            }
 
             windowRectangle =
                 GUILayout.Window(
@@ -108,7 +101,7 @@ namespace GameWorld.GUI {
             /* TODO: allow user to toggle what they want to see */
             ShowAgentStats(agent);
             ViewSelection(agent);
-
+            ShowThoughts(agent);
 
             // Make the windows be draggable.
             UnityEngine.GUI.DragWindow();
@@ -155,6 +148,7 @@ namespace GameWorld.GUI {
             if (newCamera is TargetedCamera targetedCamera) targetedCamera.target = target;
         }
 
+        /* Used to select view */
         private void ViewSelection(Component agent){
             if (curCamera < 0) return;
 
@@ -165,6 +159,26 @@ namespace GameWorld.GUI {
             var newCamera = GetCamera(curCamera);
             SetCurrentView(oldCamera, newCamera, agent.gameObject.transform);
             GUILayout.EndVertical();
+        }
+
+        /* Show the agents thought process */
+        private void ShowThoughts(Agent agent){
+            var agentBrain = agent.Brain;
+            var headMessage = agentBrain.GetHeadMessage();
+            var agentMessages = messageManager.GetMessages(agent);
+            /* Get top message */
+            var headStyle = new GUIStyle{normal ={textColor = headMessage.Color}};
+            GUILayout.Label(headMessage.Text, headStyle);
+            scrollPosition = GUILayout.BeginScrollView(
+                                scrollPosition, 
+                                GUILayout.ExpandWidth(true),
+                                GUILayout.MinHeight(50)
+                                );
+            foreach(var message in agentMessages){
+                var style = new GUIStyle{normal ={textColor = message.Color}};
+                GUILayout.Label(message.Text, style);
+            }
+            GUILayout.EndScrollView();
         }
     }
 }

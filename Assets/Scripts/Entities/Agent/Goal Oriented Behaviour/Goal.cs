@@ -1,4 +1,6 @@
 using System;
+using Common;
+using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public abstract class Goal {
@@ -53,49 +55,41 @@ namespace Entities.GoalOrientedBehaviour {
             if (IsInactive) Activate();
         }
 
-//        public void ShowOnDisplay(MessageManager messageManager, string messageDisplay)
-//        {
-//            displayTimer -= Time.deltaTime;
-//            
-//            if (displayTimer <= 0)
-//            {
-//                displayTimer = timeBetweenDisplayUpdates;
-//                
-//                int indent = 0;
-//                messageManager.ClearMessages(messageDisplay);
-//                messageManager.Message(messageDisplay, Agent.shortName + " (" + Agent.SteeringBehaviours.Count + ")", Agent.color);
-//                ShowOnDisplay(messageManager, messageDisplay, ref indent);
-//            }
-//        }
+        public Message GetHeadMessage(){
+            return new Message {
+                Text = Agent.shortName + " (" + Agent.SteeringBehaviours.Count + ")",
+                Color =  Agent.color
+            };
+        }
 
-//        public virtual void ShowOnDisplay(MessageManager messageManager, string messageDisplay, ref int indent)
-//        {
-//            Color textColor = Color.black;
-//
-//            if (IsComplete)
-//            {
-//                textColor = Color.cyan;
-//            }
-//
-//            if (IsInactive)
-//            {
-//                textColor = Color.black;
-//            }
-//
-//            if (HasFailed)
-//            {
-//                textColor = Color.red;
-//            }
-//
-//            if (IsActive)
-//            {
-//                textColor = Color.blue;
-//            }
-//    
-//            messageManager.Message(
-//                messageDisplay,  
-//                new string(' ', indent) + EnumUtility.GetDescription(GoalType),                 
-//                textColor);
-//        }
+        /* Get the colour based on the type of goal */
+        private Color GetGoalColor(){
+            return Status switch{
+                StatusTypes.Completed => Color.cyan,
+                StatusTypes.Active => Color.blue,
+                StatusTypes.Failed => Color.red,
+                StatusTypes.Inactive => Color.black,
+                _ => Color.black,
+            };
+        }
+
+        public virtual void StoreThoughtProcess(MessageManager messageManager){
+            displayTimer -= Time.deltaTime;
+            if (displayTimer > 0) return;
+            displayTimer = timeBetweenDisplayUpdates;
+            var indent = 0;
+            StoreThoughtProcess(messageManager, ref indent);
+        }
+        
+        public virtual void StoreThoughtProcess(MessageManager messageManager, ref int indent){
+            var messageColor = GetGoalColor();
+            var messageString = new string(' ', indent) + EnumUtility.GetDescription(GoalType);
+            var message = new Message {
+                Text = messageString,
+                Color = messageColor
+            };
+            messageManager.AddMessage(Agent, message);
+        }   
+    
     }
 }

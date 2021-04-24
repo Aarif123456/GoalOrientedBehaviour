@@ -8,7 +8,7 @@ namespace Entities.GoalOrientedBehaviour {
             Subgoals = new List<Goal>();
         }
 
-        public List<Goal> Subgoals { get; }
+        protected List<Goal> Subgoals { get; }
 
         public override void AddSubgoal(Goal subgoal){
             Subgoals.Push(subgoal);
@@ -31,9 +31,9 @@ namespace Entities.GoalOrientedBehaviour {
                 Subgoals.Pop();
             }
 
-            // if any subgoals remain, process the one at the front of the list
+            // no more subgoals to process - return 'completed'
             if (Subgoals.Count <= 0) return StatusTypes.Completed;
-            // grab the status of the front-most subgoal
+            // if any subgoals remain, process the one at the front of the list
             var statusOfSubGoals = Subgoals.Peek().Process();
 
             // we have to test for the special case where the front-most reports 
@@ -43,20 +43,15 @@ namespace Entities.GoalOrientedBehaviour {
             if (statusOfSubGoals == StatusTypes.Completed && Subgoals.Count > 1) return StatusTypes.Active;
 
             return statusOfSubGoals;
-
-            // no more subgoals to process - return 'completed'
         }
 
-//        public override void ShowOnDisplay(MessageManager messageManager, string messageDisplay, ref int indent)
-//        {
-//            base.ShowOnDisplay(messageManager, messageDisplay, ref indent);
-//            
-//            indent++;
-//            
-//            foreach (Goal goal in Subgoals)
-//            {
-//                goal.ShowOnDisplay(messageManager, messageDisplay, ref indent);
-//            }
-//        }
+       public override void StoreThoughtProcess(MessageManager messageManager, ref int indent)
+       {
+            base.StoreThoughtProcess(messageManager, ref indent);
+            indent++;
+            foreach (Goal goal in Subgoals){
+                goal.StoreThoughtProcess(messageManager, ref indent);
+            }
+       }
     }
 }
