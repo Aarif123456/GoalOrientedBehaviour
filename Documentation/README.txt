@@ -23,8 +23,6 @@ TODO
         - Weeble got hit indicator - can make it flash red
         ii) Include visual/audio/log debugging aids 
 
-    
-
     c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
         - Consider atomic vs composite goals
         - MoveToCover 
@@ -61,15 +59,15 @@ TODO
 
 In progress:
     finish up a) add in though and hit indicator
-    implement goals
+    implement goal: currently adding in the ability to move away from projectiles being fired 
     figure out why they don't spawn
 
 Completed: 
     [Bug Fixing]
         - Weeble Alice had the wrong short-name
         - Added in Wall layers so Weeble does get stuck 
-    
-        -    
+        - Weebles sometimes flip-flop between goals and end up getting stuck for a while so added a consistency boast to encourage finishing goals 
+        
     [Implementation ideas]
         - Made biases into a separate class to make it easier to expand 
 

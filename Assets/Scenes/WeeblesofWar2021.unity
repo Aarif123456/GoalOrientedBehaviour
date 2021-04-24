@@ -13725,9 +13725,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   friendlyFire: 1
   hitFlashTime: 0.2
-  agentGoalAppraisalUpdateFrequency: 5
-  agentVisionUpdateFrequency: 4
-  agentTargetingUpdateFrequency: 5
+  agentGoalAppraisalUpdateFrequency: 10
+  agentVisionUpdateFrequency: 5
+  agentTargetingUpdateFrequency: 1
   agentWeaponSelectionFrequency: 0.5
   agentMemorySpan: 5
   agentFieldOfView: 180
@@ -13739,8 +13739,8 @@ MonoBehaviour:
   agentShotgunGoalTweaker: 1
   agentRailgunGoalTweaker: 1
   agentRocketLauncherGoalTweaker: 1
-  agentAggroGoalTweaker: 1
-  maximumSearchCyclesPerUpdateStep: 200
+  agentAggroGoalTweaker: 0.8
+  maximumSearchCyclesPerUpdateStep: 500
   defaultHealthGiven: 20
   healthRespawnDelay: 70
   weaponRespawnDelay: 15

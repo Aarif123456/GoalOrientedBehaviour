@@ -49,7 +49,7 @@ namespace Entities {
 
             var parameters = Parameters.Instance;
 
-            SensoryMemory = new SensoryMemory(this, parameters.AgentMemorySpan);
+            SensoryMemory = new SensoryMemory(this, parameters.AgentMemorySpan, parameters.FriendlyFire);
             TargetingSystem = new TargetingSystem(this);
             WeaponSystem =
                 new WeaponSystem(

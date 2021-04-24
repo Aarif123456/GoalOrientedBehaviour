@@ -38,7 +38,7 @@ namespace Entities.GoalOrientedBehaviour {
             evaluators.Add(new EvaluatorExplore(biases.ExploreBias));
             evaluators.Add(new EvaluatorAttackTarget(biases.AttackBias));
             /* TODO add in evaluate to do allow agent to evade */
-            ////evaluators.Add(new EvaluatorEvadeBot(biases.EvadeBias));
+            evaluators.Add(new EvaluatorEvadeBot(biases.EvadeBias));
             evaluators.Add(new EvaluatorGetWeapon(biases.ShotgunBias, WeaponTypes.Shotgun));
             evaluators.Add(new EvaluatorGetWeapon(biases.RailgunBias, WeaponTypes.Railgun));
             evaluators.Add(new EvaluatorGetWeapon(biases.RocketLauncherBias, 
@@ -117,6 +117,20 @@ namespace Entities.GoalOrientedBehaviour {
             RemoveAllSubgoals();
             AddSubgoal(new AttackTarget(Agent));
         }
+
+        public void AddGoalEvadeBot(){
+            if (Agent.IsAiControlled && !NotPresent(GoalTypes.EvadeBot)) return;
+
+            RemoveAllSubgoals();
+            AddSubgoal(new EvadeBot(Agent));
+        }
+
+        // public void AddGoalPursueBot(){
+        //     if (Agent.IsAiControlled && !NotPresent(GoalTypes.PursueBot)) return;
+
+        //     RemoveAllSubgoals();
+        //     AddSubgoal(new PursueBot(Agent));
+        // }
 
         public void QueueGoalMoveToPosition(Vector3 destination){
             Subgoals.Enqueue(new MoveToPosition(Agent, destination));
