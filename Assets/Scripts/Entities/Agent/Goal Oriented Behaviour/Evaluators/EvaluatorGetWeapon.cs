@@ -1,7 +1,6 @@
 using Common;
 using Entities.Armory;
 using UnityEngine;
-using System;
 
 namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetWeapon : Evaluator {

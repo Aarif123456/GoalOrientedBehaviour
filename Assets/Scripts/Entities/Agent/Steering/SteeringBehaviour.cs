@@ -10,11 +10,7 @@ namespace Entities.Steering {
             : this(agentKinematic, new Kinematic{Position = otherPosition}){
         }
 
-        protected SteeringBehaviour(Kinematic agentKinematic)
-            : this(agentKinematic, null){
-        }
-
-        protected SteeringBehaviour(Kinematic agentKinematic, Kinematic otherKinematic){
+        protected SteeringBehaviour(Kinematic agentKinematic, Kinematic otherKinematic = null){
             AgentKinematic = agentKinematic;
             OtherKinematic = otherKinematic;
         }

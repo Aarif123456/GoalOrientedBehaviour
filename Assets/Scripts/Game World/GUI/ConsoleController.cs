@@ -182,9 +182,9 @@ namespace GameWorld.GUI {
         }
 
         /* Allow user to set agent goal */
-        private void ControlAgent(Agent agent){
-            int maxButtonInRow = 2;
-            int curButtons=0;
+        private static void ControlAgent(Agent agent){
+            const int maxButtonInRow = 2;
+            var curButtons=0;
             GUILayout.BeginVertical();
                 agent.IsAiControlled = GUILayout.Toggle(agent.IsAiControlled, "Is AI controlled");
                 if(!agent.IsAiControlled){
@@ -194,11 +194,10 @@ namespace GameWorld.GUI {
                             evalutor.SetGoal(agent);
                         }
                         curButtons++;
-                        if(curButtons >= maxButtonInRow){
-                            GUILayout.EndHorizontal();
-                            GUILayout.BeginHorizontal();
-                            curButtons = 0;
-                        }
+                        if (curButtons < maxButtonInRow) continue;
+                        GUILayout.EndHorizontal();
+                        GUILayout.BeginHorizontal();
+                        curButtons = 0;
                     }
                     GUILayout.EndHorizontal();
                 }

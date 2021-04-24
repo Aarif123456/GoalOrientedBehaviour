@@ -127,19 +127,12 @@ namespace GameWorld {
 
         public void Subscribe<T>(
             EventType eventType,
-            EventDelegate<T> eventDelegate){
-            Subscribe(eventType, eventDelegate, null);
-        }
-
-        public void Subscribe<T>(
-            EventType eventType,
             EventDelegate<T> eventDelegate,
-            object eventKey){
+            object eventKey = null){
             var subscriptionToAdd = new Subscription(eventDelegate, eventKey);
 
             lock (_eventSubscribers){
-                List<Subscription> eventSubscriptionList;
-                if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
+                if (_eventSubscribers.TryGetValue(eventType, out var eventSubscriptionList) &&
                     eventSubscriptionList != null){
                     if (!eventSubscriptionList.Contains(subscriptionToAdd))
                         eventSubscriptionList.Add(subscriptionToAdd);
@@ -164,8 +157,7 @@ namespace GameWorld {
             var subscriptionToRemove = new Subscription(eventDelegate, eventKey);
 
             lock (_eventSubscribers){
-                List<Subscription> eventSubscriptionList;
-                if (_eventSubscribers.TryGetValue(eventType, out eventSubscriptionList) &&
+                if (_eventSubscribers.TryGetValue(eventType, out var eventSubscriptionList) &&
                     eventSubscriptionList != null)
                     eventSubscriptionList.Remove(subscriptionToRemove);
             }
@@ -491,11 +483,13 @@ namespace GameWorld {
         private void Fire(Event eventToFire){
             // call subscriber delegates
             List<Subscription> subscriptionList;
-            if (eventToFire.EventType != Events.Message &&
-                _eventSubscribers.TryGetValue(eventToFire.EventType, out subscriptionList)){
-                if (subscriptionList != null){
-                    for (var i = 0; i < subscriptionList.Count; i++){
-                        eventToFire.Fire(subscriptionList[i].EventDelegate);
+            lock (_eventSubscribers){
+                if (eventToFire.EventType != Events.Message &&
+                    _eventSubscribers.TryGetValue(eventToFire.EventType, out subscriptionList)){
+                    if (subscriptionList != null){
+                        for (var i = 0; i < subscriptionList.Count; i++){
+                            eventToFire.Fire(subscriptionList[i].EventDelegate);
+                        }
                     }
                 }
             }

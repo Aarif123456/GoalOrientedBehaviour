@@ -6,6 +6,7 @@ using Entities;
 using Entities.Armory;
 using GameWorld.Navigation.Graph;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 namespace GameWorld {
     public sealed class PathPlanner : MonoBehaviour {
@@ -186,7 +187,10 @@ namespace GameWorld {
             CurrentSearch =
                 new TimeSlicedDijkstrasSearch(
                     closestNodeToAgent,
-                    delegate(Node node) { return NodeIsCloseToItemOfType(node, ItemType.Value, out itemEntity); });
+                    node => {
+                        Debug.Assert(ItemType != null, nameof(ItemType) + " != null");
+                        return NodeIsCloseToItemOfType(node, ItemType.Value, out itemEntity);
+                    });
 
             PathManager.AddPathPlanner(this);
 

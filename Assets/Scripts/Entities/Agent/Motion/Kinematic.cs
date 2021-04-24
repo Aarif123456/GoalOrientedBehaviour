@@ -156,7 +156,7 @@ namespace Entities.Steering {
                     break;
                 default:
                     throw new NotImplementedException(
-                        string.Format("Steering type {0} is not implemented", steering.Type));
+                        $"Steering type {steering.Type} is not implemented");
             }
         }
 
@@ -170,7 +170,7 @@ namespace Entities.Steering {
                     break;
                 default:
                     throw new NotImplementedException(
-                        string.Format("Steering type {0} is not implemented", steering.Type));
+                        $"Steering type {steering.Type} is not implemented");
             }
         }
 

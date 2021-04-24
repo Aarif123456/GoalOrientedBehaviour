@@ -2,11 +2,7 @@ namespace Entities.Steering {
     public class FaceHeading : Face {
         private readonly float minimumSpeed;
 
-        public FaceHeading(Kinematic agentKinematic)
-            : this(agentKinematic, 0.1f, 0.25f, 5){
-        }
-
-        public FaceHeading(Kinematic agentKinematic, float minimumSpeed, float timeToTarget, float satisfactionRadius)
+        public FaceHeading(Kinematic agentKinematic, float minimumSpeed = 0.1f, float timeToTarget = 0.25f, float satisfactionRadius = 5)
             : base(agentKinematic, agentKinematic.Position, timeToTarget, satisfactionRadius){
             this.minimumSpeed = minimumSpeed;
         }

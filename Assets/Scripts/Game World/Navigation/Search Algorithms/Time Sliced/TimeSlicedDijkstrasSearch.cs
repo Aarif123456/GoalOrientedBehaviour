@@ -12,7 +12,7 @@ namespace GameWorld.Navigation.Graph {
             priorityQueue =
                 new IntervalHeap<ScoredNode>(
                     new DelegateComparer<ScoredNode>(
-                        delegate(ScoredNode s1, ScoredNode s2) { return s1.f.CompareTo(s2.f); }));
+                        (s1, s2) => s1.f.CompareTo(s2.f)));
             const float g = 0;
             const float h = 0;
             priorityQueue.Add(new ScoredNode(source, g + h, g, null, null));

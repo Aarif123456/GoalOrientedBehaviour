@@ -121,15 +121,11 @@ namespace Utility.Fuzzy {
             }
 
             // now defuzzify the resultant conclusion using the specified method
-            switch (method){
-                case DefuzzifyMethod.Centroid:
-                    return Variables[nameOfFlv].DeFuzzifyCentroid(CROSS_SECTION_SAMPLE_COUNT);
-
-                case DefuzzifyMethod.MaxAv:
-                    return Variables[nameOfFlv].DeFuzzifyMaxAv();
-            }
-
-            return 0;
+            return method switch{
+                DefuzzifyMethod.Centroid => Variables[nameOfFlv].DeFuzzifyCentroid(CROSS_SECTION_SAMPLE_COUNT),
+                DefuzzifyMethod.MaxAv => Variables[nameOfFlv].DeFuzzifyMaxAv(),
+                _ => 0
+            };
         }
 
         /// <summary>

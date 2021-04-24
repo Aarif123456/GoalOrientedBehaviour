@@ -63,7 +63,7 @@ namespace Entities.Memory.SensoryMemory {
         /// <summary>
         ///     Initializes a new instance of the SensoryMemory class.
         /// </summary>
-        /// <param name="owner">The agent that owns this sensory memory.</param>
+        /// <param name="agent">The agent that owns this sensory memory.</param>
         /// <param name="memorySpan">How soon we forget.</param>
         public SensoryMemory(Agent agent, float memorySpan){
             Agent = agent;

@@ -17,7 +17,7 @@ namespace Entities {
         public static MessageManager Instance {
             get { return _instance ??= GameObject.Find("Game").GetComponent<MessageManager>(); }
         }
-        [SerializeField]
+        
         /* Will map Entity to a list that manages the messages */
         private readonly Dictionary<int, List<Message>> messageDictionary = new Dictionary<int, List<Message>>();
         /* Number of max messages stored in a queue*/

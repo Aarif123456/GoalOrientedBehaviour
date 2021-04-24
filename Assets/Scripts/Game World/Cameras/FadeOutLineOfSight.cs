@@ -115,13 +115,13 @@ namespace GameWorld.Cameras {
 
                     // We are not fading this renderer already, so insert into faded objects map
                     if (info == null){
-                        info = new FadeOutLOSInfo();
-                        info.originalMaterials = hitRenderer.sharedMaterials;
+                        info = new FadeOutLOSInfo{originalMaterials = hitRenderer.sharedMaterials};
                         info.alphaMaterials = new Material[info.originalMaterials.Length];
                         info.renderer = hitRenderer;
                         for (var i = 0; i < info.originalMaterials.Length; i++){
-                            var newMaterial = new Material(Shader.Find("Alpha/Diffuse"));
-                            newMaterial.mainTexture = info.originalMaterials[i].mainTexture;
+                            var newMaterial = new Material(Shader.Find("Alpha/Diffuse")){
+                                mainTexture = info.originalMaterials[i].mainTexture
+                            };
                             var color = info.originalMaterials[i].color;
                             color.a = 1.0f;
                             newMaterial.color = color;

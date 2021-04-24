@@ -11,15 +11,19 @@ namespace Entities.Armory {
             if (hitEntity == null) return;
             var hitPoint = hitCollider.ClosestPointOnBounds(transform.position);
 
-            if (hitEntity.EntityType == EntityTypes.Wall)
-                ProcessImpact(hitEntity, hitPoint);
-            else if (hitEntity.EntityType == EntityTypes.Agent){
-                var hitAgent = hitEntity as Agent;
+            switch (hitEntity.EntityType){
+                case EntityTypes.Wall:
+                    ProcessImpact(hitEntity, hitPoint);
+                    break;
+                case EntityTypes.Agent:{
+                    var hitAgent = hitEntity as Agent;
 
-                if (hitAgent == null || hitAgent == Shooter ||
-                    !Parameters.Instance.FriendlyFire && Shooter.color == hitAgent.color) return;
-                ProcessImpact(hitEntity, hitPoint);
-                InflictDamageOnBotsWithinBlastRadius();
+                    if (hitAgent == null || hitAgent == Shooter ||
+                        !Parameters.Instance.FriendlyFire && Shooter.color == hitAgent.color) return;
+                    ProcessImpact(hitEntity, hitPoint);
+                    InflictDamageOnBotsWithinBlastRadius();
+                    break;
+                }
             }
         }
 

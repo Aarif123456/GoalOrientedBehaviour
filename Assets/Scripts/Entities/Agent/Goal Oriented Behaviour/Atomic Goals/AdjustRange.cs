@@ -7,11 +7,7 @@ namespace Entities.GoalOrientedBehaviour {
         private readonly Seek seek;
         private readonly Agent targetAgent;
 
-        public AdjustRange(Agent agent, Agent targetAgent)
-            : this(agent, targetAgent, 5, 1){
-        }
-
-        public AdjustRange(Agent agent, Agent targetAgent, float idealRange, float satisfactionRadius)
+        public AdjustRange(Agent agent, Agent targetAgent, float idealRange = 5, float satisfactionRadius = 1)
             : base(agent, GoalTypes.AdjustRange){
             this.targetAgent = targetAgent;
             seek = new Seek(agent.Kinematic);

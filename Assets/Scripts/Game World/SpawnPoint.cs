@@ -11,7 +11,7 @@ namespace GameWorld {
             get {
                 var colliders = Physics.OverlapSphere(transform.position, radius);
 
-                return colliders.All(collider => ReferenceEquals(collider.GetComponent<Agent>(), null));
+                return colliders.All(collider1 => ReferenceEquals(collider1.GetComponent<Agent>(), null));
             }
         }
     }

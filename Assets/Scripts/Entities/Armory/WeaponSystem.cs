@@ -86,21 +86,13 @@ namespace Entities.Armory {
 
         public void AddWeapon(WeaponTypes weaponType){
             // create an instance of this weapon
-            Weapon weaponToAdd = null;
 
-            switch (weaponType){
-                case WeaponTypes.Railgun:
-                    weaponToAdd = new WeaponRailgun(Agent);
-                    break;
-
-                case WeaponTypes.Shotgun:
-                    weaponToAdd = new WeaponShotgun(Agent);
-                    break;
-
-                case WeaponTypes.RocketLauncher:
-                    weaponToAdd = new WeaponRocketLauncher(Agent);
-                    break;
-            }
+            Weapon weaponToAdd = weaponType switch{
+                WeaponTypes.Railgun => new WeaponRailgun(Agent),
+                WeaponTypes.Shotgun => new WeaponShotgun(Agent),
+                WeaponTypes.RocketLauncher => new WeaponRocketLauncher(Agent),
+                _ => null
+            };
 
             if (weaponToAdd == null) return;
 

@@ -123,9 +123,8 @@ namespace GameWorld.Cameras {
             transform.position = targetPos + direction * currentDistance;
         }
 
-        private float AdjustLineOfSight(Vector3 target, Vector3 direction){
-            RaycastHit hit;
-            if (Physics.Raycast(target, direction, out hit, distance, lineOfSightMask.value))
+        private float AdjustLineOfSight(Vector3 targetPosition, Vector3 direction){
+            if (Physics.Raycast(targetPosition, direction, out var hit, distance, lineOfSightMask.value))
                 return hit.distance - closerRadius;
 
             return distance;

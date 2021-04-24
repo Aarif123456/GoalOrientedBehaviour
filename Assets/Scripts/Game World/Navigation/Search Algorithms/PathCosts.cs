@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using C5;
 
@@ -11,7 +12,7 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public static bool PathExists(Node source, Node destination){
-            return nextNodeAndCostTable[new NodePair(source, destination)].cost != float.MaxValue;
+            return Math.Abs(nextNodeAndCostTable[new NodePair(source, destination)].cost - float.MaxValue) > 0.01;
         }
 
         public static Node NextNode(Node source, Node destination){
@@ -62,11 +63,10 @@ namespace GameWorld.Navigation.Graph {
             var priorityQueue =
                 new IntervalHeap<NodeAndCost>(
                     new DelegateComparer<NodeAndCost>(
-                        delegate(NodeAndCost nodeAndCost1, NodeAndCost nodeAndCost2) {
-                            return nodeAndCost1.cost.CompareTo(nodeAndCost2.cost);
-                        }));
+                        (nodeAndCost1, nodeAndCost2) => nodeAndCost1.cost.CompareTo(nodeAndCost2.cost))){
+                    new NodeAndCost(source, 0)
+                };
 
-            priorityQueue.Add(new NodeAndCost(source, 0));
 
             while (!priorityQueue.IsEmpty){
                 var nodeAndCost = priorityQueue.DeleteMin();
@@ -103,7 +103,7 @@ namespace GameWorld.Navigation.Graph {
             var nextNodeAndCost = new NodeAndCost(table[destination].predecessor, table[destination].cost);
 
             while (nextNodeAndCost.node != null &&
-                   nextNodeAndCost.cost != float.MaxValue &&
+                   Math.Abs(nextNodeAndCost.cost - float.MaxValue) > 0.01f &&
                    table[nextNodeAndCost.node].predecessor != source){
                 nextNodeAndCost.node = table[nextNodeAndCost.node].predecessor;
             }

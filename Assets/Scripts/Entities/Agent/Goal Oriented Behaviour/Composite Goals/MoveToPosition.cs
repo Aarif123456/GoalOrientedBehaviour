@@ -65,9 +65,7 @@ namespace Entities.GoalOrientedBehaviour {
             // clear any existing goals
             RemoveAllSubgoals();
 
-            List<Edge> splicePath;
-            Vector3? spliceTarget;
-            if (!Agent.PathPlanner.SplicePath(payload.path, out splicePath, out spliceTarget)){
+            if (!Agent.PathPlanner.SplicePath(payload.path, out var splicePath, out var spliceTarget)){
                 //Debug.Log(Agent.name + " MoveToPosition Failed at " + Time.time);
                 // QuickPath lead us astray!
                 Status = StatusTypes.Failed;

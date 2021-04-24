@@ -146,14 +146,8 @@ namespace GameWorld {
         /// </summary>
         /// <returns>A System.String that represents the event.</returns>
         public override string ToString(){
-            return string.Format(
-                "Id:{0}, Type:{1}, Lifespan:{2} Sender:{3}, Receiver:{4}, Data:{5}",
-                EventId,
-                EventType,
-                EventLifespan,
-                SenderId,
-                ReceiverId,
-                EventData);
+            return
+                $"Id:{EventId}, Type:{EventType}, Lifespan:{EventLifespan} Sender:{SenderId}, Receiver:{ReceiverId}, Data:{EventData}";
         }
 
         /// <summary>

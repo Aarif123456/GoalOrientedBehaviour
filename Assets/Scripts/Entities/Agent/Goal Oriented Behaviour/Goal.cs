@@ -69,7 +69,7 @@ namespace Entities.GoalOrientedBehaviour {
                 StatusTypes.Active => Color.blue,
                 StatusTypes.Failed => Color.red,
                 StatusTypes.Inactive => Color.black,
-                _ => Color.black,
+                _ => Color.black
             };
         }
 

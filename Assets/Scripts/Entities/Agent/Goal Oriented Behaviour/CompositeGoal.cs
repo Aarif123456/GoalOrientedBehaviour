@@ -49,7 +49,7 @@ namespace Entities.GoalOrientedBehaviour {
        {
             base.StoreThoughtProcess(messageManager, ref indent);
             indent++;
-            foreach (Goal goal in Subgoals){
+            foreach (var goal in Subgoals){
                 goal.StoreThoughtProcess(messageManager, ref indent);
             }
        }

@@ -85,9 +85,7 @@ namespace Entities.GoalOrientedBehaviour {
             itemEntity = payload.itemEntity;
             itemTrigger = itemEntity.GetComponent<Trigger>();
 
-            List<Edge> splicePath;
-            Vector3? spliceTarget;
-            if (!Agent.PathPlanner.SplicePath(payload.path, out splicePath, out spliceTarget)){
+            if (!Agent.PathPlanner.SplicePath(payload.path, out var splicePath, out var spliceTarget)){
                 //Debug.Log(Agent.name + " GetItem Failed at " + Time.time);
                 // QuickPath lead us astray!
                 Status = StatusTypes.Failed;

@@ -17,7 +17,7 @@ namespace GameWorld.Navigation.Graph {
 
         public Edge[] Edges => GetComponentsInChildren<Edge>();
 
-        public bool IsLocked => locked || !ReferenceEquals(Graph, null) && Graph.IsLocked;
+        public bool IsLocked => locked || Graph is{IsLocked: true};
 
         public bool IsVisible {
             get => isVisible;

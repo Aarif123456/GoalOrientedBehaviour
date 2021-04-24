@@ -50,7 +50,7 @@
 
 namespace GameWorld {
     public abstract partial class Event {
-        public struct Lifespan {
+        public readonly struct Lifespan {
             private readonly int _lifespan;
 
             public Lifespan(int lifespan)

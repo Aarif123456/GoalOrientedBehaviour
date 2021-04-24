@@ -101,7 +101,7 @@ namespace GameWorld.Navigation.Graph {
         }
 
         public override string ToString(){
-            return string.Format("({0}, {1}, {2}, {3}, {4})", node, f, g, edgeFromParent, parentScoredNode);
+            return $"({node}, {f}, {g}, {edgeFromParent}, {parentScoredNode})";
         }
     }
 }

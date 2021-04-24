@@ -57,6 +57,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Utility.DataStructures {
@@ -298,20 +299,16 @@ namespace Utility.DataStructures {
         /// <returns>
         /// </returns>
         public bool Contains(TValue value){
-            foreach (var x in _items){
-                if (x.Value.Equals(value)) return true;
-            }
-
-            return false;
+            return _items.Any(x => x.Value.Equals(value));
         }
 
         /// <summary>
         ///     Copy to array starting at given array index.
         /// </summary>
         public void CopyTo(PriorityQueueItem<TValue, TPriority>[] array, int arrayIndex){
-            if (array == null) throw new ArgumentNullException("array");
+            if (array == null) throw new ArgumentNullException(nameof(array));
 
-            if (arrayIndex < 0) throw new ArgumentOutOfRangeException("arrayIndex", "arrayIndex is less than 0.");
+            if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex), "arrayIndex is less than 0.");
 
             if (array.Rank > 1) throw new ArgumentException("array is multidimensional.");
 
@@ -428,7 +425,7 @@ namespace Utility.DataStructures {
         }
 
         public bool Remove(Predicate<TValue> match){
-            if (match == null) throw new ArgumentNullException("match");
+            if (match == null) throw new ArgumentNullException(nameof(match));
 
             var matchedAtLeastOne = false;
 
@@ -531,7 +528,7 @@ namespace Utility.DataStructures {
             if (newCap < DEFAULT_CAPACITY) newCap = DEFAULT_CAPACITY;
 
             // throw exception if newCapacity < NumItems
-            if (newCap < Count) throw new ArgumentOutOfRangeException("newCapacity", "New capacity is less than Count");
+            if (newCap < Count) throw new ArgumentOutOfRangeException(nameof(newCapacity), "New capacity is less than Count");
 
             _capacity = newCap;
             if (_items == null){

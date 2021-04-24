@@ -24,7 +24,7 @@ namespace GameWorld.Navigation.Graph {
 
         public Node[] Nodes => GetComponentsInChildren<Node>();
 
-        public bool IsLocked => locked || !ReferenceEquals(Graph, null) && Graph.IsLocked;
+        public bool IsLocked => locked || Graph is{IsLocked: true};
 
         /* TODO: Make cache the node component renderer */
         public bool IsVisible {

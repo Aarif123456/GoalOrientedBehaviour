@@ -45,17 +45,9 @@ namespace Entities.Armory {
         }
 
         protected override void InitializeFuzzyModule(){
-            FzSet targetClose;
-            FzSet targetMedium;
-            FzSet targetFar;
+            InitializeDistanceToTarget(out var targetClose, out var targetMedium, out var targetFar);
 
-            InitializeDistanceToTarget(out targetClose, out targetMedium, out targetFar);
-
-            FzSet undesirable;
-            FzSet desirable;
-            FzSet veryDesirable;
-
-            InitializeDesirability(out undesirable, out desirable, out veryDesirable);
+            InitializeDesirability(out var undesirable, out var desirable, out var veryDesirable);
 
             var ammoStatus = FuzzyModule.CreateFlv("ammoStatus");
             var ammoLoads = ammoStatus.AddRightShoulderSet("ammoLoads", 8, 12, 15);

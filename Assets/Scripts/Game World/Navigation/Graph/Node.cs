@@ -47,7 +47,7 @@ namespace GameWorld.Navigation.Graph {
             if (!IsLocked) GenerateNameFromPosition();
         }
 
-        public GameObject AddConnectedNode(bool oneWay, Camera camera){
+        public GameObject AddConnectedNode(bool oneWay, Camera unityCamera){
             if (IsLocked || ReferenceEquals(NodeCollection, null) || ReferenceEquals(Graph, null) ||
                 Graph.nodePrefab == null) return null;
 #if UNITY_EDITOR
@@ -59,8 +59,8 @@ namespace GameWorld.Navigation.Graph {
             if (ReferenceEquals(connectedNodeObject, null)) return null;
             var connectedNode = connectedNodeObject.GetComponent<Node>();
 
-            if (!ReferenceEquals(camera, null))
-                connectedNode.CastToCollider(camera.transform.position, camera.transform.forward, 5f, 20f);
+            if (!ReferenceEquals(unityCamera, null))
+                connectedNode.CastToCollider(unityCamera.transform.position, unityCamera.transform.forward, 5f, 20f);
 
             connectedNode.GenerateNameFromPosition();
             NodeCollection.ApplyParametersToNode(connectedNode);
@@ -96,10 +96,8 @@ namespace GameWorld.Navigation.Graph {
             var ray = new Ray(fromPosition, forward);
             var flag = false;
 
-            if (maxDistance > 0f)
-                flag = Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask);
-            else
-                flag = Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
+            flag = maxDistance > 0f ? Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask) : 
+                Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
 
             if (flag)
                 transform.position = hit.point + Vector3.up * surfaceOffset;
