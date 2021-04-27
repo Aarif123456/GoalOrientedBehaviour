@@ -14,8 +14,9 @@ namespace Entities.Steering {
         }
 
         public override Steering Steer(){
-            var direction = OtherKinematic.Position - AgentKinematic.Position;
-            var distance = direction.magnitude;
+            var targetPosition =  GetTargetPosition();
+            var direction = GetMoveDirection(targetPosition);
+            var distance = GetDistanceToTarget(direction);
 
             if (timeToTarget <= 0f || distance > brakingRadius) return base.Steer();
 

@@ -19,16 +19,18 @@ namespace Entities.GoalOrientedBehaviour {
                 Status = StatusTypes.Completed;
                 return;
             }
-            var projectileMinRange = Agent.SensoryMemory.projectileMinRange;
+            AddSubgoal(new EvadeTarget(Agent, Agent.TargetingSystem.Target));
+
+            /*var projectileMinRange = Agent.SensoryMemory.projectileMinRange;
             var projectileMaxRange = Agent.SensoryMemory.projectileMaxRange;
             var cases = new Vector3[]{
                 new Vector3(projectileMinRange.x, 1.1f, projectileMinRange.z),
                 new Vector3(projectileMinRange.x, 1.1f, projectileMaxRange.z),
                 new Vector3(projectileMaxRange.x, 1.1f, projectileMinRange.z),
                 new Vector3(projectileMaxRange.x, 1.1f, projectileMaxRange.z),
-            };
+            };*/
 
-            /* TODO: Check what ever is closest to us and get away from that projectile - the idea is to move away the extreme range of the projectile fire */
+            /*TODO: Make a new composite goal where bot will dodge bullets and check what ever is closest to us and get away from that projectile - the idea is to move away the extreme range of the projectile fire */
         }
 
         public override StatusTypes Process(){
