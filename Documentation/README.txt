@@ -24,7 +24,6 @@ TODO
         ii) Include visual/audio/log debugging aids 
 
     c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
-        - Consider atomic vs composite goals
         - MoveToCover 
         - CaptureTheFlag
 
@@ -44,7 +43,7 @@ TODO
     e) Add an additional weapon type.
         - landmine 
 
-    f)Add additional cameras such as one to follow weebles in first or third person. Add the ability to switch between cameras. Perhaps add a mini-map/overhead view as a sub-window of the Weeble camera.
+    
 
 4. Find ways to make it awesome!
     a) Make them aim where the target will be, not where they are now.
@@ -52,7 +51,7 @@ TODO
     c) explosion
     d) custom map from map file
     e) loading page - with loading bar while map loads (pre-computation)
-    f)setting changing possible main menu
+    f) setting changing possible main menu
     g) character that can move
     h) Implementing smell 
 
@@ -67,7 +66,7 @@ Completed:
         - Added in Wall layers so Weeble does get stuck 
         - Weebles sometimes flip-flop between goals and end up getting stuck for a while so added a consistency boast to encourage finishing goals 
         - Weeble keeps moving back to old location - happens if we manually teleport Weeble
-        
+
     [Implementation ideas]
         - Made biases into a separate class to make it easier to expand 
 
@@ -76,6 +75,7 @@ Completed:
             - Weeble status (health, score, etc)
             - Weeble thoughts (text bubble?)
             - Added in option to forcibly add goal to agent to make debugging easier 
+
         b) Tune the parameters and evaluators. Some parameters in Parameters.cs are not used or were set based on a larger map. You can remove unused parameters (or make use of them). You should also adjust the values of the parameters to be sensible. For example, what should the sound range for the shotgun be? What should the rate of fire be? How many searches should be allowed per update?
             - Made ideal range of weapons smaller
             - Activated blasters
@@ -85,3 +85,5 @@ Completed:
         c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
             - evade bot
 
+    4. Find ways to make it awesome!
+    f) Add additional cameras such as one to follow weebles in first or third person. Add the ability to switch between cameras. Perhaps add a mini-map/overhead view as a sub-window of the Weeble camera.
