@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class SeekToPosition : Goal {
-        private readonly Vector3 destination;
-        private readonly FaceHeading look;
-        private readonly Seek seek;
+        private readonly Vector3 _destination;
+        private readonly FaceHeading _look;
+        private readonly Seek _seek;
 
         public SeekToPosition(Agent agent, Vector3 destination)
             : base(agent, GoalTypes.SeekToPosition){
-            this.destination = destination;
-            seek = new Seek(agent.Kinematic, destination);
-            look = new FaceHeading(agent.Kinematic);
+            _destination = destination;
+            _seek = new Seek(agent.Kinematic, destination);
+            _look = new FaceHeading(agent.Kinematic);
         }
 
         public override void Activate(){
             Status = StatusTypes.Active;
-            Agent.SteeringBehaviours.Add(seek);
-            Agent.SteeringBehaviours.Add(look);
+            Agent.SteeringBehaviours.Add(_seek);
+            Agent.SteeringBehaviours.Add(_look);
         }
 
         public override StatusTypes Process(){
@@ -27,17 +27,18 @@ namespace Entities.GoalOrientedBehaviour {
             // test to see if the bot has become stuck
             if (IsStuck())
                 Status = StatusTypes.Failed;
-            else if (Vector3.Distance(Agent.Kinematic.Position, destination) <= seek.SatisfactionRadius)
+            else if (Vector3.Distance(Agent.Kinematic.Position, _destination) <= _seek.SatisfactionRadius)
                 Status = StatusTypes.Completed;
 
             return Status;
         }
 
         public override void Terminate(){
-            Agent.SteeringBehaviours.Remove(seek);
-            Agent.SteeringBehaviours.Remove(look);
+            Agent.SteeringBehaviours.Remove(_seek);
+            Agent.SteeringBehaviours.Remove(_look);
         }
 
+        /* TODO: figure out if agent has been stuck */
         private static bool IsStuck(){
             return false;
         }

@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Entities.Triggers {
     public abstract class Trigger : Entity {
-        private bool isActive;
+        private bool _isActive;
 
         public bool IsActive {
-            get => isActive;
+            get => _isActive;
 
             protected set {
-                isActive = value;
+                _isActive = value;
                 GetComponent<Renderer>().enabled = value;
             }
         }
@@ -18,10 +18,6 @@ namespace Entities.Triggers {
         public override void Awake(){
             base.Awake();
             IsActive = true;
-        }
-
-        public override void Update(){
-            base.Update();
         }
     }
 }

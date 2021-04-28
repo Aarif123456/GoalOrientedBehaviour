@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Entities.Armory {
     public sealed class WeaponSystem {
-        private readonly Dictionary<WeaponTypes, Weapon> weaponMap =
+        private readonly Dictionary<WeaponTypes, Weapon> _weaponMap =
             new Dictionary<WeaponTypes, Weapon>();
 
-        private float bestDesirability;
+        private float _bestDesirability;
 
         /// <summary>
         ///     A flag that is toggle each time weapon selection is called.
         /// </summary>
-        private bool weaponSelectionTickTock;
+        private bool _weaponSelectionTickTock;
         //private WeaponTypes mostDesirable = WeaponTypes.Blaster;
         //private WeaponTypes previousMostDesirable = WeaponTypes.Blaster;
 
@@ -42,17 +42,17 @@ namespace Entities.Armory {
         public void Initialize(){
             CurrentWeapon = new WeaponBlaster(Agent);
 
-            weaponMap.Clear();
-            weaponMap[WeaponTypes.Blaster] = CurrentWeapon;
-            weaponMap[WeaponTypes.Shotgun] = null;
-            weaponMap[WeaponTypes.Railgun] = null;
-            weaponMap[WeaponTypes.RocketLauncher] = null;
+            _weaponMap.Clear();
+            _weaponMap[WeaponTypes.Blaster] = CurrentWeapon;
+            _weaponMap[WeaponTypes.Shotgun] = null;
+            _weaponMap[WeaponTypes.Railgun] = null;
+            _weaponMap[WeaponTypes.RocketLauncher] = null;
         }
 
         public void SelectWeapon(){
             // if a target is present use fuzzy logic to determine the most desirable weapon.
             if (Agent.TargetingSystem.IsTargetPresent){
-                weaponSelectionTickTock = !weaponSelectionTickTock;
+                _weaponSelectionTickTock = !_weaponSelectionTickTock;
                 //previousMostDesirable = mostDesirable;
 
                 // calculate the distance to the target
@@ -61,9 +61,9 @@ namespace Entities.Armory {
 
                 // for each weapon in the inventory calculate its desirability
                 // given the current situation. The most desirable weapon is selected
-                bestDesirability = float.MinValue;
+                _bestDesirability = float.MinValue;
 
-                foreach (var kvp in weaponMap){
+                foreach (var kvp in _weaponMap){
                     // grab the desirability of this weapon (desirability is
                     // based upon distance to target and ammo remaining)
                     if (kvp.Value == null) continue;
@@ -71,9 +71,9 @@ namespace Entities.Armory {
                     var score = kvp.Value.GetDesirability(distanceToTarget);
 
                     // if it is the most desirable so far select it
-                    if (score <= bestDesirability) continue;
+                    if (score <= _bestDesirability) continue;
 
-                    bestDesirability = score;
+                    _bestDesirability = score;
 
                     // place the weapon in the agent's hand.
                     CurrentWeapon = kvp.Value;
@@ -81,7 +81,7 @@ namespace Entities.Armory {
                 }
             }
             else
-                CurrentWeapon = weaponMap[WeaponTypes.Blaster];
+                CurrentWeapon = _weaponMap[WeaponTypes.Blaster];
         }
 
         public void AddWeapon(WeaponTypes weaponType){
@@ -104,11 +104,11 @@ namespace Entities.Armory {
 
             // if not already holding, add to inventory
             else
-                weaponMap[weaponType] = weaponToAdd;
+                _weaponMap[weaponType] = weaponToAdd;
         }
 
         public Weapon GetWeaponFromInventory(WeaponTypes weaponType){
-            return weaponMap[weaponType];
+            return _weaponMap[weaponType];
         }
 
         public void ChangeWeapon(WeaponTypes weaponType){
@@ -175,11 +175,11 @@ namespace Entities.Armory {
 
             // return the predicted future position of the enemy
             return Agent.TargetingSystem.Target.Kinematic.Position +
-                   Agent.TargetingSystem.Target.Kinematic.Velocity * lookAheadTime * deltaTime;
+                   Agent.TargetingSystem.Target.Kinematic.Velocity * (lookAheadTime * deltaTime);
         }
 
         public int GetRoundsRemaining(WeaponTypes weaponType){
-            return weaponMap[weaponType] != null ? weaponMap[weaponType].RoundsRemaining : 0;
+            return _weaponMap[weaponType] != null ? _weaponMap[weaponType].RoundsRemaining : 0;
         }
 
         public void ShootAt(Vector3 targetPosition){

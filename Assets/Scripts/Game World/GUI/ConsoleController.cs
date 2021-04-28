@@ -8,26 +8,26 @@ using UnityEngine;
 namespace GameWorld.GUI {
     [AddComponentMenu("Scripts/GUI/Console Controller")]
     public class ConsoleController : WindowManager {
-        private const string WindowTitle = "Console Controller";
+        private const string _WINDOW_TITLE = "Console Controller";
         public Vector2 positionOffset = new Vector2(0, 50);
 
         public int minimumWindowWidth = 150;
         public int minimumColumnWidth = 120;
 
-        private List<Agent> agents;
-        private Dictionary<string, SelectableCamera> cameras;
-        private string[] camerasNames;
-        private int curAgent;
-        private int curCamera = -1;
+        private List<Agent> _agents;
+        private Dictionary<string, SelectableCamera> _cameras;
+        private string[] _camerasNames;
+        private int _curAgent;
+        private int _curCamera = -1;
 
-        private MessageManager messageManager;
+        private MessageManager _messageManager;
 
-        // The variable to control where the scrollview 'looks' into its child elements.
-        private Vector2 scrollPosition;
-        private Rect windowRectangle;
+        // The variable to control where the scroll-view 'looks' into its child elements.
+        private Vector2 _scrollPosition;
+        private Rect _windowRectangle;
 
         public void Awake(){
-            windowRectangle = new Rect(positionOffset.x, positionOffset.y, minimumWindowWidth, 0);
+            _windowRectangle = new Rect(positionOffset.x, positionOffset.y, minimumWindowWidth, 0);
         }
 
         /********************************************************************************************************************/
@@ -36,21 +36,21 @@ namespace GameWorld.GUI {
         public override void Start(){
             base.Start(); // initializes the window id
             /* Get list of all Agents*/
-            agents = EntityManager.FindAll<Agent>();
+            _agents = EntityManager.FindAll<Agent>();
             GetViews();
-            messageManager = MessageManager.Instance;
+            _messageManager = MessageManager.Instance;
         }
 
         /********************************************************************************************************************/
         // If this behaviour is enabled, OnGUI is called for rendering and handling GUI events.
         // It might be called several times per frame (one call per event).
         public void OnGUI(){
-            windowRectangle =
+            _windowRectangle =
                 GUILayout.Window(
                     windowId,
-                    windowRectangle,
+                    _windowRectangle,
                     WindowFunction,
-                    WindowTitle,
+                    _WINDOW_TITLE,
                     GUILayout.MinWidth(minimumWindowWidth));
         }
 
@@ -58,13 +58,13 @@ namespace GameWorld.GUI {
         /* Initialization helpers */
         /* Get camera script to allows users to toggle view  */
         private void GetViews(){
-            cameras = new Dictionary<string, SelectableCamera>();
+            _cameras = new Dictionary<string, SelectableCamera>();
             var cameraObjects = GameObject.FindGameObjectsWithTag("MainCamera");
             var curCameraName = "";
             foreach (var cameraObject in cameraObjects){
                 var attachedCameras = cameraObject.GetComponents<SelectableCamera>();
                 foreach (var selectableCamera in attachedCameras){
-                    cameras.Add(selectableCamera.CameraName, selectableCamera);
+                    _cameras.Add(selectableCamera.CameraName, selectableCamera);
                     /* Make sure we only have one active camera */
                     if (string.IsNullOrEmpty(curCameraName) && selectableCamera.IsActive())
                         curCameraName = selectableCamera.CameraName;
@@ -74,14 +74,14 @@ namespace GameWorld.GUI {
             }
 
             /* Store camera names in array*/
-            camerasNames = new string[cameras.Count];
-            cameras.Keys.CopyTo(camerasNames, 0);
+            _camerasNames = new string[_cameras.Count];
+            _cameras.Keys.CopyTo(_camerasNames, 0);
 
             /* Activate current camera and set the correct index*/
             if (string.IsNullOrEmpty(curCameraName)) return;
 
-            cameras[curCameraName].Activate();
-            curCamera = Array.IndexOf(camerasNames, curCameraName);
+            _cameras[curCameraName].Activate();
+            _curCamera = Array.IndexOf(_camerasNames, curCameraName);
         }
 
         /********************************************************************************************************************/
@@ -89,7 +89,7 @@ namespace GameWorld.GUI {
 
         // It requires the id of the window it's currently making GUI for. 
         private void WindowFunction(int windowID){
-            if (agents.Count == 0) return;
+            if (_agents.Count == 0) return;
 
             // Layout dummy label to keep the title showing
             // even when no items are selected.
@@ -97,7 +97,7 @@ namespace GameWorld.GUI {
 
             /* Let users select which agent they want to view */
             AgentSelection();
-            var agent = agents[curAgent];
+            var agent = _agents[_curAgent];
 
             /* Show info about the current agent */
             /* TODO: allow user to toggle what they want to see */
@@ -114,13 +114,13 @@ namespace GameWorld.GUI {
         private void AgentSelection(){
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", GUILayout.ExpandWidth(true))){
-                curAgent--;
-                if (curAgent < 0) curAgent = (curAgent + agents.Count) % agents.Count;
+                _curAgent--;
+                if (_curAgent < 0) _curAgent = (_curAgent + _agents.Count) % _agents.Count;
             }
 
             if (GUILayout.Button("Next", GUILayout.ExpandWidth(true))){
-                curAgent++;
-                curAgent %= agents.Count;
+                _curAgent++;
+                _curAgent %= _agents.Count;
             }
 
             GUILayout.EndHorizontal();
@@ -140,7 +140,7 @@ namespace GameWorld.GUI {
 
         /* Little bit ugly cause Unity forces us to use arrays for the selection grid */
         private SelectableCamera GetCamera(int index){
-            return cameras[camerasNames[index]];
+            return _cameras[_camerasNames[index]];
         }
 
         private static void SetCurrentView(SelectableCamera oldCamera, SelectableCamera newCamera, Transform target){
@@ -152,13 +152,13 @@ namespace GameWorld.GUI {
 
         /* Used to select view */
         private void ViewSelection(Component agent){
-            if (curCamera < 0) return;
+            if (_curCamera < 0) return;
 
             /* Set current camera*/
             GUILayout.BeginVertical();
-            var oldCamera = GetCamera(curCamera);
-            curCamera = GUILayout.SelectionGrid(curCamera, camerasNames, 2);
-            var newCamera = GetCamera(curCamera);
+            var oldCamera = GetCamera(_curCamera);
+            _curCamera = GUILayout.SelectionGrid(_curCamera, _camerasNames, 2);
+            var newCamera = GetCamera(_curCamera);
             SetCurrentView(oldCamera, newCamera, agent.gameObject.transform);
             GUILayout.EndVertical();
         }
@@ -167,12 +167,12 @@ namespace GameWorld.GUI {
         private void ShowThoughts(Agent agent){
             var agentBrain = agent.Brain;
             var headMessage = agentBrain.GetHeadMessage();
-            var agentMessages = messageManager.GetMessages(agent);
+            var agentMessages = _messageManager.GetMessages(agent);
             /* Get top message */
             var headStyle = new GUIStyle{normal ={textColor = headMessage.Color}};
             GUILayout.Label(headMessage.Text, headStyle);
-            scrollPosition = GUILayout.BeginScrollView(
-                scrollPosition,
+            _scrollPosition = GUILayout.BeginScrollView(
+                _scrollPosition,
                 GUILayout.ExpandWidth(true),
                 GUILayout.MinHeight(50)
             );
@@ -192,8 +192,8 @@ namespace GameWorld.GUI {
             agent.IsAiControlled = GUILayout.Toggle(agent.IsAiControlled, "Is AI controlled");
             if (!agent.IsAiControlled){
                 GUILayout.BeginHorizontal();
-                foreach (var evalutor in agent.Brain.evaluators){
-                    if (GUILayout.Button(evalutor.GoalName, GUILayout.ExpandWidth(true))) evalutor.SetGoal(agent);
+                foreach (var evaluator in agent.Brain.evaluators){
+                    if (GUILayout.Button(evaluator.GoalName, GUILayout.ExpandWidth(true))) evaluator.SetGoal(agent);
                     curButtons++;
                     if (curButtons < maxButtonInRow) continue;
                     GUILayout.EndHorizontal();

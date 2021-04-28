@@ -60,6 +60,4 @@ namespace GameWorld {
     ///     ///
     /// </param>
     public delegate void EventDelegate<T>(Event<T> eventT);
-
-    public delegate bool MessageDelegate<T>(Event<T> eventT);
 }

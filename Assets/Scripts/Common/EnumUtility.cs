@@ -103,6 +103,7 @@ namespace Common {
                 ItemTypes.Railgun => GoalTypes.GetRailgun,
                 ItemTypes.RocketLauncher => GoalTypes.GetRocketLauncher,
                 ItemTypes.Shotgun => GoalTypes.GetShotgun,
+                ItemTypes.Blaster => throw new Exception("ItemTypeToGoalType: blasters cannot be acquired"),
                 _ => throw new Exception("ItemTypeToGoalType: cannot determine item type.")
             };
         }

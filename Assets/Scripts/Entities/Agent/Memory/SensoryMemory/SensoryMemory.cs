@@ -51,7 +51,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common;
 using Entities.Armory;
 using UnityEngine;
 
@@ -63,39 +62,41 @@ namespace Entities.Memory.SensoryMemory {
     ///     TODO: how about add smell or tracking if crossing recent path.
     /// </remarks>
     public class SensoryMemory {
+        private readonly bool _friendlyFire;
+        public Vector3 projectileMaxRange = Vector3.zero;
+
+        public Vector3 projectileMinRange = Vector3.zero;
 
         /// <summary>
         ///     Initializes a new instance of the SensoryMemory class.
         /// </summary>
         /// <param name="agent">The agent that owns this sensory memory.</param>
+        /// <param name="friendlyFire">If we can shoot agents on same team.</param>
         /// <param name="memorySpan">How soon we forget.</param>
         public SensoryMemory(Agent agent, float memorySpan, bool friendlyFire){
             Agent = agent;
             MemorySpan = memorySpan;
-            this.friendlyFire = friendlyFire;
+            _friendlyFire = friendlyFire;
             MemoryMap = new Dictionary<Agent, SensoryMemoryRecord>();
         }
 
-        public Vector3 projectileMinRange = Vector3.zero;
-        public Vector3 projectileMaxRange = Vector3.zero;
-        private readonly bool friendlyFire;
         /// <summary>
         ///     Gets the owner of this instance.
         /// </summary>
-        public Agent Agent { get; }
+        private Agent Agent { get; }
 
         /// <summary>
         ///     Gets the container is used to simulate memory of sensory events. A  record is created
         ///     for each opponent in the environment. Each record is updated whenever the opponent is
         ///     encountered (i.e., whenever it is seen or heard).
         /// </summary>
-        public Dictionary<Agent, SensoryMemoryRecord> MemoryMap { get; }
+        private Dictionary<Agent, SensoryMemoryRecord> MemoryMap { get; }
 
         /// <summary>
         ///     Gets the agent's memory span. When an agent requests a list of all recently sensed opponents
         ///     this value is used to determine if the agent is able to remember an opponent or not.
         /// </summary>
-        public float MemorySpan { get; }
+        private float MemorySpan { get; }
 
         /// <summary>
         ///     Remove an agent's record from memory.
@@ -139,7 +140,7 @@ namespace Entities.Memory.SensoryMemory {
 
         /// <summary>
         ///     This method iterates through all the agents in the game world to test if they are in the
-        ///     field of view. Each agents's memory record is updated accordingly.
+        ///     field of view. Each agent's memory record is updated accordingly.
         /// </summary>
         public void UpdateVision(){
             // for each agent in the world test to see if it is visible to the
@@ -183,13 +184,17 @@ namespace Entities.Memory.SensoryMemory {
             /* TODO: move someone easier to access */
             const float careAboutRange = 5f;
             foreach (var projectile in from projectile in projectiles
-                where Agent.HasLineOfSight(Agent.Kinematic.Position) 
-                where friendlyFire || Agent.color != projectile.Shooter.color 
-                where !((projectile.TargetPosition - Agent.transform.position).magnitude >  careAboutRange) 
+                where Agent.HasLineOfSight(Agent.Kinematic.Position)
+                where _friendlyFire || Agent.color != projectile.Shooter.color
+                where !((projectile.TargetPosition - Agent.transform.position).magnitude > careAboutRange)
                 select projectile){
                 /* NOTE: can make it sophisticated by considering the range of damage or somehow giving them a higher priority */
-                projectileMinRange = new Vector3(Mathf.Min(projectileMinRange.x, projectile.TargetPosition.x), Mathf.Min(projectileMinRange.y, projectile.TargetPosition.y), Mathf.Min(projectileMinRange.z, projectile.TargetPosition.z));
-                projectileMaxRange = new Vector3(Mathf.Max(projectileMaxRange.x, projectile.TargetPosition.x), Mathf.Max(projectileMaxRange.y, projectile.TargetPosition.y), Mathf.Max(projectileMaxRange.z, projectile.TargetPosition.z));
+                projectileMinRange = new Vector3(Mathf.Min(projectileMinRange.x, projectile.TargetPosition.x),
+                    Mathf.Min(projectileMinRange.y, projectile.TargetPosition.y),
+                    Mathf.Min(projectileMinRange.z, projectile.TargetPosition.z));
+                projectileMaxRange = new Vector3(Mathf.Max(projectileMaxRange.x, projectile.TargetPosition.x),
+                    Mathf.Max(projectileMaxRange.y, projectile.TargetPosition.y),
+                    Mathf.Max(projectileMaxRange.z, projectile.TargetPosition.z));
             }
         }
 

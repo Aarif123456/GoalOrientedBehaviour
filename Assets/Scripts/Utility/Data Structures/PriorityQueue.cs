@@ -97,7 +97,7 @@ namespace Utility.DataStructures {
             LowFirst
         }
 
-        private const int DEFAULT_CAPACITY = 16;
+        private const int _DEFAULT_CAPACITY = 16;
         private int _capacity;
         private Comparison<TPriority> _compareFunc;
         private PriorityQueueItem<TValue, TPriority>[] _items;
@@ -110,7 +110,7 @@ namespace Utility.DataStructures {
         ///     <see cref="IComparer" />.
         /// </summary>
         public PriorityQueue()
-            : this(DEFAULT_CAPACITY, Comparer<TPriority>.Default, PriorityOrder.HighFirst){
+            : this(_DEFAULT_CAPACITY, Comparer<TPriority>.Default, PriorityOrder.HighFirst){
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Utility.DataStructures {
         ///     The priority order.
         /// </param>
         public PriorityQueue(PriorityOrder priorityOrder)
-            : this(DEFAULT_CAPACITY, Comparer<TPriority>.Default, priorityOrder){
+            : this(_DEFAULT_CAPACITY, Comparer<TPriority>.Default, priorityOrder){
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Utility.DataStructures {
         /// <param name="comparer">
         /// </param>
         public PriorityQueue(IComparer<TPriority> comparer)
-            : this(DEFAULT_CAPACITY, comparer, PriorityOrder.HighFirst){
+            : this(_DEFAULT_CAPACITY, comparer, PriorityOrder.HighFirst){
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Utility.DataStructures {
         /// <param name="comparison">
         /// </param>
         public PriorityQueue(Comparison<TPriority> comparison)
-            : this(DEFAULT_CAPACITY, comparison, PriorityOrder.HighFirst){
+            : this(_DEFAULT_CAPACITY, comparison, PriorityOrder.HighFirst){
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Utility.DataStructures {
         ///     has the given priority order.
         /// </summary>
         public PriorityQueue(IComparer<TPriority> comparer, PriorityOrder priorityOrder)
-            : this(DEFAULT_CAPACITY, comparer, priorityOrder){
+            : this(_DEFAULT_CAPACITY, comparer, priorityOrder){
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Utility.DataStructures {
         ///     has the given priority order.
         /// </summary>
         public PriorityQueue(Comparison<TPriority> comparison, PriorityOrder priorityOrder)
-            : this(DEFAULT_CAPACITY, comparison, priorityOrder){
+            : this(_DEFAULT_CAPACITY, comparison, priorityOrder){
         }
 
         /// <summary>
@@ -525,10 +525,11 @@ namespace Utility.DataStructures {
 
         private void SetCapacity(int newCapacity){
             var newCap = newCapacity;
-            if (newCap < DEFAULT_CAPACITY) newCap = DEFAULT_CAPACITY;
+            if (newCap < _DEFAULT_CAPACITY) newCap = _DEFAULT_CAPACITY;
 
             // throw exception if newCapacity < NumItems
-            if (newCap < Count) throw new ArgumentOutOfRangeException(nameof(newCapacity), "New capacity is less than Count");
+            if (newCap < Count)
+                throw new ArgumentOutOfRangeException(nameof(newCapacity), "New capacity is less than Count");
 
             _capacity = newCap;
             if (_items == null){

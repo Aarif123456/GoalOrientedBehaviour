@@ -3,13 +3,13 @@ using Utility.Math;
 
 namespace Entities.Steering {
     public class Align : SteeringBehaviour {
-        private readonly float satisfactionRadius;
-        private readonly float timeToTarget;
+        private readonly float _satisfactionRadius;
+        private readonly float _timeToTarget;
 
         public Align(Kinematic agentKinematic, Kinematic targetKinematic, float timeToTarget, float satisfactionRadius)
             : base(agentKinematic, targetKinematic){
-            this.timeToTarget = timeToTarget;
-            this.satisfactionRadius = satisfactionRadius;
+            _timeToTarget = timeToTarget;
+            _satisfactionRadius = satisfactionRadius;
         }
 
         public override Steering Steer(){
@@ -17,12 +17,12 @@ namespace Entities.Steering {
 
             Vector3 angularVelocity;
 
-            if (angularDirection.magnitude <= satisfactionRadius)
+            if (angularDirection.magnitude <= _satisfactionRadius)
                 angularVelocity = Vector3.zero;
-            else if (timeToTarget <= 0f)
+            else if (_timeToTarget <= 0f)
                 angularVelocity = angularDirection;
             else
-                angularVelocity = angularDirection / timeToTarget;
+                angularVelocity = angularDirection / _timeToTarget;
 
             return new Steering{Type = Steering.Types.Velocities, Angular = angularVelocity};
         }

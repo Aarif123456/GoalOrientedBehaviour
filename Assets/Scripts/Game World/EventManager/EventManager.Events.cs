@@ -52,12 +52,12 @@ using System.ComponentModel;
 
 namespace GameWorld {
     public static partial class Events {
-        [Description("Invalid")] public static readonly EventType Invalid = (EventType) Count++;
+        [Description("Invalid")] public static readonly EventType INVALID = (EventType) Count++;
 
-        [Description("Message")] public static readonly EventType Message = (EventType) Count++;
+        [Description("Message")] public static readonly EventType MESSAGE = (EventType) Count++;
 
-        [Description("ImmediateUpdate")] public static readonly EventType ImmediateUpdate = (EventType) Count++;
+        [Description("ImmediateUpdate")] public static readonly EventType IMMEDIATE_UPDATE = (EventType) Count++;
 
-        [Description("QueuedUpdate")] public static readonly EventType QueuedUpdate = (EventType) Count++;
+        [Description("QueuedUpdate")] public static readonly EventType QUEUED_UPDATE = (EventType) Count++;
     }
 }

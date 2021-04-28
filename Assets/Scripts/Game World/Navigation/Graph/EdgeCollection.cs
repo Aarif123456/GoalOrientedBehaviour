@@ -7,7 +7,7 @@ namespace GameWorld.Navigation.Graph {
         public Graph graph;
         public Color color = Color.magenta;
         public float alpha = 0.25f;
-        private bool isVisible;
+        private bool _isVisible;
 
         public Graph Graph {
             get => graph;
@@ -20,12 +20,12 @@ namespace GameWorld.Navigation.Graph {
         public bool IsLocked => locked || Graph is{IsLocked: true};
 
         public bool IsVisible {
-            get => isVisible;
+            get => _isVisible;
 
             set {
-                isVisible = value;
+                _isVisible = value;
                 foreach (var edge in Edges){
-                    edge.GetComponent<Renderer>().enabled = value;
+                    edge.renderer.enabled = value;
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace GameWorld.Navigation.Graph {
         GameObject edgeObject = Instantiate(fromNode.Graph.edgePrefab) as GameObject;
 #endif
 
-            if (ReferenceEquals(edgeObject, null)) return edgeObject;
+            if (ReferenceEquals(edgeObject, null)) return null;
             var edge = edgeObject.GetComponent<Edge>();
 
             if (!ReferenceEquals(edge, null)){
@@ -75,7 +75,7 @@ namespace GameWorld.Navigation.Graph {
             if (IsLocked || edge.locked) return;
             color.a = alpha;
             edge.color = color;
-            edge.GetComponent<Renderer>().sharedMaterial.color = color;
+            edge.renderer.sharedMaterial.color = color;
         }
     }
 }

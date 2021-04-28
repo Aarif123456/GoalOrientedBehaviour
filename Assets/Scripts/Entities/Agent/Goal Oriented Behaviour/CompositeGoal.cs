@@ -45,13 +45,12 @@ namespace Entities.GoalOrientedBehaviour {
             return statusOfSubGoals;
         }
 
-       public override void StoreThoughtProcess(MessageManager messageManager, ref int indent)
-       {
+        public override void StoreThoughtProcess(MessageManager messageManager, ref int indent){
             base.StoreThoughtProcess(messageManager, ref indent);
             indent++;
             foreach (var goal in Subgoals){
                 goal.StoreThoughtProcess(messageManager, ref indent);
             }
-       }
+        }
     }
 }

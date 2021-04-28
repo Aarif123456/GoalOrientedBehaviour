@@ -4,7 +4,7 @@ using Entities.Armory;
 using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
-    public sealed class Feature {
+    public static class Feature {
         public static float Health(Agent agent){
             return agent.Health / (float) agent.MaximumHealth;
         }
@@ -19,10 +19,10 @@ namespace Entities.GoalOrientedBehaviour {
 
             // these values represent cutoffs. Any distance over maxDistance results in
             // a value of 1, and value below minDistance results in a value of 0
-            const float MAX_DISTANCE = 200.0f;
-            const float MIN_DISTANCE = 10.0f;
-            distanceToItem = Mathf.Clamp(distanceToItem, MIN_DISTANCE, MAX_DISTANCE);
-            return distanceToItem / MAX_DISTANCE;
+            const float maxDistance = 200.0f;
+            const float minDistance = 10.0f;
+            distanceToItem = Mathf.Clamp(distanceToItem, minDistance, maxDistance);
+            return distanceToItem / maxDistance;
         }
 
         public static float IndividualWeaponStrength(Agent agent, WeaponTypes weaponType){
@@ -47,9 +47,9 @@ namespace Entities.GoalOrientedBehaviour {
             // the value of the tweaker (must be in the range 0-1) indicates how much
             // desirability value is returned even if a bot has not picked up any weapons.
             // (it basically adds in an amount for a bot's persistent weapon -- the blaster)
-            const float TWEAKER = 0.1f;
+            const float tweaker = 0.1f;
 
-            return TWEAKER + (1.0f - TWEAKER) * (numSlugs + numCartridges + numRockets) / totalRoundsCarryable;
+            return tweaker + (1.0f - tweaker) * (numSlugs + numCartridges + numRockets) / totalRoundsCarryable;
         }
 
         private static float GetMaxRoundsBotCanCarryForWeapon(WeaponTypes weaponType){

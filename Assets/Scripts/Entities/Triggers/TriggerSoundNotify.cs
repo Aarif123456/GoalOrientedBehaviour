@@ -21,7 +21,7 @@ namespace Entities.Triggers {
 
             if (TriggeringAgent != null){
                 EventManager.Instance.Enqueue(
-                    Events.WeaponSound,
+                    Events.WEAPON_SOUND,
                     new WeaponSoundEventPayload(TriggeringAgent, NoiseMakingAgent));
             }
         }

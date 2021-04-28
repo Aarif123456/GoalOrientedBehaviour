@@ -3,14 +3,14 @@ using UnityEngine;
 namespace Entities.Steering {
     [RequireComponent(typeof(CharacterController))]
     public class CharacterMotor : Motor {
-        private CharacterController characterController;
+        private CharacterController _characterController;
 
         public void Start(){
-            characterController = GetComponent<CharacterController>();
+            _characterController = GetComponent<CharacterController>();
         }
 
         public override void ApplyPhysicsToGameObject(MovingEntity movingEntity, float deltaTime){
-            characterController.SimpleMove(movingEntity.Kinematic.Velocity);
+            _characterController.SimpleMove(movingEntity.Kinematic.Velocity);
             transform.rotation = Quaternion.Euler(movingEntity.Kinematic.Rotation);
         }
 
@@ -22,7 +22,7 @@ namespace Entities.Steering {
             var transform1 = transform;
             movingEntity.Kinematic.Position = transform1.position;
             movingEntity.Kinematic.Rotation = transform1.rotation.eulerAngles;
-            movingEntity.Kinematic.Velocity = characterController.velocity;
+            movingEntity.Kinematic.Velocity = _characterController.velocity;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace GameWorld.Managers {
             return false;
         }
 
-        public void AddGrave(Vector3 position){
+        private static void AddGrave(Vector3 position){
         }
     }
 }

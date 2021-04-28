@@ -64,7 +64,7 @@ namespace GameWorld {
         /// <summary>
         ///     The id of the sender is irrelevant (system generated).
         /// </summary>
-        public const int SENDER_ID_IRRELEVANT = -1;
+        private const int _SENDER_ID_IRRELEVANT = -1;
 
         /// <summary>
         ///     The id of the receiver is irrelevant (system generated).
@@ -74,7 +74,7 @@ namespace GameWorld {
         /// <summary>
         ///     Event should be dispatched without delay.
         /// </summary>
-        public const double NO_DELAY = 0.0f;
+        private const double _NO_DELAY = 0.0f;
 
         private static EventManager _instance;
 
@@ -116,10 +116,10 @@ namespace GameWorld {
         public void Update(){
             // Fire a (non-queued) update event per cycle. Trigger processes the
             // event immediately without putting it on the event queue.
-            Fire(Events.ImmediateUpdate, Time.time);
+            Fire(Events.IMMEDIATE_UPDATE, Time.time);
 
             // post a (queued) update event per cycle.
-            Enqueue(Events.QueuedUpdate, Time.time);
+            Enqueue(Events.QUEUED_UPDATE, Time.time);
 
             while (ProcessEvents()){
             }
@@ -146,14 +146,8 @@ namespace GameWorld {
 
         public void Unsubscribe<T>(
             EventType eventType,
-            EventDelegate<T> eventDelegate){
-            Unsubscribe(eventType, eventDelegate, null);
-        }
-
-        public void Unsubscribe<T>(
-            EventType eventType,
             EventDelegate<T> eventDelegate,
-            object eventKey){
+            object eventKey = null){
             var subscriptionToRemove = new Subscription(eventDelegate, eventKey);
 
             lock (_eventSubscribers){
@@ -166,7 +160,7 @@ namespace GameWorld {
         public int Enqueue<T>(
             EventType eventType,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
+            return Enqueue(eventType, Event.Lifespans.CYCLE, _NO_DELAY, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
                 null,
                 eventData, null);
         }
@@ -175,7 +169,7 @@ namespace GameWorld {
             EventType eventType,
             double delay,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null,
+            return Enqueue(eventType, Event.Lifespans.LEVEL, delay, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null,
                 eventData, null);
         }
 
@@ -184,7 +178,7 @@ namespace GameWorld {
             double delay,
             EventDelegate<T> eventDelegate,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
+            return Enqueue(eventType, Event.Lifespans.LEVEL, delay, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
                 eventDelegate, eventData, null);
         }
 
@@ -192,7 +186,7 @@ namespace GameWorld {
             EventType eventType,
             EventDelegate<T> eventDelegate,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
+            return Enqueue(eventType, Event.Lifespans.CYCLE, _NO_DELAY, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT,
                 eventDelegate, eventData, null);
         }
 
@@ -201,7 +195,7 @@ namespace GameWorld {
             double delay,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Level, delay, SENDER_ID_IRRELEVANT, receiverId, null, eventData,
+            return Enqueue(eventType, Event.Lifespans.LEVEL, delay, _SENDER_ID_IRRELEVANT, receiverId, null, eventData,
                 null);
         }
 
@@ -209,7 +203,7 @@ namespace GameWorld {
             EventType eventType,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, SENDER_ID_IRRELEVANT, receiverId, null,
+            return Enqueue(eventType, Event.Lifespans.CYCLE, _NO_DELAY, _SENDER_ID_IRRELEVANT, receiverId, null,
                 eventData,
                 null);
         }
@@ -220,7 +214,7 @@ namespace GameWorld {
             int senderId,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Level, delay, senderId, receiverId, null, eventData, null);
+            return Enqueue(eventType, Event.Lifespans.LEVEL, delay, senderId, receiverId, null, eventData, null);
         }
 
         public int Enqueue<T>(
@@ -228,7 +222,7 @@ namespace GameWorld {
             int senderId,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, null, eventData, null);
+            return Enqueue(eventType, Event.Lifespans.CYCLE, _NO_DELAY, senderId, receiverId, null, eventData, null);
         }
 
         public int Enqueue<T>(
@@ -238,7 +232,7 @@ namespace GameWorld {
             EventDelegate<T> eventDelegate,
             T eventData,
             object eventKey){
-            return Enqueue(eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId, eventDelegate, eventData,
+            return Enqueue(eventType, Event.Lifespans.CYCLE, _NO_DELAY, senderId, receiverId, eventDelegate, eventData,
                 eventKey);
         }
 
@@ -250,7 +244,7 @@ namespace GameWorld {
             EventDelegate<T> eventDelegate,
             T eventData,
             object eventKey){
-            return Enqueue(eventType, Event.Lifespans.Level, delay, senderId, receiverId, eventDelegate, eventData,
+            return Enqueue(eventType, Event.Lifespans.LEVEL, delay, senderId, receiverId, eventDelegate, eventData,
                 eventKey);
         }
 
@@ -258,7 +252,8 @@ namespace GameWorld {
             EventType eventType,
             Event.Lifespan lifespan,
             T eventData){
-            return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData,
+            return Enqueue(eventType, lifespan, _NO_DELAY, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null,
+                eventData,
                 null);
         }
 
@@ -267,7 +262,7 @@ namespace GameWorld {
             Event.Lifespan lifespan,
             double delay,
             T eventData){
-            return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData,
+            return Enqueue(eventType, lifespan, delay, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData,
                 null);
         }
 
@@ -277,7 +272,7 @@ namespace GameWorld {
             double delay,
             EventDelegate<T> eventDelegate,
             T eventData){
-            return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
+            return Enqueue(eventType, lifespan, delay, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
                 eventData, null);
         }
 
@@ -286,7 +281,7 @@ namespace GameWorld {
             Event.Lifespan lifespan,
             EventDelegate<T> eventDelegate,
             T eventData){
-            return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
+            return Enqueue(eventType, lifespan, _NO_DELAY, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate,
                 eventData, null);
         }
 
@@ -296,7 +291,7 @@ namespace GameWorld {
             double delay,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, lifespan, delay, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
+            return Enqueue(eventType, lifespan, delay, _SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
         }
 
         public int Enqueue<T>(
@@ -304,7 +299,7 @@ namespace GameWorld {
             Event.Lifespan lifespan,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, lifespan, NO_DELAY, SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
+            return Enqueue(eventType, lifespan, _NO_DELAY, _SENDER_ID_IRRELEVANT, receiverId, null, eventData, null);
         }
 
         public int Enqueue<T>(
@@ -323,7 +318,7 @@ namespace GameWorld {
             int senderId,
             int receiverId,
             T eventData){
-            return Enqueue(eventType, lifespan, NO_DELAY, senderId, receiverId, null, eventData, null);
+            return Enqueue(eventType, lifespan, _NO_DELAY, senderId, receiverId, null, eventData, null);
         }
 
         public int Enqueue<T>(
@@ -334,7 +329,7 @@ namespace GameWorld {
             EventDelegate<T> eventDelegate,
             T eventData,
             object eventKey){
-            return Enqueue(eventType, lifespan, NO_DELAY, senderId, receiverId, eventDelegate, eventData, eventKey);
+            return Enqueue(eventType, lifespan, _NO_DELAY, senderId, receiverId, eventDelegate, eventData, eventKey);
         }
 
         public int Enqueue<T>(
@@ -367,21 +362,21 @@ namespace GameWorld {
         public void Fire<T>(
             EventType eventType,
             T eventData){
-            Fire(eventType, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
+            Fire(eventType, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, null, eventData, null);
         }
 
         public void Fire<T>(
             EventType eventType,
             EventDelegate<T> eventDelegate,
             T eventData){
-            Fire(eventType, SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
+            Fire(eventType, _SENDER_ID_IRRELEVANT, RECEIVER_ID_IRRELEVANT, eventDelegate, eventData, null);
         }
 
         public void Fire<T>(
             EventType eventType,
             int receiverId,
             T eventData){
-            Fire(eventType, SENDER_ID_IRRELEVANT, receiverId, eventData);
+            Fire(eventType, _SENDER_ID_IRRELEVANT, receiverId, eventData);
         }
 
         public void Fire<T>(
@@ -400,7 +395,7 @@ namespace GameWorld {
             T eventData,
             object eventKey){
             var eventToFire =
-                Event<T>.Obtain(++_nextEventId, eventType, Event.Lifespans.Cycle, NO_DELAY, senderId, receiverId,
+                Event<T>.Obtain(++_nextEventId, eventType, Event.Lifespans.CYCLE, _NO_DELAY, senderId, receiverId,
                     eventDelegate, eventData);
             Fire(eventToFire);
         }
@@ -458,7 +453,7 @@ namespace GameWorld {
                 while (_eventProcessQueue.Count > 0){
                     var queueItem = _eventProcessQueue.Dequeue();
                     var unprocessedEvent = queueItem.Value;
-                    if (unprocessedEvent.EventLifespan == Event.Lifespans.Cycle){
+                    if (unprocessedEvent.EventLifespan == Event.Lifespans.CYCLE){
                         //unprocessedEvent.Recycle(); // shouldn't happen. If it does, event is skipped.
                     }
                     else
@@ -482,13 +477,12 @@ namespace GameWorld {
         /// </param>
         private void Fire(Event eventToFire){
             // call subscriber delegates
-            List<Subscription> subscriptionList;
             lock (_eventSubscribers){
-                if (eventToFire.EventType != Events.Message &&
-                    _eventSubscribers.TryGetValue(eventToFire.EventType, out subscriptionList)){
+                if (eventToFire.EventType != Events.MESSAGE &&
+                    _eventSubscribers.TryGetValue(eventToFire.EventType, out var subscriptionList)){
                     if (subscriptionList != null){
                         for (var i = 0; i < subscriptionList.Count; i++){
-                            eventToFire.Fire(subscriptionList[i].EventDelegate);
+                            eventToFire.Fire(subscriptionList[i].eventDelegate);
                         }
                     }
                 }

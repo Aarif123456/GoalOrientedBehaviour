@@ -39,9 +39,10 @@ namespace Entities.Armory {
 
             var directionToTarget = (targetPosition - (shooter.Kinematic.Position + heightOffset)).normalized;
 
-            transform.position =
+            var transform1 = transform;
+            transform1.position =
                 shooter.Kinematic.Position + heightOffset + directionToTarget * shooter.Kinematic.Radius;
-            transform.localScale = new Vector3(0.25f, 0.5f, 0.25f);
+            transform1.localScale = new Vector3(0.25f, 0.5f, 0.25f);
             transform.LookAt(targetPosition);
             transform.Rotate(Vector3.right, 90);
 
@@ -67,7 +68,7 @@ namespace Entities.Armory {
                 var fallOffFactor = (Parameters.Instance.RocketBlastRadius - distanceFromBlast) /
                                     Parameters.Instance.RocketBlastRadius;
                 EventManager.Instance.Enqueue(
-                    Events.DamageInflicted,
+                    Events.DAMAGE_INFLICTED,
                     new DamageInflictedEventPayload(Shooter, agent,
                         agent.GetComponent<Collider>().ClosestPointOnBounds(Kinematic.Position),
                         DamageInflicted * fallOffFactor));

@@ -3,7 +3,7 @@ using Utility.Math;
 
 namespace Entities.Steering {
     public sealed class Wander : SteeringBehaviour {
-        private float headingAngle;
+        private float _headingAngle;
 
         public Wander(Kinematic agentKinematic)
             : this(agentKinematic,
@@ -44,8 +44,8 @@ namespace Entities.Steering {
 
             if (WanderCircleRadius <= 0) return steering;
 
-            headingAngle += MaximumSlideDegrees - 2 * Random.value * MaximumSlideDegrees;
-            headingAngle = Math.WrapAngle(headingAngle);
+            _headingAngle += MaximumSlideDegrees - 2 * Random.value * MaximumSlideDegrees;
+            _headingAngle = Math.WrapAngle(_headingAngle);
 
             var forwardDirection = new Vector3(AgentKinematic.Velocity.x, 0, AgentKinematic.Velocity.z);
 
@@ -59,7 +59,7 @@ namespace Entities.Steering {
 
             var rightDirection = new Vector3(-forwardDirection.z, 0, forwardDirection.x);
             forwardDirection *= WanderCircleOffset;
-            rightDirection *= -Mathf.Sin(headingAngle) * WanderCircleRadius;
+            rightDirection *= -Mathf.Sin(_headingAngle) * WanderCircleRadius;
 
             var direction = forwardDirection + rightDirection;
             direction.Normalize();

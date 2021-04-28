@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
 using C5;
+using Object = UnityEngine.Object;
 
 namespace GameWorld.Navigation.Graph {
     public static class LeastCostPathTable {
-        private static readonly HashDictionary<NodePair, NodeAndCost> nextNodeAndCostTable =
+        private static readonly HashDictionary<NodePair, NodeAndCost> _NEXT_NODE_AND_COST_TABLE =
             new HashDictionary<NodePair, NodeAndCost>();
 
         public static float Cost(Node source, Node destination){
-            return nextNodeAndCostTable[new NodePair(source, destination)].cost;
+            return _NEXT_NODE_AND_COST_TABLE[new NodePair(source, destination)].cost;
         }
 
         public static bool PathExists(Node source, Node destination){
-            return Math.Abs(nextNodeAndCostTable[new NodePair(source, destination)].cost - float.MaxValue) > 0.01;
+            return Math.Abs(_NEXT_NODE_AND_COST_TABLE[new NodePair(source, destination)].cost - float.MaxValue) > 0.01;
         }
 
         public static Node NextNode(Node source, Node destination){
-            return nextNodeAndCostTable[new NodePair(source, destination)].node;
+            return _NEXT_NODE_AND_COST_TABLE[new NodePair(source, destination)].node;
         }
 
         public static List<Edge> Path(Node source, Node destination){
@@ -24,7 +25,7 @@ namespace GameWorld.Navigation.Graph {
             var fromNode = source;
 
             while (fromNode != null){
-                var nextNodeAndCost = nextNodeAndCostTable[new NodePair(fromNode, destination)];
+                var nextNodeAndCost = _NEXT_NODE_AND_COST_TABLE[new NodePair(fromNode, destination)];
                 var toNode = nextNodeAndCost.node;
 
                 if (toNode == null) continue;
@@ -41,7 +42,8 @@ namespace GameWorld.Navigation.Graph {
         public static void Create(Graph graph){
             foreach (var sourceNode in graph.nodeCollection.Nodes)
             foreach (var destinationNode in graph.nodeCollection.Nodes){
-                nextNodeAndCostTable[new NodePair(sourceNode, destinationNode)] = new NodeAndCost(null, float.MaxValue);
+                _NEXT_NODE_AND_COST_TABLE[new NodePair(sourceNode, destinationNode)] =
+                    new NodeAndCost(null, float.MaxValue);
             }
 
             foreach (var node in graph.nodeCollection.Nodes){
@@ -92,13 +94,13 @@ namespace GameWorld.Navigation.Graph {
             }
 
             foreach (var node in nodes){
-                nextNodeAndCostTable[new NodePair(source, node)] =
+                _NEXT_NODE_AND_COST_TABLE[new NodePair(source, node)] =
                     ExtractNextNodeFromTable(table, source, node);
             }
         }
 
         // Walk back through the predecessors to the one after source.
-        private static NodeAndCost ExtractNextNodeFromTable(HashDictionary<Node, Entry> table, Node source,
+        private static NodeAndCost ExtractNextNodeFromTable(C5.IDictionary<Node, Entry> table, Object source,
             Node destination){
             var nextNodeAndCost = new NodeAndCost(table[destination].predecessor, table[destination].cost);
 

@@ -23,7 +23,7 @@ namespace Entities.Steering {
         }
 
         protected virtual Vector3 GetTargetPosition(){
-            if(!ReferenceEquals(OtherKinematic, null)) return OtherKinematic.Position;
+            if (!ReferenceEquals(OtherKinematic, null)) return OtherKinematic.Position;
             Debug.LogWarning("Steering does not have a target");
             return AgentKinematic.Position;
         }
@@ -35,9 +35,9 @@ namespace Entities.Steering {
         protected virtual float GetDistanceToTarget(Vector3 moveDirection){
             return moveDirection.magnitude;
         }
-        
+
         public override Steering Steer(){
-            var targetPosition =  GetTargetPosition();
+            var targetPosition = GetTargetPosition();
             var direction = GetMoveDirection(targetPosition);
             var distance = GetDistanceToTarget(direction);
 

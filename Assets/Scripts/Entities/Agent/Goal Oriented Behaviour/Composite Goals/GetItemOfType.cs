@@ -1,40 +1,37 @@
-using System.Collections.Generic;
 using Common;
 using Entities.Armory;
 using Entities.Triggers;
 using GameWorld;
-using GameWorld.Navigation.Graph;
-using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class GetItemOfType : CompositeGoal {
-        private readonly ItemTypes itemTypeToGet;
-        private Entity itemEntity;
-        private Trigger itemTrigger;
+        private readonly ItemTypes _itemTypeToGet;
+        private Entity _itemEntity;
+        private Trigger _itemTrigger;
 
         public GetItemOfType(Agent agent, ItemTypes itemTypeToGet)
             : base(agent, EnumUtility.ItemTypeToGoalType(itemTypeToGet)){
-            this.itemTypeToGet = itemTypeToGet;
+            _itemTypeToGet = itemTypeToGet;
         }
 
         public override void Activate(){
             Status = StatusTypes.Active;
 
             EventManager.Instance.Subscribe<PathToItemReadyEventPayload>(
-                Events.PathToItemReady,
+                Events.PATH_TO_ITEM_READY,
                 OnPathToItemReady);
 
             EventManager.Instance.Subscribe<NoPathToItemAvailableEventPayload>(
-                Events.NoPathToItemAvailable,
+                Events.NO_PATH_TO_ITEM_AVAILABLE,
                 OnNoPathToItemAvailable);
 
-            itemTrigger = null;
-            itemEntity = null;
+            _itemTrigger = null;
+            _itemEntity = null;
 
             // request a path to the item
             EventManager.Instance.Enqueue(
-                Events.PathToItemRequest,
-                new PathToItemRequestEventPayload(Agent, itemTypeToGet));
+                Events.PATH_TO_ITEM_REQUEST,
+                new PathToItemRequestEventPayload(Agent, _itemTypeToGet));
 
             // the agent may have to wait a few update cycles before a path is
             // calculated so for appearances sake it just wanders
@@ -55,11 +52,11 @@ namespace Entities.GoalOrientedBehaviour {
 
         public override void Terminate(){
             EventManager.Instance.Unsubscribe<PathToItemReadyEventPayload>(
-                Events.PathToItemReady,
+                Events.PATH_TO_ITEM_READY,
                 OnPathToItemReady);
 
             EventManager.Instance.Unsubscribe<NoPathToItemAvailableEventPayload>(
-                Events.NoPathToItemAvailable,
+                Events.NO_PATH_TO_ITEM_AVAILABLE,
                 OnNoPathToItemAvailable);
 
             RemoveAllSubgoals();
@@ -67,10 +64,10 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         private bool HasItemBeenStolen(){
-            return itemTrigger != null &&
-                   !itemTrigger.IsActive &&
-                   itemTrigger.TriggeringAgent != Agent &&
-                   Agent.HasLineOfSight(itemEntity.Kinematic.Position);
+            return _itemTrigger != null &&
+                   !_itemTrigger.IsActive &&
+                   _itemTrigger.TriggeringAgent != Agent &&
+                   Agent.HasLineOfSight(_itemEntity.Kinematic.Position);
         }
 
         private void OnPathToItemReady(Event<PathToItemReadyEventPayload> eventArg){
@@ -82,8 +79,8 @@ namespace Entities.GoalOrientedBehaviour {
             // clear any existing goals
             RemoveAllSubgoals();
 
-            itemEntity = payload.itemEntity;
-            itemTrigger = itemEntity.GetComponent<Trigger>();
+            _itemEntity = payload.itemEntity;
+            _itemTrigger = _itemEntity.GetComponent<Trigger>();
 
             if (!Agent.PathPlanner.SplicePath(payload.path, out var splicePath, out var spliceTarget)){
                 //Debug.Log(Agent.name + " GetItem Failed at " + Time.time);

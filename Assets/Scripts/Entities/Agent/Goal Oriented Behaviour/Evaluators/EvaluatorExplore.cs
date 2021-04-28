@@ -4,7 +4,7 @@ namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorExplore : Evaluator {
         public EvaluatorExplore(float characterBias)
             : base(characterBias){
-                GoalName = "Explore";
+            GoalName = "Explore";
         }
 
         public override float CalculateDesirability(Agent agent){

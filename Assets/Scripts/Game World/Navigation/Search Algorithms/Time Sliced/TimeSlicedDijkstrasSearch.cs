@@ -3,27 +3,27 @@ using C5;
 
 namespace GameWorld.Navigation.Graph {
     public sealed class TimeSlicedDijkstrasSearch : TimeSlicedSearch {
-        private readonly IntervalHeap<ScoredNode> priorityQueue;
+        private readonly IntervalHeap<ScoredNode> _priorityQueue;
 
         public TimeSlicedDijkstrasSearch(Node source, Predicate<Node> isGoal)
             : base(TimeSlicedSearchTypes.Dijkstra, source){
             IsGoal = isGoal;
 
-            priorityQueue =
+            _priorityQueue =
                 new IntervalHeap<ScoredNode>(
                     new DelegateComparer<ScoredNode>(
                         (s1, s2) => s1.f.CompareTo(s2.f)));
             const float g = 0;
             const float h = 0;
-            priorityQueue.Add(new ScoredNode(source, g + h, g, null, null));
+            _priorityQueue.Add(new ScoredNode(source, g + h, g, null, null));
         }
 
-        public Predicate<Node> IsGoal { get; set; }
+        private Predicate<Node> IsGoal { get; }
 
         public override SearchResults CycleOnce(){
-            if (priorityQueue.IsEmpty) return SearchResults.Failure;
+            if (_priorityQueue.IsEmpty) return SearchResults.Failure;
 
-            var current = priorityQueue.DeleteMin();
+            var current = _priorityQueue.DeleteMin();
 
             if (IsGoal(current.node)){
                 Solution = ExtractPath(current);
@@ -34,7 +34,7 @@ namespace GameWorld.Navigation.Graph {
                 const float h = 0;
                 var g = current.g + edgeFromCurrent.Cost;
 
-                priorityQueue.Add(new ScoredNode(edgeFromCurrent.ToNode, g + h, g, edgeFromCurrent, current));
+                _priorityQueue.Add(new ScoredNode(edgeFromCurrent.ToNode, g + h, g, edgeFromCurrent, current));
             }
 
             return SearchResults.Running;

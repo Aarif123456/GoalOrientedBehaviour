@@ -3,7 +3,7 @@ using System.Text;
 using C5;
 
 namespace GameWorld.Navigation.Graph {
-    public class ScoredNode : IEquatable<ScoredNode>, IShowable, IFormattable {
+    public class ScoredNode : IEquatable<ScoredNode>, IShowable {
         public readonly Edge edgeFromParent;
         public readonly float f;
         public readonly float g;
@@ -78,7 +78,7 @@ namespace GameWorld.Navigation.Graph {
 
         [Tested]
         public override bool Equals(object obj){
-            return obj is ScoredNode && Equals((ScoredNode) obj);
+            return obj is ScoredNode scoredNode && Equals(scoredNode);
         }
 
         [Tested]

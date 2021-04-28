@@ -1,15 +1,13 @@
-using System.Collections.Generic;
 using GameWorld;
-using GameWorld.Navigation.Graph;
 using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class MoveToPosition : CompositeGoal {
-        private readonly Vector3 destination;
+        private readonly Vector3 _destination;
 
         public MoveToPosition(Agent agent, Vector2 destination)
             : base(agent, GoalTypes.MoveToPosition){
-            this.destination = destination;
+            _destination = destination;
         }
 
         public override void Activate(){
@@ -19,18 +17,18 @@ namespace Entities.GoalOrientedBehaviour {
             RemoveAllSubgoals();
 
             EventManager.Instance.Subscribe<PathToPositionReadyEventPayload>(
-                Events.PathToPositionReady,
+                Events.PATH_TO_POSITION_READY,
                 OnPathToPositionReady);
 
             EventManager.Instance.Subscribe<NoPathToPositionAvailableEventPayload>(
-                Events.NoPathToPositionAvailable,
+                Events.NO_PATH_TO_POSITION_AVAILABLE,
                 OnNoPathToPositionAvailable);
 
             EventManager.Instance.Enqueue(
-                Events.PathToPositionRequest,
-                new PathToPositionRequestEventPayload(Agent, destination));
+                Events.PATH_TO_POSITION_REQUEST,
+                new PathToPositionRequestEventPayload(Agent, _destination));
 
-            AddSubgoal(new SeekToPosition(Agent, destination));
+            AddSubgoal(new SeekToPosition(Agent, _destination));
         }
 
         public override StatusTypes Process(){
@@ -48,11 +46,11 @@ namespace Entities.GoalOrientedBehaviour {
 
         public override void Terminate(){
             EventManager.Instance.Unsubscribe<PathToPositionReadyEventPayload>(
-                Events.PathToPositionReady,
+                Events.PATH_TO_POSITION_READY,
                 OnPathToPositionReady);
 
             EventManager.Instance.Unsubscribe<NoPathToPositionAvailableEventPayload>(
-                Events.NoPathToPositionAvailable,
+                Events.NO_PATH_TO_POSITION_AVAILABLE,
                 OnNoPathToPositionAvailable);
         }
 

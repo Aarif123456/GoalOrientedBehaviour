@@ -21,7 +21,7 @@ namespace Entities.Armory {
                         (Parameters.Instance.FriendlyFire || Shooter.color != hitAgent.color)){
                         ProcessImpact(hitEntity, hitPoint);
                         EventManager.Instance.Enqueue(
-                            Events.DamageInflicted,
+                            Events.DAMAGE_INFLICTED,
                             new DamageInflictedEventPayload(Shooter, hitAgent, hitPoint, DamageInflicted));
                     }
 
@@ -42,14 +42,14 @@ namespace Entities.Armory {
 
             var directionToTarget = (targetPosition - (shooter.Kinematic.Position + heightOffset)).normalized;
 
-            transform.position =
+            var transform1 = transform;
+            transform1.position =
                 shooter.Kinematic.Position + heightOffset + directionToTarget * shooter.Kinematic.Radius;
-            transform.localScale = new Vector3(0.25f, 1, 0.25f);
+            transform1.localScale = new Vector3(0.25f, 1, 0.25f);
             transform.LookAt(targetPosition);
             transform.Rotate(Vector3.right, 90);
 
             Kinematic.SetVelocity(directionToTarget * Parameters.Instance.BoltMaximumSpeed);
         }
-
     }
 }

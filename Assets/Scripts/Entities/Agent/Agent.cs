@@ -10,15 +10,19 @@ namespace Entities {
         public Color color;
         public string shortName;
 
-        public Think Brain { get; set; }
+        private readonly Color _flashColor = Color.yellow;
+        private Material[] _normalMaterial, _flashMaterial;
+        private Renderer _renderer;
 
-        public SensoryMemory SensoryMemory { get; set; }
+        public Think Brain { get; private set; }
 
-        public TargetingSystem TargetingSystem { get; set; }
+        public SensoryMemory SensoryMemory { get; private set; }
 
-        public WeaponSystem WeaponSystem { get; set; }
+        public TargetingSystem TargetingSystem { get; private set; }
 
-        public PathPlanner PathPlanner { get; set; }
+        public WeaponSystem WeaponSystem { get; private set; }
+
+        public PathPlanner PathPlanner { get; private set; }
 
         public PathManager PathManager => PathPlanner.PathManager;
 
@@ -26,19 +30,19 @@ namespace Entities {
 
         public float FieldOfView { get; protected set; }
 
-        public Regulator GoalArbitrationRegulator { get; protected set; }
+        private Regulator GoalArbitrationRegulator { get; set; }
 
-        public Regulator VisionUpdateRegulator { get; protected set; }
+        private Regulator VisionUpdateRegulator { get; set; }
 
-        public Regulator TargetSelectionRegulator { get; protected set; }
+        private Regulator TargetSelectionRegulator { get; set; }
 
-        public Regulator WeaponSelectionRegulator { get; protected set; }
+        private Regulator WeaponSelectionRegulator { get; set; }
 
         public int Score { get; set; }
 
-        public float HitIndicatorTimer { get; set; }
+        private float HitIndicatorTimer { get; set; }
 
-        public bool Hit { get; set; }
+        private bool Hit { get; set; }
 
         public int Health { get; set; }
 
@@ -46,7 +50,7 @@ namespace Entities {
 
         public override void Awake(){
             base.Awake();
-
+            _renderer = GetComponent<Renderer>();
             var parameters = Parameters.Instance;
 
             SensoryMemory = new SensoryMemory(this, parameters.AgentMemorySpan, parameters.FriendlyFire);
@@ -307,7 +311,7 @@ namespace Entities {
 
             if (IsDead){
                 EventManager.Instance.Enqueue(
-                    Events.EntityDestroyed,
+                    Events.ENTITY_DESTROYED,
                     new EntityDestroyedEventPayload(payload.shooter, payload.victim));
             }
         }

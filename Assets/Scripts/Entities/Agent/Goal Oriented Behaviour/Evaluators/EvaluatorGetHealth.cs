@@ -1,3 +1,4 @@
+using System;
 using Common;
 using Entities.Armory;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorGetHealth : Evaluator {
         public EvaluatorGetHealth(float characterBias)
             : base(characterBias){
-                GoalName = "Get Health";
+            GoalName = "Get Health";
         }
 
         public override float CalculateDesirability(Agent agent){
@@ -16,7 +17,7 @@ namespace Entities.GoalOrientedBehaviour {
             // if the distance feature is rated with a value of 1 it means that the
             // item is either not present on the map or too far away to be worth 
             // considering, therefore the desirability is zero
-            if (distance == 1) return 0;
+            if (Math.Abs(distance - 1) < 0.01) return 0;
 
             // the desirability of finding a health item is proportional to the amount
             // of health remaining and inversely proportional to the distance from the

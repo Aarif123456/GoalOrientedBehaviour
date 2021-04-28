@@ -24,9 +24,7 @@ namespace Entities {
 
         public EntityTypes entityType = EntityTypes.DefaultEntityType;
 
-        protected Kinematic kinematic;
-
-        public States State { get; set; }
+        protected States State { get; set; }
 
         public bool IsDead => State == States.Dead;
 
@@ -42,11 +40,7 @@ namespace Entities {
 
         public Collider Collider => GetComponent<Collider>();
 
-        public Kinematic Kinematic {
-            get => kinematic;
-
-            set => kinematic = value;
-        }
+        public Kinematic Kinematic { get; private set; }
 
         public bool IsLockedPositionX {
             get => isLockedPositionX;
@@ -54,7 +48,7 @@ namespace Entities {
             set {
                 isLockedPositionX = value;
 
-                if (kinematic != null) kinematic.IsLockedPositionX = isLockedPositionX;
+                if (Kinematic != null) Kinematic.IsLockedPositionX = isLockedPositionX;
             }
         }
 
@@ -64,7 +58,7 @@ namespace Entities {
             set {
                 isLockedPositionY = value;
 
-                if (kinematic != null) kinematic.IsLockedPositionY = isLockedPositionY;
+                if (Kinematic != null) Kinematic.IsLockedPositionY = isLockedPositionY;
             }
         }
 
@@ -74,7 +68,7 @@ namespace Entities {
             set {
                 isLockedPositionZ = value;
 
-                if (kinematic != null) kinematic.IsLockedPositionZ = isLockedPositionZ;
+                if (Kinematic != null) Kinematic.IsLockedPositionZ = isLockedPositionZ;
             }
         }
 
@@ -84,7 +78,7 @@ namespace Entities {
             set {
                 isLockedRotationX = value;
 
-                if (kinematic != null) kinematic.IsLockedRotationX = isLockedRotationX;
+                if (Kinematic != null) Kinematic.IsLockedRotationX = isLockedRotationX;
             }
         }
 
@@ -94,7 +88,7 @@ namespace Entities {
             set {
                 isLockedRotationY = value;
 
-                if (kinematic != null) kinematic.IsLockedRotationY = isLockedRotationY;
+                if (Kinematic != null) Kinematic.IsLockedRotationY = isLockedRotationY;
             }
         }
 
@@ -104,7 +98,7 @@ namespace Entities {
             set {
                 isLockedRotationZ = value;
 
-                if (kinematic != null) kinematic.IsLockedRotationZ = isLockedRotationZ;
+                if (Kinematic != null) Kinematic.IsLockedRotationZ = isLockedRotationZ;
             }
         }
 
@@ -119,7 +113,7 @@ namespace Entities {
 
             State = States.Alive;
 
-            kinematic =
+            Kinematic =
                 new Kinematic{
                     IsLockedPositionX = isLockedPositionX,
                     IsLockedRotationX = isLockedRotationX,
@@ -129,8 +123,9 @@ namespace Entities {
                     IsLockedRotationZ = isLockedRotationZ
                 };
 
-            Kinematic.Position = transform.position;
-            Kinematic.Rotation = transform.rotation.eulerAngles;
+            var transform1 = transform;
+            Kinematic.Position = transform1.position;
+            Kinematic.Rotation = transform1.rotation.eulerAngles;
         }
 
         public virtual void Update(){

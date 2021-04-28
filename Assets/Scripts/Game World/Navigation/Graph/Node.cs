@@ -20,6 +20,7 @@ namespace GameWorld.Navigation.Graph {
         public List<Node> neighbours;
         public List<Edge> outEdges;
         public List<Trigger> nearbyTriggers;
+        public new Renderer renderer;
 
         public Graph Graph => ReferenceEquals(NodeCollection, null) ? null : NodeCollection.Graph;
 
@@ -39,7 +40,8 @@ namespace GameWorld.Navigation.Graph {
         public void Awake(){
             if (IsLocked) return;
             color.a = alpha;
-            GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
+            renderer = GetComponent<Renderer>();
+            renderer.sharedMaterial = new Material(renderer.sharedMaterial)
                 {color = color};
         }
 
@@ -49,7 +51,7 @@ namespace GameWorld.Navigation.Graph {
 
         public GameObject AddConnectedNode(bool oneWay, Camera unityCamera){
             if (IsLocked || ReferenceEquals(NodeCollection, null) || ReferenceEquals(Graph, null) ||
-                Graph.nodePrefab == null) return null;
+                ReferenceEquals(Graph.nodePrefab, null)) return null;
 #if UNITY_EDITOR
             var connectedNodeObject = PrefabUtility.InstantiatePrefab(Graph.nodePrefab) as GameObject;
 #else
@@ -59,8 +61,10 @@ namespace GameWorld.Navigation.Graph {
             if (ReferenceEquals(connectedNodeObject, null)) return null;
             var connectedNode = connectedNodeObject.GetComponent<Node>();
 
-            if (!ReferenceEquals(unityCamera, null))
-                connectedNode.CastToCollider(unityCamera.transform.position, unityCamera.transform.forward, 5f, 20f);
+            if (!ReferenceEquals(unityCamera, null)){
+                var transform1 = unityCamera.transform;
+                connectedNode.CastToCollider(transform1.position, transform1.forward, 5f, 20f);
+            }
 
             connectedNode.GenerateNameFromPosition();
             NodeCollection.ApplyParametersToNode(connectedNode);
@@ -73,7 +77,7 @@ namespace GameWorld.Navigation.Graph {
             return connectedNodeObject;
         }
 
-        public void AddConnection(Node toNode){
+        private void AddConnection(Node toNode){
             if (IsLocked || toNode == this || ReferenceEquals(Graph, null) || toNode.Graph != Graph ||
                 ReferenceEquals(Graph.edgeCollection, null)) return;
             neighbours ??= new List<Node>();
@@ -96,8 +100,9 @@ namespace GameWorld.Navigation.Graph {
             var ray = new Ray(fromPosition, forward);
             var flag = false;
 
-            flag = maxDistance > 0f ? Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask) : 
-                Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
+            flag = maxDistance > 0f
+                ? Physics.SphereCast(ray, radius, out hit, maxDistance, raycastObstaclesLayerMask)
+                : Physics.SphereCast(ray, radius, out hit, float.MaxValue, raycastObstaclesLayerMask);
 
             if (flag)
                 transform.position = hit.point + Vector3.up * surfaceOffset;
@@ -164,7 +169,7 @@ namespace GameWorld.Navigation.Graph {
                 ")";
         }
 
-        public bool IsConnectedTo(Node toNode){
+        private bool IsConnectedTo(Node toNode){
             return neighbours.Contains(toNode);
         }
 
@@ -215,7 +220,7 @@ namespace GameWorld.Navigation.Graph {
             outEdges.Clear();
         }
 
-        public void RemoveConnection(Node toNode){
+        private void RemoveConnection(Node toNode){
             if (IsLocked) return;
             neighbours.Remove(toNode);
 

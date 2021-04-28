@@ -53,11 +53,11 @@ using System.ComponentModel;
 namespace GameWorld {
     public abstract partial class Event {
         public static class Lifespans {
-            [Description("Cycle")] public static readonly Lifespan Cycle = (Lifespan) Count++;
+            [Description("Cycle")] public static readonly Lifespan CYCLE = (Lifespan) Count++;
 
-            [Description("Level")] public static readonly Lifespan Level = (Lifespan) Count++;
+            [Description("Level")] public static readonly Lifespan LEVEL = (Lifespan) Count++;
 
-            [Description("Game")] public static readonly Lifespan Game = (Lifespan) Count++;
+            [Description("Game")] public static readonly Lifespan GAME = (Lifespan) Count++;
 
             public static int Count { get; }
 

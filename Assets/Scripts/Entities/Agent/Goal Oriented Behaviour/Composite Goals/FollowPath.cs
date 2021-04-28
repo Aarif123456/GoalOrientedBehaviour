@@ -5,16 +5,16 @@ using Utility.DataStructures;
 
 namespace Entities.GoalOrientedBehaviour {
     public class FollowPath : CompositeGoal {
-        private readonly List<Edge> edgesToTraverse;
-        private Vector3? destination;
+        private readonly List<Edge> _edgesToTraverse;
+        private Vector3? _destination;
 
         public FollowPath(Agent agent, List<Edge> edgesToTraverse)
             : base(agent, GoalTypes.FollowPath){
-            this.edgesToTraverse = edgesToTraverse;
+            _edgesToTraverse = edgesToTraverse;
         }
 
         public override void Activate(){
-            if (edgesToTraverse.Count == 0){
+            if (_edgesToTraverse.Count == 0){
                 Status = StatusTypes.Completed;
                 return;
             }
@@ -24,7 +24,7 @@ namespace Entities.GoalOrientedBehaviour {
             RemoveAllSubgoals();
 
             Status = StatusTypes.Active;
-            var edgeToTraverse = edgesToTraverse.Dequeue();
+            var edgeToTraverse = _edgesToTraverse.Dequeue();
             AddSubgoal(new TraverseEdge(Agent, edgeToTraverse));
         }
 
@@ -37,7 +37,7 @@ namespace Entities.GoalOrientedBehaviour {
             // has edges remaining. If it does then call activate to grab the
             // next edge.
             if (Status != StatusTypes.Completed) return Status;
-            if (edgesToTraverse.Count > 0)
+            if (_edgesToTraverse.Count > 0)
                 Activate();
 
             return Status;

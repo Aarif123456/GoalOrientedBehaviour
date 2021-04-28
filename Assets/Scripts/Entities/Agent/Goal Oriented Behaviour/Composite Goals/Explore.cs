@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using GameWorld;
 using GameWorld.Navigation.Graph;
 using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class Explore : CompositeGoal {
-        private Vector3? destination;
+        private Vector3? _destination;
 
         public Explore(Agent agent)
             : base(agent, GoalTypes.Explore){
@@ -15,34 +14,34 @@ namespace Entities.GoalOrientedBehaviour {
             Status = StatusTypes.Active;
 
             EventManager.Instance.Subscribe<PathToPositionReadyEventPayload>(
-                Events.PathToPositionReady,
+                Events.PATH_TO_POSITION_READY,
                 OnPathToPositionReady);
 
             EventManager.Instance.Subscribe<NoPathToPositionAvailableEventPayload>(
-                Events.NoPathToPositionAvailable,
+                Events.NO_PATH_TO_POSITION_AVAILABLE,
                 OnNoPathToPositionAvailable);
 
             // if this goal is reactivated then there may be some existing
             // subgoals that must be removed
             RemoveAllSubgoals();
 
-            if (!destination.HasValue){
+            if (!_destination.HasValue){
                 var graph = GameObject.Find("Game").GetComponent<Graph>();
                 var nodes = graph.nodeCollection.Nodes;
                 var index = Random.Range(0, nodes.Length);
 
                 // grab a random position
-                destination = nodes[index].Position;
+                _destination = nodes[index].Position;
             }
 
             EventManager.Instance.Enqueue(
-                Events.PathToPositionRequest,
-                new PathToPositionRequestEventPayload(Agent, destination.Value));
+                Events.PATH_TO_POSITION_REQUEST,
+                new PathToPositionRequestEventPayload(Agent, _destination.Value));
 
             // the bot may have to wait a few update cycles before a path is
             // calculated so for appearances sake it simply SEEKS toward the
             // destination until a path has been found
-            AddSubgoal(new SeekToPosition(Agent, destination.Value));
+            AddSubgoal(new SeekToPosition(Agent, _destination.Value));
         }
 
         public override StatusTypes Process(){
@@ -55,11 +54,11 @@ namespace Entities.GoalOrientedBehaviour {
 
         public override void Terminate(){
             EventManager.Instance.Unsubscribe<PathToPositionReadyEventPayload>(
-                Events.PathToPositionReady,
+                Events.PATH_TO_POSITION_READY,
                 OnPathToPositionReady);
 
             EventManager.Instance.Unsubscribe<NoPathToPositionAvailableEventPayload>(
-                Events.NoPathToPositionAvailable,
+                Events.NO_PATH_TO_POSITION_AVAILABLE,
                 OnNoPathToPositionAvailable);
         }
 

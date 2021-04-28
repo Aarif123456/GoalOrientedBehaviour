@@ -64,12 +64,12 @@ namespace GameWorld {
             /// <summary>
             ///     The event delegate.
             /// </summary>
-            public readonly Delegate EventDelegate;
+            public readonly Delegate eventDelegate;
 
             /// <summary>
             ///     Gets the key used to identify subscriptions.
             /// </summary>
-            public object EventKey;
+            public object eventKey;
 
             /// <summary>
             ///     Initializes a new instance of the Subscription struct.
@@ -78,8 +78,8 @@ namespace GameWorld {
             /// <param name="eventKey">The event key.</param>
             public Subscription(Delegate eventDelegate, object eventKey)
                 : this(){
-                EventDelegate = eventDelegate;
-                EventKey = eventKey;
+                this.eventDelegate = eventDelegate;
+                this.eventKey = eventKey;
             }
         }
     }

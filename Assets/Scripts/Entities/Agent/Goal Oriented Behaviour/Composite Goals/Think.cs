@@ -9,10 +9,10 @@ using Random = UnityEngine.Random;
 namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
         /* add a small boast to reduce the chance of flip flopping between goals */
-        private const float consistencyBoast = 0.05f;
+        private const float _CONSISTENCY_BOAST = 0.05f;
         public readonly List<Evaluator> evaluators = new List<Evaluator>();
-        private float bestDesirability;
-        private Evaluator mostDesirable;
+        private float _bestDesirability;
+        private Evaluator _mostDesirable;
 
         public Think(Agent agent)
             : base(agent, GoalTypes.Think){
@@ -56,7 +56,7 @@ namespace Entities.GoalOrientedBehaviour {
 
             if (subgoalStatus != StatusTypes.Completed && subgoalStatus != StatusTypes.Failed) return Status;
             Status = StatusTypes.Inactive;
-            bestDesirability = 0.0f;
+            _bestDesirability = 0.0f;
 
             if (!Subgoals.IsEmpty()) Subgoals.Peek().Terminate();
 
@@ -68,27 +68,27 @@ namespace Entities.GoalOrientedBehaviour {
 
         public void Arbitrate(){
             if (!Agent.IsAiControlled){
-                mostDesirable.SetGoal(Agent);
+                _mostDesirable.SetGoal(Agent);
                 return;
             }
 
-            bestDesirability = 0.0f;
-            var prevMostDesirable = mostDesirable;
-            mostDesirable = null;
+            _bestDesirability = 0.0f;
+            var prevMostDesirable = _mostDesirable;
+            _mostDesirable = null;
 
             // iterate through all the evaluators to find the highest scoring one
             foreach (var evaluator in evaluators){
                 var desirability = evaluator.CalculateDesirability(Agent);
 
-                if (!(bestDesirability < desirability)) continue;
-                if (ReferenceEquals(evaluator, mostDesirable)) desirability += consistencyBoast;
-                bestDesirability = desirability;
-                mostDesirable = evaluator;
+                if (!(_bestDesirability < desirability)) continue;
+                if (ReferenceEquals(evaluator, _mostDesirable)) desirability += _CONSISTENCY_BOAST;
+                _bestDesirability = desirability;
+                _mostDesirable = evaluator;
             }
 
-            if (mostDesirable == null) throw new Exception("Think.Arbitrate: no evaluator selected.");
+            if (_mostDesirable == null) throw new Exception("Think.Arbitrate: no evaluator selected.");
 
-            mostDesirable.SetGoal(Agent);
+            _mostDesirable.SetGoal(Agent);
         }
 
         public bool NotPresent(GoalTypes goalType){

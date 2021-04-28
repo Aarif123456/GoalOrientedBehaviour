@@ -10,6 +10,7 @@ namespace GameWorld.Navigation.Graph {
         public Node fromNode;
         public Node toNode;
         public float cost;
+        public new Renderer renderer;
 
         public Graph Graph => EdgeCollection == null ? null : EdgeCollection.Graph;
 
@@ -33,7 +34,7 @@ namespace GameWorld.Navigation.Graph {
         public float Cost {
             get => cost;
 
-            set => cost = value;
+            private set => cost = value;
         }
 
         public bool IsLocked => locked || EdgeCollection != null && EdgeCollection.IsLocked;
@@ -41,7 +42,8 @@ namespace GameWorld.Navigation.Graph {
         public void Awake(){
             if (IsLocked) return;
             color.a = alpha;
-            GetComponent<Renderer>().sharedMaterial = new Material(GetComponent<Renderer>().sharedMaterial)
+            renderer = GetComponent<Renderer>();
+            renderer.sharedMaterial = new Material(renderer.sharedMaterial)
                 {color = color};
         }
 
@@ -72,18 +74,18 @@ namespace GameWorld.Navigation.Graph {
             }
         }
 
-        public void UpdatePosition(){
+        private void UpdatePosition(){
             if (!IsLocked && !ReferenceEquals(FromNode, null) && !ReferenceEquals(ToNode, null))
                 transform.position = (FromNode.Position + ToNode.Position) / 2;
         }
 
-        public void UpdateRotation(){
+        private void UpdateRotation(){
             if (IsLocked || ReferenceEquals(FromNode, null) || ReferenceEquals(ToNode, null)) return;
             transform.LookAt(ToNode.Position);
             transform.Rotate(Vector3.right, 90);
         }
 
-        public void UpdateScale(){
+        private void UpdateScale(){
             if (IsLocked || ReferenceEquals(FromNode, null) || ReferenceEquals(ToNode, null)) return;
             var scale = transform.localScale;
             scale.y = Vector3.Distance(FromNode.Position, ToNode.Position) / 2;

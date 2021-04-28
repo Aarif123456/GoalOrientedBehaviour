@@ -15,7 +15,7 @@ namespace GameWorld {
             ItemType
         }
 
-        private Entity itemEntity;
+        private Entity _itemEntity;
 
         public PathManager PathManager { get; set; }
 
@@ -28,8 +28,8 @@ namespace GameWorld {
         public ItemTypes? ItemType { get; set; }
 
         public Entity ItemEntity {
-            get => itemEntity;
-            set => itemEntity = value;
+            get => _itemEntity;
+            set => _itemEntity = value;
         }
 
         public TimeSlicedSearch CurrentSearch { get; set; }
@@ -43,21 +43,21 @@ namespace GameWorld {
 
         private void OnEnable(){
             EventManager.Instance.Subscribe<PathToPositionRequestEventPayload>(
-                Events.PathToPositionRequest,
+                Events.PATH_TO_POSITION_REQUEST,
                 OnPathToPositionRequest);
 
             EventManager.Instance.Subscribe<PathToItemRequestEventPayload>(
-                Events.PathToItemRequest,
+                Events.PATH_TO_ITEM_REQUEST,
                 OnPathToItemRequest);
         }
 
         private void OnDisable(){
             EventManager.Instance.Unsubscribe<PathToPositionRequestEventPayload>(
-                Events.PathToPositionRequest,
+                Events.PATH_TO_POSITION_REQUEST,
                 OnPathToPositionRequest);
 
             EventManager.Instance.Unsubscribe<PathToItemRequestEventPayload>(
-                Events.PathToItemRequest,
+                Events.PATH_TO_ITEM_REQUEST,
                 OnPathToItemRequest);
         }
 
@@ -66,18 +66,19 @@ namespace GameWorld {
 
             var searchResult = CurrentSearch.CycleOnce();
 
+            Debug.Assert(CurrentSearchType != null, nameof(CurrentSearchType) + " != null");
             switch (searchResult){
                 case SearchResults.Failure:
                     if (CurrentSearchType != null){
                         switch (CurrentSearchType.Value){
                             case SearchTypes.Position:
                                 EventManager.Instance.Enqueue(
-                                    Events.NoPathToPositionAvailable,
+                                    Events.NO_PATH_TO_POSITION_AVAILABLE,
                                     new NoPathToPositionAvailableEventPayload(Agent));
                                 break;
                             case SearchTypes.ItemType:
                                 EventManager.Instance.Enqueue(
-                                    Events.NoPathToItemAvailable,
+                                    Events.NO_PATH_TO_ITEM_AVAILABLE,
                                     new NoPathToItemAvailableEventPayload(Agent));
                                 break;
                         }
@@ -85,15 +86,16 @@ namespace GameWorld {
 
                     break;
                 case SearchResults.Success when CurrentSearchType.Value == SearchTypes.Position:
+                    Debug.Assert(Destination != null, nameof(Destination) + " != null");
                     EventManager.Instance.Enqueue(
-                        Events.PathToPositionReady,
+                        Events.PATH_TO_POSITION_READY,
                         new PathToPositionReadyEventPayload(Agent,
                             new Path(Source, CurrentSearch.Solution, Destination.Value)));
                     break;
                 case SearchResults.Success:{
                     if (CurrentSearchType.Value == SearchTypes.ItemType){
                         EventManager.Instance.Enqueue(
-                            Events.PathToItemReady,
+                            Events.PATH_TO_ITEM_READY,
                             new PathToItemReadyEventPayload(
                                 Agent,
                                 new Path(Source, CurrentSearch.Solution, ItemEntity.Kinematic.Position),
@@ -115,7 +117,7 @@ namespace GameWorld {
 
             if (!RequestPathToPosition(payload.destination)){
                 EventManager.Instance.Enqueue(
-                    Events.NoPathToPositionAvailable,
+                    Events.NO_PATH_TO_POSITION_AVAILABLE,
                     new NoPathToPositionAvailableEventPayload(Agent));
             }
         }
@@ -164,7 +166,7 @@ namespace GameWorld {
 
             if (!RequestPathToItem(payload.itemType)){
                 EventManager.Instance.Enqueue(
-                    Events.NoPathToItemAvailable,
+                    Events.NO_PATH_TO_ITEM_AVAILABLE,
                     new NoPathToItemAvailableEventPayload(Agent));
             }
         }
@@ -189,7 +191,7 @@ namespace GameWorld {
                     closestNodeToAgent,
                     node => {
                         Debug.Assert(ItemType != null, nameof(ItemType) + " != null");
-                        return NodeIsCloseToItemOfType(node, ItemType.Value, out itemEntity);
+                        return NodeIsCloseToItemOfType(node, ItemType.Value, out _itemEntity);
                     });
 
             PathManager.AddPathPlanner(this);
@@ -237,11 +239,11 @@ namespace GameWorld {
                 select CalculateCostBetweenNodes(closestNodeToAgent, node)).Prepend(float.MaxValue).Min();
         }
 
-        public float CalculateCostBetweenNodes(Node sourceNode, Node destinationNode){
+        private static float CalculateCostBetweenNodes(Node sourceNode, Node destinationNode){
             return LeastCostPathTable.Cost(sourceNode, destinationNode);
         }
 
-        public bool NodeIsCloseToItemOfType(Node node, ItemTypes itemType, out Entity itemEntity){
+        private static bool NodeIsCloseToItemOfType(Node node, ItemTypes itemType, out Entity itemEntity){
             foreach (var trigger in node.NearbyTriggers){
                 if (trigger.EntityType != EnumUtility.ItemTypeToEntityType(itemType) || !trigger.IsActive) continue;
                 itemEntity = trigger;

@@ -66,7 +66,7 @@ namespace GameWorld.Cameras {
         public float occlusionRadius = 0.3f;
         public float fadedOutAlpha = 0.3f;
 
-        private readonly List<FadeOutLOSInfo> fadedOutObjects = new List<FadeOutLOSInfo>();
+        private readonly List<FadeOutLosInfo> _fadedOutObjects = new List<FadeOutLosInfo>();
 
         // After all objects are initialized, Awake is called when the script
         // is being loaded. This occurs before any Start calls.
@@ -89,7 +89,7 @@ namespace GameWorld.Cameras {
             var castDistance = Vector3.Distance(to, from);
 
             // Mark all objects as not needing fade out
-            foreach (var fade in fadedOutObjects){
+            foreach (var fade in _fadedOutObjects){
                 fade.needFadeOut = false;
             }
 
@@ -115,7 +115,7 @@ namespace GameWorld.Cameras {
 
                     // We are not fading this renderer already, so insert into faded objects map
                     if (info == null){
-                        info = new FadeOutLOSInfo{originalMaterials = hitRenderer.sharedMaterials};
+                        info = new FadeOutLosInfo{originalMaterials = hitRenderer.sharedMaterials};
                         info.alphaMaterials = new Material[info.originalMaterials.Length];
                         info.renderer = hitRenderer;
                         for (var i = 0; i < info.originalMaterials.Length; i++){
@@ -129,7 +129,7 @@ namespace GameWorld.Cameras {
                         }
 
                         hitRenderer.sharedMaterials = info.alphaMaterials;
-                        fadedOutObjects.Add(info);
+                        _fadedOutObjects.Add(info);
                     }
                     // Just mark the renderer as needing fade out
                     else
@@ -139,8 +139,8 @@ namespace GameWorld.Cameras {
 
             // Now go over all renderers and do the actual fading!
             var fadeDelta = fadeSpeed * Time.deltaTime;
-            for (var i = 0; i < fadedOutObjects.Count; i++){
-                var fade = fadedOutObjects[i];
+            for (var i = 0; i < _fadedOutObjects.Count; i++){
+                var fade = _fadedOutObjects[i];
                 // Fade out up to minimum alpha value
                 if (fade.needFadeOut){
                     foreach (var alphaMaterial in fade.alphaMaterials){
@@ -175,17 +175,17 @@ namespace GameWorld.Cameras {
                         Destroy(newMaterial);
                     }
 
-                    fadedOutObjects.RemoveAt(i);
+                    _fadedOutObjects.RemoveAt(i);
                     i--;
                 }
             }
         }
 
-        private FadeOutLOSInfo FindLosInfo(Object r){
-            return fadedOutObjects.FirstOrDefault(fade => r == fade.renderer);
+        private FadeOutLosInfo FindLosInfo(Object r){
+            return _fadedOutObjects.FirstOrDefault(fade => r == fade.renderer);
         }
 
-        public class FadeOutLOSInfo {
+        private class FadeOutLosInfo {
             public Material[] alphaMaterials;
             public bool needFadeOut = true;
             public Material[] originalMaterials;

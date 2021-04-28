@@ -7,9 +7,9 @@ namespace Entities.Armory {
             Target = null;
         }
 
-        public Agent Agent { get; }
+        private Agent Agent { get; }
 
-        public Agent Target { get; set; }
+        public Agent Target { get; private set; }
 
         public bool IsTargetPresent => Target != null;
 
@@ -28,7 +28,7 @@ namespace Entities.Armory {
         }
 
         public void Update(){
-            if (Agent == null) return;
+            if (ReferenceEquals(Agent, null)) return;
 
             ClearTarget();
 

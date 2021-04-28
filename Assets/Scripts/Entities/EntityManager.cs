@@ -52,39 +52,37 @@ using System.Collections.Generic;
 
 namespace Entities {
     public static class EntityManager {
-        private static readonly Dictionary<int, Entity> _entityIdDictionary = new Dictionary<int, Entity>();
-        private static readonly Dictionary<string, Entity> _entityNameDictionary = new Dictionary<string, Entity>();
+        private static readonly Dictionary<int, Entity> _ENTITY_ID_DICTIONARY = new Dictionary<int, Entity>();
+        private static readonly Dictionary<string, Entity> _ENTITY_NAME_DICTIONARY = new Dictionary<string, Entity>();
 
         public static void Add(Entity entity){
-            if (!_entityIdDictionary.ContainsKey(entity.id)) _entityIdDictionary.Add(entity.id, entity);
+            if (!_ENTITY_ID_DICTIONARY.ContainsKey(entity.id)) _ENTITY_ID_DICTIONARY.Add(entity.id, entity);
 
             // TODO: catch duplicate name errors
-            if (!_entityNameDictionary.ContainsKey(entity.name)) _entityNameDictionary.Add(entity.name, entity);
+            if (!_ENTITY_NAME_DICTIONARY.ContainsKey(entity.name)) _ENTITY_NAME_DICTIONARY.Add(entity.name, entity);
         }
 
         public static void Remove(Entity entity){
-            _entityIdDictionary.Remove(entity.id);
-            _entityNameDictionary.Remove(entity.name);
+            _ENTITY_ID_DICTIONARY.Remove(entity.id);
+            _ENTITY_NAME_DICTIONARY.Remove(entity.name);
         }
 
         public static T Find<T>(int entityId) where T : Entity{
-            if (!_entityIdDictionary.ContainsKey(entityId)) return null;
+            if (!_ENTITY_ID_DICTIONARY.ContainsKey(entityId)) return null;
 
-            return _entityIdDictionary[entityId] as T;
+            return _ENTITY_ID_DICTIONARY[entityId] as T;
         }
 
         public static T Find<T>(string entityName) where T : Entity{
-            if (!_entityNameDictionary.ContainsKey(entityName)) return null;
+            if (!_ENTITY_NAME_DICTIONARY.ContainsKey(entityName)) return null;
 
-            return _entityNameDictionary[entityName] as T;
+            return _ENTITY_NAME_DICTIONARY[entityName] as T;
         }
 
         public static List<T> FindAll<T>() where T : Entity{
             var resultList = new List<T>();
-            foreach (var entity in _entityIdDictionary.Values){
-                var entityT = entity as T;
-
-                if (!ReferenceEquals(entityT, null)) resultList.Add(entityT);
+            foreach (var entity in _ENTITY_ID_DICTIONARY.Values){
+                if (entity is T entityT) resultList.Add(entityT);
             }
 
             return resultList;

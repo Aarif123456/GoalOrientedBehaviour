@@ -100,7 +100,7 @@ namespace Entities.Armory {
             undesirable = desirability.AddLeftShoulderSet("undesirable", 0, 25, 50);
         }
 
-        protected void AddSoundTrigger(Agent soundSource, float range){
+        protected static void AddSoundTrigger(Agent soundSource, float range){
             var triggerObject = Object.Instantiate(GameManager.Instance.soundNotifyTriggerPrefab);
             var trigger = triggerObject.GetComponent<TriggerSoundNotify>();
             trigger.GetComponent<MeshRenderer>().enabled = Parameters.Instance.SoundTriggerVisible;

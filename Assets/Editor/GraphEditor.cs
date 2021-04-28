@@ -81,15 +81,15 @@ public class GraphEditor : Editor {
         graph.edgeCollection.Graph = graph;
     }
 
-    private GameObject CreateNewCollection(string defaultName, Transform parent){
-        var name = defaultName;
+    private static GameObject CreateNewCollection(string defaultName, Transform parent){
+        var s = defaultName;
         var nameSuffix = 1;
 
-        while (GameObject.Find(name) != null){
-            name = defaultName + nameSuffix++;
+        while (GameObject.Find(s) != null){
+            s = defaultName + nameSuffix++;
         }
 
-        var collectionObject = new GameObject(name){
+        var collectionObject = new GameObject(s){
             transform ={position = Vector3.zero}
         };
 

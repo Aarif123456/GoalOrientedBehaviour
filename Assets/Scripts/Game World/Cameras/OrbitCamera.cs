@@ -73,10 +73,10 @@ namespace GameWorld.Cameras {
         public float yMinLimit = -20;
         public float yMaxLimit = 80;
 
-        private float currentDistance = 10.0f;
-        private float distanceVelocity;
-        private float x;
-        private float y;
+        private float _currentDistance = 10.0f;
+        private float _distanceVelocity;
+        private float _x;
+        private float _y;
 
         public override void Awake(){
             base.Awake();
@@ -88,9 +88,9 @@ namespace GameWorld.Cameras {
 
         public void Start(){
             var angles = transform.eulerAngles;
-            x = angles.y;
-            y = angles.x;
-            currentDistance = distance;
+            _x = angles.y;
+            _y = angles.x;
+            _currentDistance = distance;
 
             // Make the rigid body not change rotation.
             if (GetComponent<Rigidbody>()) GetComponent<Rigidbody>().freezeRotation = true;
@@ -100,27 +100,28 @@ namespace GameWorld.Cameras {
             if (!target) return;
 
             if (isControllable){
-                x += Input.GetAxis(sideLookAxis) * xSpeed * 0.02f;
-                y -= Input.GetAxis(verticalAxis) * ySpeed * 0.02f;
+                _x += Input.GetAxis(sideLookAxis) * xSpeed * 0.02f;
+                _y -= Input.GetAxis(verticalAxis) * ySpeed * 0.02f;
             }
             else{
                 // TODO: Add ability for AI control?
-                x = 0;
-                y = 0;
+                _x = 0;
+                _y = 0;
             }
 
-            y = ClampAngle(y, yMinLimit, yMaxLimit);
+            _y = ClampAngle(_y, yMinLimit, yMaxLimit);
 
-            var rotation = Quaternion.Euler(y, x, 0);
+            var rotation = Quaternion.Euler(_y, _x, 0);
             var targetPos = target.position + targetOffset;
             var direction = rotation * -Vector3.forward;
 
             var targetDistance = AdjustLineOfSight(targetPos, direction);
-            currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref distanceVelocity,
+            _currentDistance = Mathf.SmoothDamp(_currentDistance, targetDistance, ref _distanceVelocity,
                 closerSnapLag * 0.3f);
 
-            transform.rotation = rotation;
-            transform.position = targetPos + direction * currentDistance;
+            var transform1 = transform;
+            transform1.rotation = rotation;
+            transform1.position = targetPos + direction * _currentDistance;
         }
 
         private float AdjustLineOfSight(Vector3 targetPosition, Vector3 direction){

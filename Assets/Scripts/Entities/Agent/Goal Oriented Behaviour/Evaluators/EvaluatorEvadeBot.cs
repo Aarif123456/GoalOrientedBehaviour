@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorEvadeBot : Evaluator {
-
         public EvaluatorEvadeBot(float characterBias)
             : base(characterBias){
-                GoalName = "Evade Target";
+            GoalName = "Evade Target";
         }
 
         /* TODO FIX */
@@ -16,11 +15,11 @@ namespace Entities.GoalOrientedBehaviour {
             // only do the calculation if there is a target present
             if (!agent.TargetingSystem.IsTargetPresent) return desirability;
             /* Less aggressive agents will prefer to be cautious */
-            var tweaker = 1-Parameters.Instance.AgentAggroGoalTweaker;
+            var tweaker = 1 - Parameters.Instance.AgentAggroGoalTweaker;
 
             /* The lower our health */
             desirability = tweaker *
-                           (1-Feature.Health(agent)) ;
+                           (1 - Feature.Health(agent));
 
             // bias the value according to the personality of the bot
             desirability *= characterBias;

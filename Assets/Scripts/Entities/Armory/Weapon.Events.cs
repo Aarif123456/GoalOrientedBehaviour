@@ -54,18 +54,19 @@ using UnityEngine;
 
 namespace GameWorld {
     public static partial class Events {
-        [Description("DamageInflicted")] public static readonly EventType DamageInflicted = (EventType) Count++;
+        [Description("DamageInflicted")] public static readonly EventType DAMAGE_INFLICTED = (EventType) Count++;
 
-        [Description("EntityDestroyed")] public static readonly EventType EntityDestroyed = (EventType) Count++;
+        [Description("EntityDestroyed")] public static readonly EventType ENTITY_DESTROYED = (EventType) Count++;
 
-        [Description("WeaponSound")] public static readonly EventType WeaponSound = (EventType) Count++;
+        [Description("WeaponSound")] public static readonly EventType WEAPON_SOUND = (EventType) Count++;
     }
 
-    public struct DamageInflictedEventPayload {
-        public Agent shooter;
-        public Entity victim;
-        public Vector3 hitPoint;
-        public float damageInflicted;
+    public readonly struct DamageInflictedEventPayload {
+        public readonly Agent shooter;
+        public readonly Entity victim;
+        /*NOTE: hitpoint is not used anywhere */
+        public readonly Vector3 hitPoint;
+        public readonly float damageInflicted;
 
         public DamageInflictedEventPayload(
             Agent shooter,
@@ -79,9 +80,9 @@ namespace GameWorld {
         }
     }
 
-    public struct EntityDestroyedEventPayload {
-        public Agent shooter;
-        public Entity victim;
+    public readonly struct EntityDestroyedEventPayload {
+        public readonly Agent shooter;
+        public readonly Entity victim;
 
         public EntityDestroyedEventPayload(
             Agent shooter,
@@ -91,9 +92,9 @@ namespace GameWorld {
         }
     }
 
-    public struct WeaponSoundEventPayload {
-        public Agent noiseHearer;
-        public Agent noiseMaker;
+    public readonly struct WeaponSoundEventPayload {
+        public readonly Agent noiseHearer;
+        public readonly Agent noiseMaker;
 
         public WeaponSoundEventPayload(
             Agent noiseHearer,

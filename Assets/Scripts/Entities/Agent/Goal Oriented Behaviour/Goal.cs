@@ -11,8 +11,8 @@ namespace Entities.GoalOrientedBehaviour {
             Failed
         }
 
-        private const float timeBetweenDisplayUpdates = 0.5f;
-        private float displayTimer;
+        private const float _TIME_BETWEEN_DISPLAY_UPDATES = 0.5f;
+        private float _displayTimer;
 
         protected Goal(Agent agent, GoalTypes goalType){
             Agent = agent;
@@ -74,9 +74,9 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public virtual void StoreThoughtProcess(MessageManager messageManager){
-            displayTimer -= Time.deltaTime;
-            if (displayTimer > 0) return;
-            displayTimer = timeBetweenDisplayUpdates;
+            _displayTimer -= Time.deltaTime;
+            if (_displayTimer > 0) return;
+            _displayTimer = _TIME_BETWEEN_DISPLAY_UPDATES;
             var indent = 0;
             StoreThoughtProcess(messageManager, ref indent);
         }

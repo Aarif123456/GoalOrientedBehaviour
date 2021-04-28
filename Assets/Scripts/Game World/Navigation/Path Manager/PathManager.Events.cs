@@ -56,33 +56,34 @@ using UnityEngine;
 namespace GameWorld {
     public static partial class Events {
         [Description("PathToPositionRequest")]
-        public static readonly EventType PathToPositionRequest = (EventType) Count++;
+        public static readonly EventType PATH_TO_POSITION_REQUEST = (EventType) Count++;
 
-        [Description("PathToPositionReady")] public static readonly EventType PathToPositionReady = (EventType) Count++;
+        [Description("PathToPositionReady")]
+        public static readonly EventType PATH_TO_POSITION_READY = (EventType) Count++;
 
         [Description("NoPathToPositionAvailable")]
-        public static readonly EventType NoPathToPositionAvailable = (EventType) Count++;
+        public static readonly EventType NO_PATH_TO_POSITION_AVAILABLE = (EventType) Count++;
 
-        [Description("PathToItemRequest")] public static readonly EventType PathToItemRequest = (EventType) Count++;
+        [Description("PathToItemRequest")] public static readonly EventType PATH_TO_ITEM_REQUEST = (EventType) Count++;
 
-        [Description("PathToItemReady")] public static readonly EventType PathToItemReady = (EventType) Count++;
+        [Description("PathToItemReady")] public static readonly EventType PATH_TO_ITEM_READY = (EventType) Count++;
 
         [Description("NoPathToItemAvailable")]
-        public static readonly EventType NoPathToItemAvailable = (EventType) Count++;
+        public static readonly EventType NO_PATH_TO_ITEM_AVAILABLE = (EventType) Count++;
 
-        [Description("FollowCompleted")] public static readonly EventType FollowCompleted = (EventType) Count++;
+        [Description("FollowCompleted")] public static readonly EventType FOLLOW_COMPLETED = (EventType) Count++;
 
-        [Description("FollowFailed")] public static readonly EventType FollowFailed = (EventType) Count++;
+        [Description("FollowFailed")] public static readonly EventType FOLLOW_FAILED = (EventType) Count++;
 
-        [Description("TraversalCompleted")] public static readonly EventType TraversalCompleted = (EventType) Count++;
+        [Description("TraversalCompleted")] public static readonly EventType TRAVERSAL_COMPLETED = (EventType) Count++;
 
-        [Description("TraversalFailed")] public static readonly EventType TraversalFailed = (EventType) Count++;
+        [Description("TraversalFailed")] public static readonly EventType TRAVERSAL_FAILED = (EventType) Count++;
 
-        [Description("Arrival")] public static readonly EventType Arrival = (EventType) Count++;
+        [Description("Arrival")] public static readonly EventType ARRIVAL = (EventType) Count++;
     }
 
     public struct PathToPositionRequestEventPayload {
-        public Agent agent;
+        public readonly Agent agent;
         public Vector3 destination;
 
         public PathToPositionRequestEventPayload(
@@ -93,9 +94,9 @@ namespace GameWorld {
         }
     }
 
-    public struct PathToPositionReadyEventPayload {
-        public Agent agent;
-        public Path path;
+    public readonly struct PathToPositionReadyEventPayload {
+        public readonly Agent agent;
+        public readonly Path path;
 
         public PathToPositionReadyEventPayload(
             Agent agent,
@@ -105,17 +106,17 @@ namespace GameWorld {
         }
     }
 
-    public struct NoPathToPositionAvailableEventPayload {
-        public Agent agent;
+    public readonly struct NoPathToPositionAvailableEventPayload {
+        public readonly Agent agent;
 
         public NoPathToPositionAvailableEventPayload(Agent agent){
             this.agent = agent;
         }
     }
 
-    public struct PathToItemRequestEventPayload {
-        public Agent agent;
-        public ItemTypes itemType;
+    public readonly struct PathToItemRequestEventPayload {
+        public readonly Agent agent;
+        public readonly ItemTypes itemType;
 
         public PathToItemRequestEventPayload(
             Agent agent,
@@ -125,10 +126,10 @@ namespace GameWorld {
         }
     }
 
-    public struct PathToItemReadyEventPayload {
-        public Agent agent;
-        public Path path;
-        public Entity itemEntity;
+    public readonly struct PathToItemReadyEventPayload {
+        public readonly Agent agent;
+        public readonly Path path;
+        public readonly Entity itemEntity;
 
         public PathToItemReadyEventPayload(
             Agent agent,

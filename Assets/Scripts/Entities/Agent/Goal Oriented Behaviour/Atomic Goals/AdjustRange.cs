@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public sealed class AdjustRange : Goal {
-        private readonly Face look;
-        private readonly Seek seek;
-        private readonly Agent targetAgent;
+        private readonly Face _look;
+        private readonly Seek _seek;
+        private readonly Agent _targetAgent;
 
         public AdjustRange(Agent agent, Agent targetAgent, float idealRange = 5, float satisfactionRadius = 1)
             : base(agent, GoalTypes.AdjustRange){
-            this.targetAgent = targetAgent;
-            seek = new Seek(agent.Kinematic);
-            look = new Face(Agent.Kinematic, targetAgent.Kinematic.Position);
+            _targetAgent = targetAgent;
+            _seek = new Seek(agent.Kinematic);
+            _look = new Face(Agent.Kinematic, targetAgent.Kinematic.Position);
             IdealRange = idealRange;
             SatisfactionRadius = satisfactionRadius;
         }
@@ -21,8 +21,8 @@ namespace Entities.GoalOrientedBehaviour {
 
         public override void Activate(){
             Status = StatusTypes.Active;
-            Agent.SteeringBehaviours.Add(seek);
-            Agent.SteeringBehaviours.Add(look);
+            Agent.SteeringBehaviours.Add(_seek);
+            Agent.SteeringBehaviours.Add(_look);
         }
 
         public override StatusTypes Process(){
@@ -31,12 +31,12 @@ namespace Entities.GoalOrientedBehaviour {
             if (IsStuck())
                 Status = StatusTypes.Failed;
             else{
-                var distanceFromTarget = Vector3.Distance(Agent.Kinematic.Position, targetAgent.Kinematic.Position);
+                var distanceFromTarget = Vector3.Distance(Agent.Kinematic.Position, _targetAgent.Kinematic.Position);
 
                 if (Mathf.Abs(distanceFromTarget - IdealRange) <= SatisfactionRadius)
                     Status = StatusTypes.Completed;
                 else{
-                    var idealPosition = targetAgent.Kinematic.Position;
+                    var idealPosition = _targetAgent.Kinematic.Position;
 
                     if (Mathf.Approximately(distanceFromTarget, 0)){
                         Vector2 aDirection = Random.onUnitSphere;
@@ -44,11 +44,11 @@ namespace Entities.GoalOrientedBehaviour {
                                          IdealRange;
                     }
                     else{
-                        idealPosition += (Agent.Kinematic.Position - targetAgent.Kinematic.Position).normalized *
+                        idealPosition += (Agent.Kinematic.Position - _targetAgent.Kinematic.Position).normalized *
                                          IdealRange;
                     }
 
-                    seek.OtherKinematic.Position = idealPosition;
+                    _seek.OtherKinematic.Position = idealPosition;
                 }
             }
 
@@ -56,8 +56,8 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public override void Terminate(){
-            Agent.SteeringBehaviours.Remove(seek);
-            Agent.SteeringBehaviours.Remove(look);
+            Agent.SteeringBehaviours.Remove(_seek);
+            Agent.SteeringBehaviours.Remove(_look);
         }
 
         private static bool IsStuck(){

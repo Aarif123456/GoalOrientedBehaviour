@@ -58,13 +58,13 @@ namespace Utility.Math {
         /// <summary>
         ///     The default Epsilon value.
         /// </summary>
-        private const float DEFAULT_EPSILON = 0.000001f;
+        private const float _DEFAULT_EPSILON = 0.000001f;
 
         /// <summary>
         ///     The Epsilon value used in comparisons.
         /// </summary>
         private static EpsilonTester _epsilonTester =
-            new EpsilonTester(DEFAULT_EPSILON);
+            new EpsilonTester(_DEFAULT_EPSILON);
 
         /// <summary>
         ///     Gets or sets the Epsilon value used in comparisons.

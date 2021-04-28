@@ -1,7 +1,5 @@
-
 namespace Entities {
     public struct Biases {
-
         public float HealthBias { get; set; }
         public float ExploreBias { get; set; }
         public float AttackBias { get; set; }
@@ -9,6 +7,5 @@ namespace Entities {
         public float ShotgunBias { get; set; }
         public float RailgunBias { get; set; }
         public float RocketLauncherBias { get; set; }
-
     }
 }

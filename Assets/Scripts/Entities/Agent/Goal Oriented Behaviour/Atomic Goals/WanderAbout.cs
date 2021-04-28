@@ -2,16 +2,16 @@ using Entities.Steering;
 
 namespace Entities.GoalOrientedBehaviour {
     public class WanderAbout : Goal {
-        private readonly Wander wander;
+        private readonly Wander _wander;
 
         public WanderAbout(Agent agent)
             : base(agent, GoalTypes.WanderAbout){
-            wander = new Wander(agent.Kinematic);
+            _wander = new Wander(agent.Kinematic);
         }
 
         public override void Activate(){
             Status = StatusTypes.Active;
-            Agent.SteeringBehaviours.Add(wander);
+            Agent.SteeringBehaviours.Add(_wander);
         }
 
         public override StatusTypes Process(){
@@ -22,7 +22,7 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public override void Terminate(){
-            Agent.SteeringBehaviours.Remove(wander);
+            Agent.SteeringBehaviours.Remove(_wander);
         }
     }
 }

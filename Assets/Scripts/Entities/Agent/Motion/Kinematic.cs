@@ -4,35 +4,35 @@ using Math = Utility.Math.Math;
 
 namespace Entities.Steering {
     public class Kinematic {
-        public const float DEFAULT_MAXIMUM_SPEED = 5;
-        public const float DEFAULT_MAXIMUM_ANGULAR_SPEED = 360;
-        public const float DEFAULT_MAXIMUM_ACCELERATION = 0.5f;
-        public const float DEFAULT_MAXIMUM_ANGULAR_ACCELERATION = 180;
-        private Vector3 acceleration;
-        private Vector3 accumulatedAcceleration;
-        private Vector3 accumulatedAngularAcceleration;
-        private Vector3 accumulatedAngularVelocity;
+        private const float _DEFAULT_MAXIMUM_SPEED = 5;
+        private const float _DEFAULT_MAXIMUM_ANGULAR_SPEED = 360;
+        private const float _DEFAULT_MAXIMUM_ACCELERATION = 0.5f;
+        private const float _DEFAULT_MAXIMUM_ANGULAR_ACCELERATION = 180;
+        private Vector3 _acceleration;
+        private Vector3 _accumulatedAcceleration;
+        private Vector3 _accumulatedAngularAcceleration;
+        private Vector3 _accumulatedAngularVelocity;
 
-        public Vector3 accumulatedVelocity;
-        private Vector3 angularAcceleration;
-        private Vector3 angularVelocity;
-        private bool applyAccumulatedVelocities;
+        private Vector3 _accumulatedVelocity;
+        private Vector3 _angularAcceleration;
+        private Vector3 _angularVelocity;
+        private bool _applyAccumulatedVelocities;
 
-        private Vector3 rotation;
-        private Vector3 velocity;
+        private Vector3 _rotation;
+        private Vector3 _velocity;
 
         public Kinematic(){
-            MaximumSpeed = DEFAULT_MAXIMUM_SPEED;
-            MaximumAngularSpeed = DEFAULT_MAXIMUM_ANGULAR_SPEED;
-            MaximumAcceleration = DEFAULT_MAXIMUM_ACCELERATION;
-            MaximumAngularAcceleration = DEFAULT_MAXIMUM_ANGULAR_ACCELERATION;
+            MaximumSpeed = _DEFAULT_MAXIMUM_SPEED;
+            MaximumAngularSpeed = _DEFAULT_MAXIMUM_ANGULAR_SPEED;
+            MaximumAcceleration = _DEFAULT_MAXIMUM_ACCELERATION;
+            MaximumAngularAcceleration = _DEFAULT_MAXIMUM_ANGULAR_ACCELERATION;
 
             Position = Vector3.zero;
-            rotation = Vector3.zero;
-            velocity = Vector3.zero;
-            angularVelocity = Vector3.zero;
-            acceleration = Vector3.zero;
-            angularAcceleration = Vector3.zero;
+            _rotation = Vector3.zero;
+            _velocity = Vector3.zero;
+            _angularVelocity = Vector3.zero;
+            _acceleration = Vector3.zero;
+            _angularAcceleration = Vector3.zero;
         }
 
         public Kinematic(Kinematic kinematicSource){
@@ -42,75 +42,75 @@ namespace Entities.Steering {
             MaximumAngularAcceleration = kinematicSource.MaximumAngularAcceleration;
 
             Position = kinematicSource.Position;
-            rotation = kinematicSource.rotation;
+            _rotation = kinematicSource._rotation;
 
-            velocity = kinematicSource.velocity;
-            angularVelocity = kinematicSource.angularVelocity;
+            _velocity = kinematicSource._velocity;
+            _angularVelocity = kinematicSource._angularVelocity;
 
-            acceleration = kinematicSource.acceleration;
-            angularAcceleration = kinematicSource.angularAcceleration;
+            _acceleration = kinematicSource._acceleration;
+            _angularAcceleration = kinematicSource._angularAcceleration;
 
-            accumulatedVelocity = kinematicSource.accumulatedVelocity;
-            accumulatedAngularVelocity = kinematicSource.accumulatedAngularVelocity;
-            accumulatedAcceleration = kinematicSource.accumulatedAcceleration;
-            accumulatedAngularAcceleration = kinematicSource.accumulatedAngularAcceleration;
+            _accumulatedVelocity = kinematicSource._accumulatedVelocity;
+            _accumulatedAngularVelocity = kinematicSource._accumulatedAngularVelocity;
+            _accumulatedAcceleration = kinematicSource._accumulatedAcceleration;
+            _accumulatedAngularAcceleration = kinematicSource._accumulatedAngularAcceleration;
         }
 
         public Vector3 Position { get; set; }
 
         public Vector3 Rotation {
-            get => rotation;
+            get => _rotation;
 
-            set => rotation = Math.WrapAngles(value);
+            set => _rotation = Math.WrapAngles(value);
         }
 
         public Vector3 HeadingVector => Quaternion.Euler(Rotation) * Vector3.forward;
 
         public Vector3 Velocity {
-            get => velocity;
+            get => _velocity;
 
             set {
-                velocity = value;
+                _velocity = value;
 
                 if (MaximumMagnitudeIncludesVertical)
-                    velocity = Math.LimitMagnitude(velocity, MaximumSpeed);
+                    _velocity = Math.LimitMagnitude(_velocity, MaximumSpeed);
                 else{
-                    velocity.y = 0;
-                    velocity = Math.LimitMagnitude(velocity, MaximumSpeed);
-                    velocity.y = value.y;
+                    _velocity.y = 0;
+                    _velocity = Math.LimitMagnitude(_velocity, MaximumSpeed);
+                    _velocity.y = value.y;
                 }
             }
         }
 
         public Vector3 AngularVelocity {
-            get => angularVelocity;
+            get => _angularVelocity;
 
-            set => angularVelocity = Math.LimitMagnitude(value, MaximumAngularSpeed);
+            set => _angularVelocity = Math.LimitMagnitude(value, MaximumAngularSpeed);
         }
 
         public Vector3 Acceleration {
-            get => acceleration;
+            get => _acceleration;
 
             set {
-                acceleration = value;
+                _acceleration = value;
 
                 if (MaximumMagnitudeIncludesVertical)
-                    acceleration = Math.LimitMagnitude(acceleration, MaximumAcceleration);
+                    _acceleration = Math.LimitMagnitude(_acceleration, MaximumAcceleration);
                 else{
-                    acceleration.y = 0;
-                    acceleration = Math.LimitMagnitude(acceleration, MaximumAcceleration);
-                    acceleration.y = value.y;
+                    _acceleration.y = 0;
+                    _acceleration = Math.LimitMagnitude(_acceleration, MaximumAcceleration);
+                    _acceleration.y = value.y;
                 }
             }
         }
 
         public Vector3 AngularAcceleration {
-            get => angularAcceleration;
+            get => _angularAcceleration;
 
-            set => angularAcceleration = Math.LimitMagnitude(value, MaximumAngularAcceleration);
+            set => _angularAcceleration = Math.LimitMagnitude(value, MaximumAngularAcceleration);
         }
 
-        public float Speed => velocity.magnitude;
+        public float Speed => _velocity.magnitude;
 
         public float MaximumSpeed { get; set; }
 
@@ -175,47 +175,47 @@ namespace Entities.Steering {
         }
 
         public void SetVelocity(Vector3 velocity){
-            applyAccumulatedVelocities = true;
-            accumulatedVelocity = velocity;
+            _applyAccumulatedVelocities = true;
+            _accumulatedVelocity = velocity;
         }
 
-        public void SetAngularVelocity(Vector3 angularVelocity){
-            applyAccumulatedVelocities = true;
-            accumulatedAngularVelocity = angularVelocity;
+        public void SetAngularVelocity(Vector3 angularVelocityAccumulated){
+            _applyAccumulatedVelocities = true;
+            _accumulatedAngularVelocity = angularVelocityAccumulated;
         }
 
-        public void SetAccelerations(Vector3 acceleration, Vector3 angularAcceleration){
-            accumulatedAcceleration = acceleration;
-            accumulatedAngularAcceleration = angularAcceleration;
+        public void SetAccelerations(Vector3 accelerationAccumulated, Vector3 angularVelocityAccumulated){
+            _accumulatedAcceleration = accelerationAccumulated;
+            _accumulatedAngularAcceleration = angularVelocityAccumulated;
         }
 
-        public void SetVelocities(Vector3 velocity, Vector3 angularVelocity){
-            applyAccumulatedVelocities = true;
-            accumulatedVelocity = velocity;
-            accumulatedAngularVelocity = angularVelocity;
+        public void SetVelocities(Vector3 velocity, Vector3 angularVelocityAccumulated){
+            _applyAccumulatedVelocities = true;
+            _accumulatedVelocity = velocity;
+            _accumulatedAngularVelocity = angularVelocityAccumulated;
         }
 
         public void AccumulateAccelerations(Vector3 acceleration, Vector3 angularAcceleration){
-            accumulatedAcceleration += acceleration;
-            accumulatedAngularAcceleration += angularAcceleration;
+            _accumulatedAcceleration += acceleration;
+            _accumulatedAngularAcceleration += angularAcceleration;
         }
 
         public void AccumulateVelocities(Vector3 velocity, Vector3 angularVelocity){
-            applyAccumulatedVelocities = true;
+            _applyAccumulatedVelocities = true;
 
-            accumulatedVelocity.y = 0;
+            _accumulatedVelocity.y = 0;
 
-            accumulatedVelocity =
-                Math.LimitMagnitude(accumulatedVelocity + velocity, MaximumSpeed);
-            accumulatedAngularVelocity =
-                Math.LimitMagnitude(accumulatedAngularVelocity + angularVelocity, MaximumAngularSpeed);
+            _accumulatedVelocity =
+                Math.LimitMagnitude(_accumulatedVelocity + velocity, MaximumSpeed);
+            _accumulatedAngularVelocity =
+                Math.LimitMagnitude(_accumulatedAngularVelocity + angularVelocity, MaximumAngularSpeed);
         }
 
         public void Update(float deltaTime){
-            if (applyAccumulatedVelocities){
-                Velocity = accumulatedVelocity;
-                AngularVelocity = accumulatedAngularVelocity;
-                applyAccumulatedVelocities = false;
+            if (_applyAccumulatedVelocities){
+                Velocity = _accumulatedVelocity;
+                AngularVelocity = _accumulatedAngularVelocity;
+                _applyAccumulatedVelocities = false;
             }
 
             var halfDeltaTimeSquared = 0.5f * deltaTime * deltaTime;
@@ -246,14 +246,14 @@ namespace Entities.Steering {
                 Math.LimitMagnitude(AngularVelocity + AngularAcceleration * deltaTime, MaximumAngularSpeed);
 
             Acceleration =
-                Math.LimitMagnitude(accumulatedAcceleration, MaximumAcceleration);
+                Math.LimitMagnitude(_accumulatedAcceleration, MaximumAcceleration);
             AngularAcceleration =
-                Math.LimitMagnitude(accumulatedAngularAcceleration, MaximumAngularAcceleration);
+                Math.LimitMagnitude(_accumulatedAngularAcceleration, MaximumAngularAcceleration);
 
-            accumulatedVelocity = Vector3.zero;
-            accumulatedAngularVelocity = Vector3.zero;
-            accumulatedAcceleration = Vector3.zero;
-            accumulatedAngularAcceleration = Vector3.zero;
+            _accumulatedVelocity = Vector3.zero;
+            _accumulatedAngularVelocity = Vector3.zero;
+            _accumulatedAcceleration = Vector3.zero;
+            _accumulatedAngularAcceleration = Vector3.zero;
         }
     }
 }

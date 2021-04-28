@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Entities.GoalOrientedBehaviour {
     public class EvadeBot : CompositeGoal {
         public EvadeBot(Agent agent)
@@ -19,6 +17,7 @@ namespace Entities.GoalOrientedBehaviour {
                 Status = StatusTypes.Completed;
                 return;
             }
+
             AddSubgoal(new EvadeTarget(Agent, Agent.TargetingSystem.Target));
 
             /*var projectileMinRange = Agent.SensoryMemory.projectileMinRange;

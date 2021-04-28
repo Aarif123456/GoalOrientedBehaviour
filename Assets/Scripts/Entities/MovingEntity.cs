@@ -6,7 +6,7 @@ namespace Entities {
     public class MovingEntity : Entity {
         public float closeEnoughDistance = 1;
 
-        private CharacterController characterController; // optional
+        private CharacterController _characterController; // optional
 
         protected Motor motor;
 
@@ -22,13 +22,13 @@ namespace Entities {
             base.Awake();
 
             motor = GetComponent<Motor>();
-            characterController = GetComponent<CharacterController>();
+            _characterController = GetComponent<CharacterController>();
             SteeringBehaviours = new List<SteeringBehaviour>();
 
-            if (characterController == null) return;
-            Kinematic.CenterOffset = characterController.center;
-            Kinematic.Radius = characterController.radius;
-            Kinematic.Height = characterController.height;
+            if (_characterController == null) return;
+            Kinematic.CenterOffset = _characterController.center;
+            Kinematic.Radius = _characterController.radius;
+            Kinematic.Height = _characterController.height;
         }
 
         public override void Update(){
@@ -74,19 +74,20 @@ namespace Entities {
 
         public virtual void Spawn(Vector3 spawnPoint){
             State = States.Alive;
-            if (characterController != null){
-                characterController.enabled = false;
-                transform.position = spawnPoint;
-                transform.eulerAngles = Vector3.zero;
+            var transform1 = transform;
+            if (_characterController != null){
+                _characterController.enabled = false;
+                transform1.position = spawnPoint;
+                transform1.eulerAngles = Vector3.zero;
                 // Kinematic = new Kinematic{Position = transform.position, Rotation = transform.eulerAngles};
-                characterController.enabled = true;
+                _characterController.enabled = true;
                 // Kinematic.CenterOffset = characterController.center;
                 // Kinematic.Radius = characterController.radius;
                 // Kinematic.Height = characterController.height;
             }
             else{
-                transform.position = spawnPoint;
-                transform.eulerAngles = Vector3.zero;
+                transform1.position = spawnPoint;
+                transform1.eulerAngles = Vector3.zero;
             }
         }
     }

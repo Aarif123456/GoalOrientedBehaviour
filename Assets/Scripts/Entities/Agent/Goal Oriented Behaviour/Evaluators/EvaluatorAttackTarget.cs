@@ -3,10 +3,9 @@ using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class EvaluatorAttackTarget : Evaluator {
-
         public EvaluatorAttackTarget(float characterBias)
             : base(characterBias){
-                GoalName = "Attack Target";
+            GoalName = "Attack Target";
         }
 
         public override float CalculateDesirability(Agent agent){

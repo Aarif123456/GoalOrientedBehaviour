@@ -70,7 +70,7 @@ namespace Utility.Fuzzy {
         ///     When calculating the centroid of the fuzzy manifold this value is used to determine how
         ///     many cross-sections should be sampled.
         /// </summary>
-        public const int CROSS_SECTION_SAMPLE_COUNT = 15;
+        private const int _CROSS_SECTION_SAMPLE_COUNT = 15;
 
         /// <summary>
         ///     Initializes a new instance of the FuzzyModule class.
@@ -113,7 +113,7 @@ namespace Utility.Fuzzy {
             if (!Variables.ContainsKey(nameOfFlv)) throw new Exception("FuzzyModule.DeFuzzify: key not found.");
 
             // clear the DOMs of all the consequents of all the rules
-            SetConfidencesOfConsequentsToZero();
+            SetConfidencesOfConsequentToZero();
 
             // process the rules
             foreach (var rule in Rules){
@@ -122,7 +122,7 @@ namespace Utility.Fuzzy {
 
             // now defuzzify the resultant conclusion using the specified method
             return method switch{
-                DefuzzifyMethod.Centroid => Variables[nameOfFlv].DeFuzzifyCentroid(CROSS_SECTION_SAMPLE_COUNT),
+                DefuzzifyMethod.Centroid => Variables[nameOfFlv].DeFuzzifyCentroid(_CROSS_SECTION_SAMPLE_COUNT),
                 DefuzzifyMethod.MaxAv => Variables[nameOfFlv].DeFuzzifyMaxAv(),
                 _ => 0
             };
@@ -149,9 +149,9 @@ namespace Utility.Fuzzy {
         }
 
         /// <summary>
-        ///     Zeros the DOMs of the consequents of each rule.
+        ///     Zeros the DOMs of the consequent of each rule.
         /// </summary>
-        private void SetConfidencesOfConsequentsToZero(){
+        private void SetConfidencesOfConsequentToZero(){
             foreach (var rule in Rules){
                 rule.SetConfidenceOfConsequentToZero();
             }

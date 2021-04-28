@@ -4,23 +4,23 @@ using UnityEngine;
 
 namespace Entities.GoalOrientedBehaviour {
     public class TraverseEdge : Goal {
-        private readonly Vector3 destination;
-        private readonly FaceHeading look;
-        private readonly Seek seek;
-        private Edge edgeToTraverse;
+        private readonly Vector3 _destination;
+        private readonly FaceHeading _look;
+        private readonly Seek _seek;
+        private Edge _edgeToTraverse;
 
         public TraverseEdge(Agent agent, Edge edgeToTraverse)
             : base(agent, GoalTypes.SeekToPosition){
             //this.edgeToTraverse = edgeToTraverse;
-            destination = edgeToTraverse.ToNode.Position;
-            seek = new Seek(agent.Kinematic, destination);
-            look = new FaceHeading(agent.Kinematic);
+            _destination = edgeToTraverse.ToNode.Position;
+            _seek = new Seek(agent.Kinematic, _destination);
+            _look = new FaceHeading(agent.Kinematic);
         }
 
         public override void Activate(){
             Status = StatusTypes.Active;
-            Agent.SteeringBehaviours.Add(seek);
-            Agent.SteeringBehaviours.Add(look);
+            Agent.SteeringBehaviours.Add(_seek);
+            Agent.SteeringBehaviours.Add(_look);
 //            edgeToTraverse.renderer.enabled = true;
 //            edgeToTraverse.ToNode.renderer.enabled = true;
         }
@@ -32,15 +32,15 @@ namespace Entities.GoalOrientedBehaviour {
             // test to see if the bot has become stuck
             if (IsStuck())
                 Status = StatusTypes.Failed;
-            else if (Vector3.Distance(Agent.Kinematic.Position, destination) <= seek.SatisfactionRadius)
+            else if (Vector3.Distance(Agent.Kinematic.Position, _destination) <= _seek.SatisfactionRadius)
                 Status = StatusTypes.Completed;
 
             return Status;
         }
 
         public override void Terminate(){
-            Agent.SteeringBehaviours.Remove(seek);
-            Agent.SteeringBehaviours.Remove(look);
+            Agent.SteeringBehaviours.Remove(_seek);
+            Agent.SteeringBehaviours.Remove(_look);
 //            edgeToTraverse.renderer.enabled = edgeToTraverse.EdgeCollection.IsVisible;
 //            edgeToTraverse.ToNode.renderer.enabled = edgeToTraverse.ToNode.NodeCollection.IsVisible;
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ namespace GameWorld.Navigation.Graph {
         public float surfaceOffset = 1.1f;
         public LayerMask raycastObstaclesLayerMask;
         public Graph graph;
-        private bool isVisible;
+        private readonly Dictionary<Node, Renderer> _nodeRenderer = new Dictionary<Node, Renderer>();
+        private bool _isVisible;
 
         public Graph Graph {
             get => graph;
@@ -28,12 +30,13 @@ namespace GameWorld.Navigation.Graph {
 
         /* TODO: Make cache the node component renderer */
         public bool IsVisible {
-            get => isVisible;
+            get => _isVisible;
 
             set {
-                isVisible = value;
+                _isVisible = value;
                 foreach (var node in Nodes){
-                    node.GetComponent<Renderer>().enabled = value;
+                    if (!_nodeRenderer.ContainsKey(node)) _nodeRenderer.Add(node, node.GetComponent<Renderer>());
+                    _nodeRenderer[node].enabled = value;
                 }
             }
         }
@@ -56,7 +59,7 @@ namespace GameWorld.Navigation.Graph {
             color.a = alpha;
             node.color = color;
             //node.renderer.sharedMaterial.shader = Shader.Find("Transparent/Diffuse");
-            node.GetComponent<Renderer>().sharedMaterial.color = color;
+            node.renderer.sharedMaterial.color = color;
             node.lookAheadDistance = lookAheadDistance;
             node.radius = radius;
             node.useCapsuleCast = useCapsuleCast;
