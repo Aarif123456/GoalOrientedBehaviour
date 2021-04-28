@@ -19,14 +19,17 @@ namespace GameWorld.GUI {
         private string[] camerasNames;
         private int curAgent;
         private int curCamera = -1;
-        private Rect windowRectangle;
+
         private MessageManager messageManager;
+
         // The variable to control where the scrollview 'looks' into its child elements.
         private Vector2 scrollPosition;
+        private Rect windowRectangle;
 
         public void Awake(){
             windowRectangle = new Rect(positionOffset.x, positionOffset.y, minimumWindowWidth, 0);
         }
+
         /********************************************************************************************************************/
         // If this behaviour is enabled, Start is called once
         // after all Awake calls and before all any Update calls.
@@ -42,7 +45,6 @@ namespace GameWorld.GUI {
         // If this behaviour is enabled, OnGUI is called for rendering and handling GUI events.
         // It might be called several times per frame (one call per event).
         public void OnGUI(){
-
             windowRectangle =
                 GUILayout.Window(
                     windowId,
@@ -131,7 +133,7 @@ namespace GameWorld.GUI {
             GUILayout.Label("Name: " + agent.shortName, style);
             GUILayout.Label("Score: " + agent.Score);
             GUILayout.Label("Health: " + agent.Health);
-            var agentPos = agent.gameObject.transform.position;
+            var agentPos = agent.Kinematic.Position;
             GUILayout.Label("Position: " + agentPos);
             GUILayout.EndVertical();
         }
@@ -170,37 +172,37 @@ namespace GameWorld.GUI {
             var headStyle = new GUIStyle{normal ={textColor = headMessage.Color}};
             GUILayout.Label(headMessage.Text, headStyle);
             scrollPosition = GUILayout.BeginScrollView(
-                                scrollPosition, 
-                                GUILayout.ExpandWidth(true),
-                                GUILayout.MinHeight(50)
-                                );
-            foreach(var message in agentMessages){
+                scrollPosition,
+                GUILayout.ExpandWidth(true),
+                GUILayout.MinHeight(50)
+            );
+            foreach (var message in agentMessages){
                 var style = new GUIStyle{normal ={textColor = message.Color}};
                 GUILayout.Label(message.Text, style);
             }
+
             GUILayout.EndScrollView();
         }
 
         /* Allow user to set agent goal */
         private static void ControlAgent(Agent agent){
             const int maxButtonInRow = 2;
-            var curButtons=0;
+            var curButtons = 0;
             GUILayout.BeginVertical();
-                agent.IsAiControlled = GUILayout.Toggle(agent.IsAiControlled, "Is AI controlled");
-                if(!agent.IsAiControlled){
-                    GUILayout.BeginHorizontal();
-                    foreach(var evalutor in agent.Brain.evaluators){
-                        if (GUILayout.Button(evalutor.GoalName, GUILayout.ExpandWidth(true))){
-                            evalutor.SetGoal(agent);
-                        }
-                        curButtons++;
-                        if (curButtons < maxButtonInRow) continue;
-                        GUILayout.EndHorizontal();
-                        GUILayout.BeginHorizontal();
-                        curButtons = 0;
-                    }
+            agent.IsAiControlled = GUILayout.Toggle(agent.IsAiControlled, "Is AI controlled");
+            if (!agent.IsAiControlled){
+                GUILayout.BeginHorizontal();
+                foreach (var evalutor in agent.Brain.evaluators){
+                    if (GUILayout.Button(evalutor.GoalName, GUILayout.ExpandWidth(true))) evalutor.SetGoal(agent);
+                    curButtons++;
+                    if (curButtons < maxButtonInRow) continue;
                     GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    curButtons = 0;
                 }
+
+                GUILayout.EndHorizontal();
+            }
 
             GUILayout.EndVertical();
         }

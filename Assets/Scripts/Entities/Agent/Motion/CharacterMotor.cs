@@ -19,8 +19,9 @@ namespace Entities.Steering {
         }
 
         public override void UpdateFromGameObject(MovingEntity movingEntity, float deltaTime){
-            movingEntity.Kinematic.Position = transform.position;
-            movingEntity.Kinematic.Rotation = transform.rotation.eulerAngles;
+            var transform1 = transform;
+            movingEntity.Kinematic.Position = transform1.position;
+            movingEntity.Kinematic.Rotation = transform1.rotation.eulerAngles;
             movingEntity.Kinematic.Velocity = characterController.velocity;
         }
     }

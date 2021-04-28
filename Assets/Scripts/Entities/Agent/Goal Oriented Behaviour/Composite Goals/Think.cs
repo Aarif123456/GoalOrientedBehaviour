@@ -8,20 +8,12 @@ using Random = UnityEngine.Random;
 
 namespace Entities.GoalOrientedBehaviour {
     public class Think : CompositeGoal {
-        public readonly List<Evaluator> evaluators = new List<Evaluator>();
-
-        //private Evaluator prevMostDesirable;
-        private bool arbitrateTickTock;
-        private float bestDesirability;
         /* add a small boast to reduce the chance of flip flopping between goals */
         private const float consistencyBoast = 0.05f;
+        public readonly List<Evaluator> evaluators = new List<Evaluator>();
+        private float bestDesirability;
         private Evaluator mostDesirable;
 
-        private static float CreateRandomValue(){
-            const float LOW_RANGE_OF_BIAS = 0.5f;
-            const float HIGH_RANGE_OF_BIAS = 1.5f;
-            return Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
-        }
         public Think(Agent agent)
             : base(agent, GoalTypes.Think){
             var biases = new Biases{
@@ -41,12 +33,18 @@ namespace Entities.GoalOrientedBehaviour {
             evaluators.Add(new EvaluatorEvadeBot(biases.EvadeBias));
             evaluators.Add(new EvaluatorGetWeapon(biases.ShotgunBias, WeaponTypes.Shotgun));
             evaluators.Add(new EvaluatorGetWeapon(biases.RailgunBias, WeaponTypes.Railgun));
-            evaluators.Add(new EvaluatorGetWeapon(biases.RocketLauncherBias, 
+            evaluators.Add(new EvaluatorGetWeapon(biases.RocketLauncherBias,
                 WeaponTypes.RocketLauncher));
         }
 
+        private static float CreateRandomValue(){
+            const float LOW_RANGE_OF_BIAS = 0.5f;
+            const float HIGH_RANGE_OF_BIAS = 1.5f;
+            return Random.Range(LOW_RANGE_OF_BIAS, HIGH_RANGE_OF_BIAS);
+        }
+
         public override void Activate(){
-            if (Agent.IsAiControlled) Arbitrate();
+            Arbitrate();
 
             Status = StatusTypes.Active;
         }
@@ -56,9 +54,9 @@ namespace Entities.GoalOrientedBehaviour {
 
             var subgoalStatus = ProcessSubgoals();
 
-            if (subgoalStatus != StatusTypes.Completed && subgoalStatus != StatusTypes.Failed ||
-                !Agent.IsAiControlled) return Status;
+            if (subgoalStatus != StatusTypes.Completed && subgoalStatus != StatusTypes.Failed) return Status;
             Status = StatusTypes.Inactive;
+            bestDesirability = 0.0f;
 
             if (!Subgoals.IsEmpty()) Subgoals.Peek().Terminate();
 
@@ -69,7 +67,11 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void Arbitrate(){
-            arbitrateTickTock = !arbitrateTickTock;
+            if (!Agent.IsAiControlled){
+                mostDesirable.SetGoal(Agent);
+                return;
+            }
+
             bestDesirability = 0.0f;
             var prevMostDesirable = mostDesirable;
             mostDesirable = null;
@@ -79,7 +81,7 @@ namespace Entities.GoalOrientedBehaviour {
                 var desirability = evaluator.CalculateDesirability(Agent);
 
                 if (!(bestDesirability < desirability)) continue;
-                if(ReferenceEquals(evaluator, mostDesirable)) desirability += consistencyBoast;
+                if (ReferenceEquals(evaluator, mostDesirable)) desirability += consistencyBoast;
                 bestDesirability = desirability;
                 mostDesirable = evaluator;
             }
@@ -94,7 +96,7 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalExplore(){
-            if (Agent.IsAiControlled && !NotPresent(GoalTypes.Explore)) return;
+            if (!NotPresent(GoalTypes.Explore)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new Explore(Agent));
@@ -105,28 +107,28 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public void AddGoalGetItemOfType(ItemTypes itemType){
-            if (Agent.IsAiControlled && !NotPresent(EnumUtility.ItemTypeToGoalType(itemType))) return;
+            if (!NotPresent(EnumUtility.ItemTypeToGoalType(itemType))) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new GetItemOfType(Agent, itemType));
         }
 
         public void AddGoalAttackTarget(){
-            if (Agent.IsAiControlled && !NotPresent(GoalTypes.AttackTarget)) return;
+            if (!NotPresent(GoalTypes.AttackTarget)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new AttackTarget(Agent));
         }
 
         public void AddGoalEvadeBot(){
-            if (Agent.IsAiControlled && !NotPresent(GoalTypes.EvadeBot)) return;
+            if (!NotPresent(GoalTypes.EvadeBot)) return;
 
             RemoveAllSubgoals();
             AddSubgoal(new EvadeBot(Agent));
         }
 
         // public void AddGoalPursueBot(){
-        //     if (Agent.IsAiControlled && !NotPresent(GoalTypes.PursueBot)) return;
+        //     if (!NotPresent(GoalTypes.PursueBot)) return;
 
         //     RemoveAllSubgoals();
         //     AddSubgoal(new PursueBot(Agent));

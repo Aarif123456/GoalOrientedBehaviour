@@ -11,7 +11,7 @@ namespace Entities.GoalOrientedBehaviour {
             Failed
         }
 
-        private const float timeBetweenDisplayUpdates = 1.0f;
+        private const float timeBetweenDisplayUpdates = 0.5f;
         private float displayTimer;
 
         protected Goal(Agent agent, GoalTypes goalType){
@@ -56,9 +56,9 @@ namespace Entities.GoalOrientedBehaviour {
         }
 
         public Message GetHeadMessage(){
-            return new Message {
+            return new Message{
                 Text = Agent.shortName + " (" + Agent.SteeringBehaviours.Count + ")",
-                Color =  Agent.color
+                Color = Agent.color
             };
         }
 
@@ -80,16 +80,15 @@ namespace Entities.GoalOrientedBehaviour {
             var indent = 0;
             StoreThoughtProcess(messageManager, ref indent);
         }
-        
+
         public virtual void StoreThoughtProcess(MessageManager messageManager, ref int indent){
             var messageColor = GetGoalColor();
             var messageString = new string(' ', indent) + EnumUtility.GetDescription(GoalType);
-            var message = new Message {
+            var message = new Message{
                 Text = messageString,
                 Color = messageColor
             };
             messageManager.AddMessage(Agent, message);
-        }   
-    
+        }
     }
 }
