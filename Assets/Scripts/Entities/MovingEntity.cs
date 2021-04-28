@@ -6,7 +6,7 @@ namespace Entities {
     public class MovingEntity : Entity {
         public float closeEnoughDistance = 1;
 
-        protected CharacterController characterController; // optional
+        private CharacterController characterController; // optional
 
         protected Motor motor;
 
@@ -32,12 +32,14 @@ namespace Entities {
         }
 
         public override void Update(){
+            if (IsDead || IsSpawning) return;
             base.Update();
-            
+
             if (motor is{enabled: true}) motor.UpdateFromGameObject(this, Time.deltaTime);
         }
 
         public void LateUpdate(){
+            if (IsDead || IsSpawning) return;
             Think(Time.deltaTime);
 
             Act(Time.deltaTime);
@@ -72,14 +74,20 @@ namespace Entities {
 
         public virtual void Spawn(Vector3 spawnPoint){
             State = States.Alive;
-            transform.position = spawnPoint;
-            transform.eulerAngles = Vector3.zero;
-            Kinematic = new Kinematic{Position = transform.position, Rotation = transform.eulerAngles};
-
-            if (characterController == null) return;
-            Kinematic.CenterOffset = characterController.center;
-            Kinematic.Radius = characterController.radius;
-            Kinematic.Height = characterController.height;
+            if (characterController != null){
+                characterController.enabled = false;
+                transform.position = spawnPoint;
+                transform.eulerAngles = Vector3.zero;
+                // Kinematic = new Kinematic{Position = transform.position, Rotation = transform.eulerAngles};
+                characterController.enabled = true;
+                // Kinematic.CenterOffset = characterController.center;
+                // Kinematic.Radius = characterController.radius;
+                // Kinematic.Height = characterController.height;
+            }
+            else{
+                transform.position = spawnPoint;
+                transform.eulerAngles = Vector3.zero;
+            }
         }
     }
 }

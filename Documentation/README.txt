@@ -17,7 +17,7 @@ TODO
 1. [Documentation] Document your work. Explain what parts you attempted, how your approach is supposed to work, which parts of the code you modified, removed or added. 
 
 2. [Bug Fixing] 
-    - Weeble keeps moving back to old location - happens if we manually teleport Weeble
+   
 
 3. [Implementation ideas]
         - Weeble got hit indicator - can make it flash red
@@ -60,13 +60,13 @@ TODO
 In progress:
     finish up a) add in though and hit indicator
     implement goal: currently adding in the ability to move away from projectiles being fired 
-    figure out why they don't spawn
 
 Completed: 
     [Bug Fixing]
         - Weeble Alice had the wrong short-name
         - Added in Wall layers so Weeble does get stuck 
         - Weebles sometimes flip-flop between goals and end up getting stuck for a while so added a consistency boast to encourage finishing goals 
+        - Weeble keeps moving back to old location - happens if we manually teleport Weeble
         
     [Implementation ideas]
         - Made biases into a separate class to make it easier to expand 
@@ -82,4 +82,6 @@ Completed:
             - Made the game check for paths less frequently 
             - shrunk max and min distance in Features 
 
+        c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
+            - evade bot
 
