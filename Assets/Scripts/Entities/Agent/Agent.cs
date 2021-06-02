@@ -1,3 +1,4 @@
+using System.Collections;
 using Common;
 using Entities.Armory;
 using Entities.GoalOrientedBehaviour;
@@ -81,34 +82,46 @@ namespace Entities {
             Brain = new Think(this);
 
             FieldOfView = parameters.AgentFieldOfView;
+
+            _normalMaterial = _renderer.materials;
+            _flashMaterial = CreateFlashMaterial();
         }
 
         private void OnEnable(){
             EventManager.Instance.Subscribe<DamageInflictedEventPayload>(
-                Events.DamageInflicted,
+                Events.DAMAGE_INFLICTED,
                 OnDamageInflicted);
 
             EventManager.Instance.Subscribe<EntityDestroyedEventPayload>(
-                Events.EntityDestroyed,
+                Events.ENTITY_DESTROYED,
                 OnEntityDestroyed);
 
             EventManager.Instance.Subscribe<WeaponSoundEventPayload>(
-                Events.WeaponSound,
+                Events.WEAPON_SOUND,
                 OnWeaponSound);
         }
 
         private void OnDisable(){
             EventManager.Instance.Unsubscribe<DamageInflictedEventPayload>(
-                Events.PathToPositionRequest,
+                Events.PATH_TO_POSITION_REQUEST,
                 OnDamageInflicted);
 
             EventManager.Instance.Unsubscribe<EntityDestroyedEventPayload>(
-                Events.EntityDestroyed,
+                Events.ENTITY_DESTROYED,
                 OnEntityDestroyed);
 
             EventManager.Instance.Unsubscribe<WeaponSoundEventPayload>(
-                Events.WeaponSound,
+                Events.WEAPON_SOUND,
                 OnWeaponSound);
+        }
+
+        private Material[] CreateFlashMaterial(){
+            var materials = new Material[_renderer.materials.Length];
+            for (var i = 0; i < materials.Length; i++){
+                materials[i] = new Material(_renderer.materials[i]){color = _flashColor};
+            }
+
+            return materials;
         }
 
         protected override void Think(float deltaTime){
@@ -190,8 +203,7 @@ namespace Entities {
         }
 
         public bool CanStepRight(float satisfactionRadius, LayerMask obstacleLayers){
-            Vector3 positionOfStep;
-            return CanStepRight(satisfactionRadius, obstacleLayers, out positionOfStep);
+            return CanStepRight(satisfactionRadius, obstacleLayers, out _);
         }
 
         public bool CanStepRight(out Vector3 positionOfStep){
@@ -220,8 +232,7 @@ namespace Entities {
         }
 
         public bool CanStepLeft(float satisfactionRadius, LayerMask obstacleLayers){
-            Vector3 positionOfStep;
-            return CanStepLeft(satisfactionRadius, obstacleLayers, out positionOfStep);
+            return CanStepLeft(satisfactionRadius, obstacleLayers, out _);
         }
 
         public bool CanStepLeft(out Vector3 positionOfStep){
@@ -268,24 +279,35 @@ namespace Entities {
             Health = Mathf.Clamp(Health + amount, 0, MaximumHealth);
         }
 
+
+        private void ChangeColor(){
+            _renderer.materials = Hit ? _flashMaterial : _normalMaterial;
+        }
+
+        private IEnumerator Flash(){
+            ChangeColor();
+            Hit = false;
+            yield return new WaitForSeconds(HitIndicatorTimer);
+            ChangeColor();
+            Invoke(nameof(ChangeColor), HitIndicatorTimer);
+        }
+
         /// <summary>
         ///     Reduce health by the given amount. Flash the hit indicator.
         /// </summary>
         /// <param name="amount">The amount to reduce health by.</param>
-        public void ReduceHealth(int amount){
+        private void ReduceHealth(int amount){
             Health -= amount;
-
             if (Health <= 0) SetDead();
-            /* TODO create hit indicator */
             Hit = true;
-            HitIndicatorTimer = Parameters.Instance.HitFlashTime;
+            StartCoroutine(nameof(Flash));
         }
 
         public bool RotateAimTowardPosition(Vector3 target){
             var angle = Vector3.Angle(Kinematic.Position, target);
-            const float WEAPON_AIM_TOLERANCE = 5; // degrees
+            const float weaponAimTolerance = 5; // degrees
 
-            if (angle < WEAPON_AIM_TOLERANCE){
+            if (angle < weaponAimTolerance){
                 Kinematic.Rotation = Quaternion.LookRotation(target).eulerAngles;
                 return true;
             }

@@ -37,8 +37,8 @@ namespace Entities {
 
             set => isAiControlled = value;
         }
-
-        public Collider Collider => GetComponent<Collider>();
+        private Collider _collider;
+        public Collider Collider => _collider;
 
         public Kinematic Kinematic { get; private set; }
 
@@ -110,7 +110,7 @@ namespace Entities {
         public virtual void Awake(){
             id = _nextId++;
             EntityManager.Add(this);
-
+            _collider = GetComponent<Collider>();
             State = States.Alive;
 
             Kinematic =

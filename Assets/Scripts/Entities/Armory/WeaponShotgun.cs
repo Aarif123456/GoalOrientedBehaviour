@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Common;
 using GameWorld.Managers;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace Entities.Armory {
                 Parameters.Instance.ShotgunIdealRange,
                 Parameters.Instance.PelletMaximumSpeed,
                 agent){
-            Targets = new List<Vector3>();
             BallsInShell = Parameters.Instance.ShotgunBallsInShell;
             Spread = Parameters.Instance.ShotgunSpread;
 
@@ -28,12 +26,10 @@ namespace Entities.Armory {
 
         public float Spread { get; }
 
-        public List<Vector3> Targets { get; }
 
         public override void ShootAt(Vector3 targetPosition){
             if (RoundsRemaining <= 0 || !IsReadyForNextShot()) return;
 
-            Targets.Clear();
 
             // a shotgun cartridge contains lots of tiny metal balls called
             // pellets. Therefore, every time the shotgun is discharged we 
@@ -59,7 +55,6 @@ namespace Entities.Armory {
                     adjustedTarget);
 
                 // temp debugging code
-                Targets.Add(adjustedTarget);
             }
 
             DecrementRounds();

@@ -1,7 +1,13 @@
-What is this? 🤔
+[![MIT License](https://img.shields.io/github/license/Aarif123456/GoalOrientedBehaviour?style=for-the-badge)](https://lbesson.mit-license.org/)
+[![BCH compliance](https://bettercodehub.com/edge/badge/Aarif123456/GoalOrientedBehaviour?branch=main)](https://bettercodehub.com/)
+![Lines of code](https://img.shields.io/tokei/lines/github/Aarif123456/GoalOrientedBehaviour?style=for-the-badge)
+![Top Language](https://img.shields.io/github/languages/top/Aarif123456/GoalOrientedBehaviour?style=for-the-badge)
+
+## What is this? 🤔
+
 This project is about exploring goal oriented behaviour based on chapter 7-10 of Mat Buckland's book
 
-Given
+## Given
 1. Meta editors in Editor directory, will probably not touch
 2. ShowThots - Can use to visualize the thought process of weebles
 3. Parameters - Can modify depending on program
@@ -13,54 +19,44 @@ Given
 7. Atomic goals - seek to position - is stuck - not implemented 
 
 
-TODO
-1. [Documentation] Document your work. Explain what parts you attempted, how your approach is supposed to work, which parts of the code you modified, removed or added. 
-
-2. [Bug Fixing] 
-   
-
-3. [Implementation ideas]
-        - Weeble got hit indicator - can make it flash red
+## Implementation ideas
+         Weeble got hit indicator - can make it flash red
         ii) Include visual/audio/log debugging aids 
 
     c) Design and implement an additional goal-oriented behaviour and a corresponding evaluator and relevant features. 
         - MoveToCover 
         - CaptureTheFlag
 
-4. Find ways to make it awesome!
-    a) PathCosts.cs contains a pre-computed path table similar to the ones discussed in the lectures. Modify the PathPlanner to use this table instead of TimeSlicedAStar. That should improve the efficiency of the game.
+## More ways to make it awesome!
 
-    b) Implement the ability to pickup the enemy flag at the base and carry it back to your base. If you are killed while carrying the flag, simply return the flag to its base or implement a means for the flag to be dropped where you died so either a team-mate or the enemy can pick it up. This may require implementing a new form or Trigger.
-
-    c) Improve issues with the frame rate so that the game plays smoothly with 3, 4 or 5 weebles per team.
-        - Pathfinding
-        - garbage collector
-        - string concatenation 
-        - other inefficiency 
-
-    d) Design and implement more goal-oriented behaviours and a corresponding evaluators and relevant features. Make use of the low walls and elevated areas for cover and good sniping locations.
-
-    e) Add an additional weapon type.
-        - landmine 
-
+- a) PathCosts.cs contains a pre-computed path table similar to the ones discussed in the lectures. Modify the PathPlanner to use this table instead of TimeSlicedAStar. That should improve the efficiency of the game.
+- b) Implement the ability to pickup the enemy flag at the base and carry it back to your base. If you are killed while carrying the flag, simply return the flag to its base or implement a means for the flag to be dropped where you died so either a team-mate or the enemy can pick it up. This may require implementing a new form or Trigger.
+- c) Improve issues with the frame rate so that the game plays smoothly with 3, 4 or 5 weebles per team.
+    - Pathfinding
+    - garbage collector
+    - string concatenation 
+    - other inefficiency 
+- d) Design and implement more goal-oriented behaviours and a corresponding evaluators and relevant features. Make use of the low walls and elevated areas for cover and good sniping locations.
+- e) Add an additional weapon type.
+    - landmine 
+- f) More things to add
+    - Make them aim where the target will be, not where they are now.
+    - sound effects
+    - explosion
+    - custom map from map file
+    - loading page - with loading bar while map loads (pre-computation)
+    - setting changing possible main menu
+    - character that can move
+    - Implementing smell 
     
 
-4. Find ways to make it awesome!
-    a) Make them aim where the target will be, not where they are now.
-    b) sound effects
-    c) explosion
-    d) custom map from map file
-    e) loading page - with loading bar while map loads (pre-computation)
-    f) setting changing possible main menu
-    g) character that can move
-    h) Implementing smell 
 
-
-In progress:
+## TODO: :alarm_clock:
     finish up a) add in though and hit indicator
     implement goal: currently adding in the ability to move away from projectiles being fired 
 
-Completed: 
+## Done :star2:
+
     [Bug Fixing]
         - Weeble Alice had the wrong short-name
         - Added in Wall layers so Weeble does get stuck 
